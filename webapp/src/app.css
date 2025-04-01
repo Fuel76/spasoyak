@@ -1,0 +1,184 @@
+/* Общие стили */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.layout {
+  width: 100%; /* Адаптация к ширине экрана */
+  min-height: 200vh; /* Увеличиваем минимальную высоту сайта */
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+.app {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #b8a998;
+  overflow: hidden;
+}
+
+/* Хедер */
+.header {
+  position: relative;
+  width: 100%;
+}
+
+.header-background {
+  width: 100%; /* Растягивается на всю ширину контейнера */
+  height: 100%; /* Растягивается на всю высоту контейнера */
+  object-fit: cover; /* Заполняет контейнер, сохраняя пропорции */
+  object-position: right center; /* Сдвигает изображение вправо */
+  display: block;
+}
+
+.header-title {
+  width: 50%; /* Занимает половину ширины экрана */
+  position: absolute;
+  left: 22.5%;
+  top: 8%;
+  color: rgba(51, 12, 12, 0.61);
+  font-size: 3.4vw; /* Относительный размер шрифта */
+  font-family: 'Ouverture script', serif;
+  font-weight: 550;
+  word-wrap: break-word;
+}
+
+/* Декоративные изображения */
+.rotated-images-container {
+  position: absolute;
+  left: 0; /* Располагаем изображения по левому краю */
+  top: 0; /* Начало контейнера сверху */
+  width: 100%; /* Автоматическая ширина */
+  height: 100%; /* Высота контейнера на всю страницу */
+  z-index: 10; /* Убедитесь, что значение выше, чем у других элементов */
+}
+
+.rotated-image {
+  position: absolute;
+  left: 0; /* Располагаем изображения по левому краю */
+  width: 9.5%; /* Относительная ширина */
+  object-fit: contain; /* Сохраняем пропорции изображения */
+  z-index: 10; /* Совпадает с контейнером */
+  transform-origin: top left;
+}
+
+.small-image {
+  width: 12.5%; /* Относительная ширина */
+  position: absolute;
+  left: 7.7%;
+  top: 10%;
+  border-radius: 12px;
+}
+
+/* Кнопки */
+.button-container {
+  position: absolute;
+  top: 56.5%; /* Отступ сверху */
+  left: 7.85%; /* Отступ слева */
+  display: flex;
+  flex-direction: column; /* Расположение кнопок в колонку */
+  gap: 5vh; /* Отступ между кнопками */
+}
+
+.button {
+  display: inline-flex; /* Кнопка подстраивается под содержимое */
+  align-items: center; /* Центрирование текста по вертикали */
+  justify-content: center; /* Центрирование текста по горизонтали */
+  padding: 1.8vh 2.7vw 2vh 2.7vw; /* Вверх, вправо, вниз, влево */
+  background: rgba(103, 91, 91, 0.6); /* Полупрозрачный фон */
+  border-radius: 500px; /* Увеличенное скругление углов */
+  color: white; /* Цвет текста */
+  font-size: 1vw; /* Адаптивный размер шрифта */
+  font-family: 'Segoe UI Symbol', sans-serif; /* Шрифт текста */
+  font-weight: 350; /* Толщина шрифта */
+  text-align: center; /* Выравнивание текста по центру */
+  white-space: nowrap; /* Запрещает перенос текста */
+  line-height: 1.3; /* Увеличивает межстрочный интервал для читаемости */
+  cursor: pointer; /* Указатель мыши при наведении */
+  transition: background 0.3s ease, transform 0.2s ease; /* Анимация при наведении */
+}
+
+.button:hover {
+  background: rgba(103, 91, 91, 0.8); /* Более насыщенный цвет при наведении */
+  transform: scale(1.05); /* Легкое увеличение кнопки при наведении */
+}
+
+/* Основной контент */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap; /* Адаптация для маленьких экранов */
+  gap: 2%;
+  padding: 2%;
+  min-height: 150vh; /* Увеличиваем высоту основного контента */
+}
+
+/* Sidemenu */
+.sidemenu {
+  position: absolute;
+  top: calc(70% + 10vh); /* Располагаем под кнопками (70% от верха + высота кнопок) */
+  left: 7.5%; /* Отступ слева, аналогичный кнопкам */
+  width: 15%; /* Ширина меню */
+  display: flex;
+  flex-direction: column; /* Расположение элементов в колонку */
+  gap: 1rem; /* Отступы между элементами */
+}
+
+.sidemenu-item {
+  padding: 1rem;
+  background: #c0b19f; /* Цвет фона */
+  border-radius: 10px; /* Закругленные углы */
+  text-align: center;
+  font-size: var(--sidemenu-font-size, 1rem); /* Используем переменную для размера шрифта */
+  font-family: var(--sidemenu-font-family, 'Roboto', sans-serif); /* Используем переменную для шрифта */
+  font-weight: var(--sidemenu-font-weight, 400); /* Используем переменную для толщины шрифта */
+  color: var(--sidemenu-font-color, rgb(68, 59, 59)); /* Используем переменную для цвета текста */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+}
+
+/* Футер */
+.footer {
+  width: 100%;
+  height: 20vh; /* Относительная высота */
+  position: relative;
+  background: rgba(255, 255, 255, 0.32);
+  opacity: 0.7;
+  margin-top: auto;
+}
+
+.footer-logo {
+  position: absolute;
+  top: 10%;
+  left: 5%;
+  width: 20%; /* Относительная ширина */
+}
+
+.footer-logo img {
+  width: 100%; /* Растягивается на всю ширину контейнера */
+  height: auto; /* Сохраняет пропорции */
+}
+
+.footer-text {
+  position: absolute;
+  top: 10%;
+  right: 5%;
+  color: black;
+  text-align: right;
+}
+
+.footer-text h2 {
+  font-size: 2vw; /* Относительный размер шрифта */
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+}
+
+.footer-text p {
+  font-size: 1.5vw; /* Относительный размер шрифта */
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
