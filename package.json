@@ -1,4 +1,8 @@
 {
+	"name": "monastyr",
+	"private": true,
+	"version": "0.0.0",
+	
 	"devDependencies": {
 		"prettier": "^3.5.3"
 	}
