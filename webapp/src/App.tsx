@@ -1,5 +1,13 @@
-import { Layout } from './components/layout';
+import { TrpcProvider } from './lib/trpc'
+import { HomePage } from './pages/HomePage'
 
+// export const App = () => {
+//   return <Layout />;
+// };
 export const App = () => {
-  return <Layout />;
-};
+  return (
+    <TrpcProvider>
+      <HomePage />
+    </TrpcProvider>
+  )
+}
