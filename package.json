@@ -2,8 +2,20 @@
 	"name": "monastyr",
 	"private": true,
 	"version": "0.0.0",
-	
+	"scripts": {
+		"b": "pnpm --filter @monastyr/backend",
+		"w": "pnpm --filter @monastyr/webapp",
+		"dev": "pnpm -r --parallel dev",
+		"types": "concurrently \"pnpm --filter @monastyr/backend types\" \"pnpm --filter @monastyr/webapp types\"",
+		"lint": "concurrently 'pnpm b lint' 'pnpm w lint'",
+		"prettify": "pnpm -r --parallel prettify"
+	},
 	"devDependencies": {
+		"concurrently": "^9.1.2",
+		"eslint": "^9.23.0",
+		"eslint-config-prettier": "^10.1.1",
+		"eslint-config-react-app": "^7.0.1",
+		"eslint-config-standard-with-typescript": "^43.0.1",
 		"prettier": "^3.5.3"
 	}
 }

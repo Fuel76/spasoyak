@@ -1,11 +1,11 @@
-import '../App.css';
-import coverImage from '../assets/обложка.png'; // Импорт изображения
-import ornamentImage from '../assets/Ornam.png'; // Импорт нового локального изображения
-import iconaImage from '../assets/ikona.png';
+import '../App.css'
+import coverImage from '../assets/обложка.png' // Импорт изображения
+import ornamentImage from '../assets/Ornam.png' // Импорт нового локального изображения
+import iconaImage from '../assets/ikona.png'
 
 export const Layout = () => {
   // Генерация массива для декоративных элементов
-  const decorativeElements = Array.from({ length: 3 }, (_, index) => index); // Примерное количество элементов
+  const decorativeElements = Array.from({ length: 3 }, (_, index) => index) // Примерное количество элементов
 
   return (
     <div className="layout">
@@ -31,7 +31,8 @@ export const Layout = () => {
             alt="Фон"
           />
           <div className="header-title">
-            Спасо-Яковлевский <br /> Димитриев монастырь<br /> в Ростове Великом
+            Спасо-Яковлевский <br /> Димитриев монастырь
+            <br /> в Ростове Великом
           </div>
           <img
             className="small-image"
@@ -39,7 +40,9 @@ export const Layout = () => {
             alt="Икона"
           />
           <div className="button-container">
-            <div className="button">Расписание <br /> Богослужений</div>
+            <div className="button">
+              Расписание <br /> Богослужений
+            </div>
             <div className="button">Требы</div>
           </div>
         </header>
@@ -63,14 +66,11 @@ export const Layout = () => {
           </div>
           <div className="footer-text">
             <h2>Спасо-Яковлевский Димитриев Монастырь</h2>
-            <p>
-              High level experience in web design and development knowledge,
-              producing quality work.
-            </p>
+            <p>High level experience in web design and development knowledge, producing quality work.</p>
             <p>© 2025 All Rights Reserved</p>
           </div>
         </footer>
       </div>
     </div>
-  );
-};
+  )
+}

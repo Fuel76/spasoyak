@@ -1,22 +1,19 @@
-import {trpc} from '../../lib/trpc'
+import { trpc } from '../../lib/trpc'
 
 export const HomePage = () => {
-  const {data, error, isLoading, isFething, isError} = trpc.getNews.useQuery()
-  if (isLoading || isFething) return <span>Loading...</span>
-  if (isError) return <span>Error: {error.message}</span> 
-  
+  const { data, error, isLoading, isFetching, isError } = trpc.getNews.useQuery()
+  if (isLoading || isFetching) return <span>Loading...</span>
+  if (isError) return <span>Error: {error.message}</span>
 
   return (
     <div>
       <h1>News</h1>
-      {data.news.map(news => (
-        <div key={news.id}>
-          <h2>{news.title}</h2>
-          <p>{news.content}</p>
+      {data.news.map((neww) => (
+        <div key={neww.id}>
+          <h2>{neww.title}</h2>
+          <p>{neww.content}</p>
         </div>
       ))}
-
-      
     </div>
   )
 }
