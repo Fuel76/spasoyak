@@ -17,5 +17,13 @@
 		"eslint-config-react-app": "^7.0.1",
 		"eslint-config-standard-with-typescript": "^43.0.1",
 		"prettier": "^3.5.3"
+	},
+	"dependencies": {
+		"@ckeditor/ckeditor5-build-classic": "^44.3.0",
+		"@ckeditor/ckeditor5-react": "^9.5.0",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"suneditor": "^2.47.5",
+		"suneditor-react": "^3.6.1"
 	}
 }

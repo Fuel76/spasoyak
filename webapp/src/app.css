@@ -7,11 +7,11 @@ html, body {
 
 .layout {
   width: 100%; /* Адаптация к ширине экрана */
-  min-height: 200vh; /* Увеличиваем минимальную высоту сайта */
+  min-height: 500vh; /* Увеличиваем минимальную высоту сайта */
   margin: 0;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: #b8a998;
 }
 
 .app {
@@ -118,15 +118,23 @@ html, body {
   min-height: 150vh; /* Увеличиваем высоту основного контента */
 }
 
+/* Контейнер для бокового меню и основного контента */
+.content-container {
+  display: flex;
+  flex-direction: row;
+  height: calc(100vh - 20vh); /* Высота экрана минус шапка и подвал */
+  margin-top: 0vh; /* Отступ под шапкой */
+}
+
 /* Sidemenu */
 .sidemenu {
-  position: absolute;
-  top: calc(70% + 10vh); /* Располагаем под кнопками (70% от верха + высота кнопок) */
-  left: 7.5%; /* Отступ слева, аналогичный кнопкам */
-  width: 15%; /* Ширина меню */
+  width: 20%; /* Фиксированная ширина бокового меню */
+  background: #c0b19f; /* Цвет фона */
   display: flex;
-  flex-direction: column; /* Расположение элементов в колонку */
+  flex-direction: column;
   gap: 1rem; /* Отступы между элементами */
+  padding: 1rem;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1); /* Тень справа */
 }
 
 .sidemenu-item {
@@ -139,6 +147,72 @@ html, body {
   font-weight: var(--sidemenu-font-weight, 400); /* Используем переменную для толщины шрифта */
   color: var(--sidemenu-font-color, rgb(68, 59, 59)); /* Используем переменную для цвета текста */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+}
+
+/* Контейнер для страниц */
+.page-content {
+  flex: 1; /* Занимает оставшееся пространство */
+  padding: 2rem;
+  background: #B8A998; /* Цвет фона */
+  border-radius: 10px; /* Закругленные углы */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+  overflow-y: auto; /* Скроллинг, если контент превышает высоту */
+}
+
+/* Контейнер для страницы */
+.homepage {
+  padding: 2rem;
+}
+
+/* Карусель */
+.carousel-container {
+  margin-bottom: 2rem;
+}
+
+.carousel-slide {
+  text-align: center;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-slide h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.carousel-slide p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Новостной блок */
+.news-block {
+  margin-top: 2rem;
+}
+
+.news-block h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.news-item {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.news-item h2 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.news-item p {
+  font-size: 1rem;
+  color: #555;
 }
 
 /* Футер */
@@ -182,3 +256,29 @@ html, body {
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
 }
+
+/* Quill Container */
+.quill-container {
+  width: 100%;
+  min-height: 300px;
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 10px;
+}
+
+/* SunEditor Container */
+.suneditor-container {
+  width: 100%;
+  min-height: 300px;
+  margin: 20px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  padding: 10px;
+}
+
+/* Removed invalid import statements. If needed, include these in a JavaScript/TypeScript file. */
