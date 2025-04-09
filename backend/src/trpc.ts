@@ -3,6 +3,8 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+export { prisma };
+
 const trpc = initTRPC.create();
 
 export const trpcRouter = trpc.router({

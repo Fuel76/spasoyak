@@ -4,6 +4,11 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 const router = Router();
 
+router.get('/', async (req, res) => {
+  const pages = await prisma.page.findMany();
+  res.json(pages);
+});
+
 router.get('/pages', async (req, res) => {
   try {
     const pages = await prisma.page.findMany();

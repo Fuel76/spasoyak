@@ -6,6 +6,12 @@ import { ViewNewsPage } from './pages/ViewNewsPage';
 import { CreatePage } from './pages/CreatePage';
 import { Layout } from './components/layout';
 import { NewsEditorPage } from './pages/NewsEditorPage';
+import { PrivateRoute } from './components/PrivateRoute';
+import { AdminPage } from './pages/AdminPage';
+import { LoginPage } from './pages/LoginPage';
+import { AuthProvider } from './contexts/AuthContext';
+import { PagesList } from './pages/AdminPage/PagesList';
+import { NewsList } from './pages/AdminPage/NewsList';
 
 export const App = () => {
   const [pages, setPages] = useState<{ slug: string; title: string; content: string }[]>([]);
@@ -25,34 +31,53 @@ export const App = () => {
   }, []);
 
   return (
-    <TrpcProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            {/* Главная страница */}
-            <Route index element={<HomePage />} />
+    <AuthProvider>
+      <TrpcProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              {/* Главная страница */}
+              <Route index element={<HomePage />} />
 
-            {/* Просмотр новости */}
-            <Route path="news/:neww" element={<ViewNewsPage />} />
+              {/* Просмотр новости */}
+              <Route path="news/:neww" element={<ViewNewsPage />} />
 
-            {/* Создание страницы */}
-            <Route path="create" element={<CreatePage />} />
+              {/* Создание страницы */}
+              <Route path="create" element={<CreatePage />} />
 
-            {/* Добавление и редактирование новостей */}
-            <Route path="news/add" element={<NewsEditorPage />} />
-            <Route path="news/edit/:id" element={<NewsEditorPage />} />
+              {/* Добавление и редактирование новостей */}
+              <Route path="news/add" element={<NewsEditorPage />} />
+              <Route path="news/edit/:id" element={<NewsEditorPage />} />
 
-            {/* Динамические страницы */}
-            {pages.map((page) => (
+              {/* Динамические страницы */}
+              {pages.map((page) => (
+                <Route
+                  key={page.slug}
+                  path={page.slug}
+                  element={<div dangerouslySetInnerHTML={{ __html: page.content }} />}
+                />
+              ))}
+
+              {/* Страница авторизации */}
+              <Route path="/login" element={<LoginPage />} />
+
+              {/* Админ страница */}
               <Route
-                key={page.slug}
-                path={page.slug}
-                element={<div dangerouslySetInnerHTML={{ __html: page.content }} />}
+                path="/admin"
+                element={
+                  <PrivateRoute>
+                    <AdminPage />
+                  </PrivateRoute>
+                }
               />
-            ))}
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </TrpcProvider>
+
+              {/* Админ страницы и новости */}
+              <Route path="/admin/pages" element={<PagesList />} />
+              <Route path="/admin/news" element={<NewsList />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </TrpcProvider>
+    </AuthProvider>
   );
 };

@@ -4,6 +4,12 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 const router = Router();
 
+// Получение списка новостей
+router.get('/', async (req, res) => {
+  const news = await prisma.news.findMany();
+  res.json(news);
+});
+
 // Добавление новой новости
 router.post('/add', async (req, res) => {
   const { title, content } = req.body;

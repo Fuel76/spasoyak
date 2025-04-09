@@ -281,4 +281,135 @@ html, body {
   padding: 10px;
 }
 
-/* Removed invalid import statements. If needed, include these in a JavaScript/TypeScript file. */
+/* Контейнер страницы авторизации */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa; /* Светлый фон */
+}
+
+/* Карточка формы */
+.auth-card {
+  background-color: #ffffff; /* Белый фон */
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Заголовок формы */
+.auth-card h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333333; /* Темный текст */
+}
+
+/* Поля ввода */
+.auth-card input[type="email"],
+.auth-card input[type="password"] {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ced4da; /* Светлая рамка */
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #495057; /* Темный текст */
+  background-color: #ffffff; /* Белый фон */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075); /* Внутренняя тень */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.auth-card input[type="email"]:focus,
+.auth-card input[type="password"]:focus {
+  border-color: #80bdff; /* Синий цвет рамки при фокусе */
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Синяя тень при фокусе */
+}
+
+/* Кнопка входа */
+.auth-card button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff; /* Белый текст */
+  background-color: #007bff; /* Синий фон */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.auth-card button:hover {
+  background-color: #0056b3; /* Темно-синий фон при наведении */
+}
+
+.auth-card button:disabled {
+  background-color: #6c757d; /* Серый фон для отключенной кнопки */
+  cursor: not-allowed;
+}
+
+/* Ошибка */
+.auth-error {
+  background-color: #f8d7da; /* Светло-красный фон */
+  color: #721c24; /* Темно-красный текст */
+  border: 1px solid #f5c6cb; /* Красная рамка */
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Контейнер страницы администратора */
+.admin-container {
+  padding: 2rem;
+}
+
+.admin-sections {
+  display: flex;
+  gap: 2rem;
+}
+
+.admin-section {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.admin-section h2 {
+  margin-bottom: 1rem;
+}
+
+.admin-section a {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.admin-section a:hover {
+  text-decoration: underline;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+table th {
+  background-color: #f4f4f4;
+}
