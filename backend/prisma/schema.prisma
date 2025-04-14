@@ -14,18 +14,20 @@ datasource db {
 }
 
 model News {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255) // Ограничение длины
+  content     String   @db.Text
+  htmlContent String?  @db.LongText // Изменено на LONGTEXT
+  media       Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Page {
   id        Int      @id @default(autoincrement())
-  title     String
-  slug      String   @unique
-  content   String
+  title     String   @db.VarChar(255) // Ограничение длины
+  slug      String   @unique @db.VarChar(255)
+  content   String   @db.Text
   createdAt DateTime @default(now())
 }
 
@@ -35,4 +37,16 @@ model User {
   password  String
   role      String   @default("user") // Роль пользователя (например, admin, user)
   createdAt DateTime @default(now())
+}
+
+model MenuItem {
+  id        Int        @id @default(autoincrement())
+  title     String     @db.VarChar(255)
+  link      String     @db.VarChar(255)
+  mute      Boolean    @default(false)
+  parentId  Int?
+  parent    MenuItem?  @relation("MenuItemToParent", fields: [parentId], references: [id])
+  children  MenuItem[] @relation("MenuItemToParent")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 interface News {
   id: number;
   title: string;
+  htmlContent: string;
+  media: string[];
   createdAt: string;
 }
 
@@ -26,24 +28,16 @@ export const NewsList = () => {
   return (
     <div>
       <h1>Список новостей</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Название</th>
-            <th>Дата создания</th>
-          </tr>
-        </thead>
-        <tbody>
-          {news.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.title}</td>
-              <td>{new Date(item.createdAt).toLocaleDateString()}</td>
-            </tr>
+      {news.map((item) => (
+        <div key={item.id} className="news-item">
+          <h2>{item.title}</h2>
+          <div dangerouslySetInnerHTML={{ __html: item.htmlContent }} />
+          {item.media.map((url, index) => (
+            <img key={index} src={url} alt={`media-${index}`} />
           ))}
-        </tbody>
-      </table>
+          <p>Дата создания: {new Date(item.createdAt).toLocaleDateString()}</p>
+        </div>
+      ))}
     </div>
   );
 };

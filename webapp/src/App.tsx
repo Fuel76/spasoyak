@@ -12,6 +12,7 @@ import { LoginPage } from './pages/LoginPage';
 import { AuthProvider } from './contexts/AuthContext';
 import { PagesList } from './pages/AdminPage/PagesList';
 import { NewsList } from './pages/AdminPage/NewsList';
+import { SiteMapEditor } from './pages/AdminPage/SiteMapEditor';
 
 export const App = () => {
   const [pages, setPages] = useState<{ slug: string; title: string; content: string }[]>([]);
@@ -19,7 +20,10 @@ export const App = () => {
   useEffect(() => {
     const fetchPages = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/pages'); // Убедитесь, что URL правильный
+        const response = await fetch('http://localhost:3000/api/pages');
+        if (!response.ok) {
+          throw new Error('Ошибка при загрузке страниц');
+        }
         const data = await response.json();
         setPages(data);
       } catch (error) {
@@ -74,6 +78,7 @@ export const App = () => {
               {/* Админ страницы и новости */}
               <Route path="/admin/pages" element={<PagesList />} />
               <Route path="/admin/news" element={<NewsList />} />
+              <Route path="/admin/sitemap" element={<SiteMapEditor />} />
             </Route>
           </Routes>
         </BrowserRouter>

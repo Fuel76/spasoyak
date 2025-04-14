@@ -25,6 +25,7 @@ html, body {
 /* Хедер */
 .header {
   position: relative;
+  z-index: 5; /* Шапка выше основного контента */
   width: 100%;
 }
 
@@ -48,23 +49,25 @@ html, body {
   word-wrap: break-word;
 }
 
-/* Декоративные изображения */
+/* Контейнер для декоративных изображений */
 .rotated-images-container {
-  position: absolute;
-  left: 0; /* Располагаем изображения по левому краю */
+  position: absolute; /* Абсолютное позиционирование относительно родителя */
+  left: 0; /* Располагаем контейнер по левому краю */
   top: 0; /* Начало контейнера сверху */
-  width: 100%; /* Автоматическая ширина */
-  height: 100%; /* Высота контейнера на всю страницу */
-  z-index: 10; /* Убедитесь, что значение выше, чем у других элементов */
+  width: 9.5%; /* Ширина контейнера совпадает с шириной изображений */
+  height: 100%; /* Высота контейнера на всю высоту родителя */
+  display: flex;
+  flex-direction: column; /* Располагаем изображения вертикально */
+  justify-content: space-between; /* Убираем промежутки между изображениями */
+  overflow: hidden; /* Убираем лишние изображения, если они выходят за пределы */
+  z-index: 4; /* Декоративные изображения ниже шапки */
 }
 
+/* Стили для декоративных изображений */
 .rotated-image {
-  position: absolute;
-  left: 0; /* Располагаем изображения по левому краю */
-  width: 9.5%; /* Относительная ширина */
+  width: 100%; /* Изображения занимают всю ширину контейнера */
+  height: auto; /* Сохраняем пропорции изображения */
   object-fit: contain; /* Сохраняем пропорции изображения */
-  z-index: 10; /* Совпадает с контейнером */
-  transform-origin: top left;
 }
 
 .small-image {
@@ -126,7 +129,7 @@ html, body {
   margin-top: 0vh; /* Отступ под шапкой */
 }
 
-/* Sidemenu */
+/* Контейнер для sidemenu */
 .sidemenu {
   width: 20%; /* Фиксированная ширина бокового меню */
   background: #c0b19f; /* Цвет фона */
@@ -137,6 +140,7 @@ html, body {
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1); /* Тень справа */
 }
 
+/* Секция меню */
 .sidemenu-item {
   padding: 1rem;
   background: #c0b19f; /* Цвет фона */
@@ -157,6 +161,7 @@ html, body {
   border-radius: 10px; /* Закругленные углы */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
   overflow-y: auto; /* Скроллинг, если контент превышает высоту */
+  z-index: 2; /* Основной контент ниже шапки и бокового меню */
 }
 
 /* Контейнер для страницы */
@@ -205,6 +210,12 @@ html, body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.news-item img {
+  max-width: 100%;
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
 .news-item h2 {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
@@ -223,6 +234,7 @@ html, body {
   background: rgba(255, 255, 255, 0.32);
   opacity: 0.7;
   margin-top: auto;
+  z-index: 1; /* Подвал ниже всего */
 }
 
 .footer-logo {

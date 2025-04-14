@@ -35,13 +35,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { user, token } = await authSignIn(email, password);
-    setUser(user);
+    try {
+      const { user, token } = await authSignIn(email, password);
+      setUser(user);
+      localStorage.setItem('session', JSON.stringify({ token }));
+    } catch (error) {
+      console.error('Ошибка при входе:', error);
+      throw new Error('Не удалось войти. Проверьте email и пароль.');
+    }
   };
 
   const signOut = async () => {
-    await authSignOut();
-    setUser(null);
+    try {
+      await authSignOut();
+      setUser(null);
+      localStorage.removeItem('session');
+    } catch (error) {
+      console.error('Ошибка при выходе:', error);
+      throw new Error('Не удалось выйти.');
+    }
   };
 
   return (

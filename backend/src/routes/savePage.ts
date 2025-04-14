@@ -8,6 +8,15 @@ router.post('/', async (req, res) => {
   const { title, slug, content } = req.body;
 
   try {
+    const existingPage = await prisma.page.findUnique({
+      where: { slug },
+    });
+
+    if (existingPage) {
+      res.status(400).json({ error: 'Slug уже используется' });
+      return;
+    }
+
     const page = await prisma.page.create({
       data: {
         title,
@@ -15,10 +24,9 @@ router.post('/', async (req, res) => {
         content,
       },
     });
-    res.status(200).send({ message: 'Страница успешно создана!', page });
+    res.status(201).json(page);
   } catch (error) {
-    console.error('Ошибка при создании страницы:', error);
-    res.status(500).send({ error: 'Ошибка при создании страницы.' });
+    res.status(500).json({ error: 'Ошибка при создании страницы' });
   }
 });
 

@@ -16,6 +16,10 @@ export const AdminPage = () => {
           <Link to="/admin/news">Список новостей</Link>
           <Link to="/news/add">Добавить новость</Link>
         </div>
+        <div className="admin-section">
+          <h2>Управление схемой сайта</h2>
+          <Link to="/admin/sitemap">Редактировать схему сайта</Link>
+        </div>
       </div>
     </div>
   );
