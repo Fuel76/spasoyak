@@ -1,0 +1,152 @@
+.admin-news-list-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.admin-news-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.admin-news-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+.admin-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  text-decoration: none; /* Для Link */
+  display: inline-flex; /* Для Link */
+  align-items: center;
+  justify-content: center;
+  line-height: 1; /* Убираем лишнюю высоту */
+}
+
+.admin-button-create {
+  background-color: #28a745; /* Зеленый */
+  color: white;
+}
+.admin-button-create:hover {
+  background-color: #218838;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.admin-news-list {
+  display: grid;
+  gap: 20px;
+  /* Адаптивная сетка */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.admin-news-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s;
+}
+.admin-news-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.admin-news-card--hidden {
+  opacity: 0.6; /* Делаем скрытые новости полупрозрачными */
+  background-color: #f8f9fa;
+}
+.admin-news-card--hidden:hover {
+   opacity: 0.8;
+}
+
+
+.admin-news-card__cover {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  background-color: #eee; /* Фон для случая без картинки */
+}
+
+.admin-news-card__body {
+  padding: 15px;
+  flex-grow: 1; /* Занимает доступное пространство */
+}
+
+.admin-news-card__title {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.admin-news-card__date {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-news-card__badge {
+  background-color: #6c757d;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+
+.admin-news-card__actions {
+  display: flex;
+  justify-content: flex-end; /* Кнопки справа */
+  gap: 8px;
+  padding: 10px 15px;
+  border-top: 1px solid #f0f0f0;
+  background-color: #f8f9fa; /* Легкий фон для кнопок */
+}
+
+.admin-news-card__actions .admin-button {
+  padding: 5px 8px; /* Уменьшаем кнопки действий */
+  font-size: 1rem; /* Размер иконок */
+  background-color: #e9ecef;
+  color: #495057;
+}
+.admin-news-card__actions .admin-button:hover {
+  background-color: #dee2e6;
+}
+
+.admin-button-edit { color: #007bff; }
+.admin-button-edit:hover { background-color: #cce5ff; }
+
+.admin-button-hide { color: #ffc107; }
+.admin-button-hide:hover { background-color: #fff3cd; }
+
+.admin-button-show { color: #28a745; }
+.admin-button-show:hover { background-color: #d4edda; }
+
+.admin-button-delete { color: #dc3545; }
+.admin-button-delete:hover { background-color: #f8d7da; }
+
+/* Адаптивность для списка */
+@media (max-width: 600px) {
+  .admin-news-list {
+    grid-template-columns: 1fr; /* Одна колонка на маленьких экранах */
+  }
+  .admin-news-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

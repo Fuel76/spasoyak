@@ -46,9 +46,11 @@ export const Sidemenu = () => {
             <Link to={item.link} className="sidemenu-item-title">
               {item.title}
             </Link>
-            {item.children && <div className="sidemenu-item-icon"></div>}
+            {item.children && item.children.length > 0 && (
+              <div className="sidemenu-item-icon"></div>
+            )}
           </div>
-          {item.children && (
+          {item.children && item.children.length > 0 && (
             <div className="sidemenu-children">{renderMenu(item.children)}</div>
           )}
         </div>

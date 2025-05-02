@@ -15,7 +15,7 @@ export const Header = () => {
             className="rotated-image"
             src={ornamentImage}
             alt={`Декоративное изображение ${index + 1}`}
-            style={{ top: `${index * 41}vh` }}
+            style={{ top: `${index * 50}vh` }}
           />
         ))}
       </div>

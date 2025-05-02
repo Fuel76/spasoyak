@@ -1,8 +1,15 @@
+import express from 'express';
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 const router = Router();
+
+const pagesRouter = express.Router();
+// Добавьте маршруты к pagesRouter
+pagesRouter.get('/', (req, res) => {
+  res.send('Pages route');
+});
 
 router.get('/', async (req, res) => {
   const pages = await prisma.page.findMany();

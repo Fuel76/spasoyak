@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
 
@@ -7,34 +7,41 @@ interface NewsEditorProps {
 }
 
 export const NewsEditor: React.FC<NewsEditorProps> = ({ newsId }) => {
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>('');
-  const [htmlContent, setHtmlContent] = useState<string>('');
-  const [media, setMedia] = useState<string>('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [htmlContent, setHtmlContent] = useState('');
+  const [coverUrl, setCoverUrl] = useState('');
+  const [mediaUrls, setMediaUrls] = useState<string[]>([]);
+  const [newMediaUrl, setNewMediaUrl] = useState('');
 
   useEffect(() => {
     if (newsId) {
-      // Загрузка данных новости для редактирования
-      const fetchNews = async () => {
-        try {
-          const response = await fetch(`http://localhost:3000/api/news/${newsId}`);
-          if (response.ok) {
-            const news = await response.json();
-            setTitle(news.title);
-            setContent(news.content);
-            setHtmlContent(news.htmlContent || '');
-            setMedia(news.media || '');
-          } else {
-            console.error('Ошибка при загрузке новости');
+      fetch(`http://localhost:3000/api/news/${newsId}`)
+        .then(res => res.json())
+        .then(news => {
+          setTitle(news.title);
+          setContent(news.content);
+          setHtmlContent(news.htmlContent || '');
+          setCoverUrl(news.cover || '');
+          try {
+            setMediaUrls(JSON.parse(news.media || '[]'));
+          } catch {
+            setMediaUrls([]);
           }
-        } catch (error) {
-          console.error('Ошибка при загрузке новости:', error);
-        }
-      };
-
-      fetchNews();
+        });
     }
   }, [newsId]);
+
+  const handleAddMediaUrl = () => {
+    if (newMediaUrl && !mediaUrls.includes(newMediaUrl)) {
+      setMediaUrls((prev) => [...prev, newMediaUrl]);
+      setNewMediaUrl('');
+    }
+  };
+
+  const handleRemoveMediaUrl = (urlToRemove: string) => {
+    setMediaUrls((prev) => prev.filter(url => url !== urlToRemove));
+  };
 
   const handleSave = async () => {
     if (!title || !content) {
@@ -42,67 +49,119 @@ export const NewsEditor: React.FC<NewsEditorProps> = ({ newsId }) => {
       return;
     }
 
+    const body = JSON.stringify({
+      title,
+      content,
+      htmlContent,
+      coverUrl: coverUrl || null,
+      mediaUrls,
+    });
+
+    const method = newsId ? 'PUT' : 'POST';
+    const url = `http://localhost:3000/api/news/${newsId || ''}`;
+
     try {
-      const response = await fetch(`http://localhost:3000/api/news/${newsId || ''}`, {
-        method: newsId ? 'PUT' : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title, content, htmlContent }),
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body,
       });
 
       if (response.ok) {
         alert('Новость успешно сохранена!');
       } else {
         const errorData = await response.json();
-        alert(errorData.error || 'Ошибка при сохранении новости.');
+        alert(`Ошибка: ${errorData.error || response.statusText}`);
       }
     } catch (error) {
-      console.error('Ошибка при сохранении новости:', error);
-      alert('Ошибка при сохранении новости.');
+      console.error("Ошибка при сохранении:", error);
+      alert('Сетевая ошибка или ошибка сервера.');
     }
   };
 
   return (
-    <div>
+    <div className="news-editor">
       <h2>{newsId ? 'Редактирование новости' : 'Создание новости'}</h2>
       <input
         type="text"
         placeholder="Заголовок"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        style={{ width: '100%', marginBottom: '10px', padding: '8px' }}
+        className="news-editor__input"
       />
       <SunEditor
         setOptions={{
-          height: '300px',
+          height: '500px',
           buttonList: [
             ['undo', 'redo'],
-            ['bold', 'italic', 'underline', 'strike'],
-            ['list', 'align', 'font', 'fontSize', 'formatBlock'],
-            ['link', 'image', 'video', 'table'],
+            ['font', 'fontSize', 'formatBlock'],
+            ['paragraphStyle', 'blockquote'],
+            ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript'],
+            ['fontColor', 'hiliteColor', 'textStyle'],
             ['removeFormat'],
+            ['outdent', 'indent'],
+            ['align', 'horizontalRule', 'list', 'lineHeight'],
+            ['table', 'link', 'image', 'video'],
+            ['fullScreen', 'showBlocks', 'codeView'],
           ],
+          imageUploadUrl: '/api/upload-image-from-editor',
+          imageAccept: '.jpg, .jpeg, .png, .gif, .bmp',
         }}
-        onChange={(content) => setHtmlContent(content)}
+        onChange={setHtmlContent}
         defaultValue={htmlContent}
+        setDefaultStyle="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6;"
       />
       <textarea
-        placeholder="Краткое содержание"
+        placeholder="Краткое содержание (текст)"
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        style={{ width: '100%', marginTop: '10px', padding: '8px', height: '100px' }}
+        className="news-editor__textarea"
       />
-      {newsId && (
-        <div>
-          <h3>Медиа-файлы:</h3>
-          {Array.isArray(JSON.parse(media)) &&
-            JSON.parse(media).map((mediaUrl: string, index: number) => (
-              <img key={index} src={`http://localhost:3000${mediaUrl}`} alt="media" />
-            ))}
-        </div>
-      )}
-      <button onClick={handleSave} style={{ marginTop: '20px' }}>
+
+      <div className="news-editor__media">
+        <label>
+          Ссылка на обложку:
+          <input
+            type="text"
+            value={coverUrl}
+            onChange={(e) => setCoverUrl(e.target.value)}
+            placeholder="https://example.com/cover.jpg"
+            className="news-editor__url-input"
+          />
+        </label>
+        {coverUrl && (
+          <img src={coverUrl} alt="Превью обложки" className="news-editor__cover-preview" />
+        )}
+      </div>
+
+      <div className="news-editor__media">
+        <label>
+          Добавить ссылку на изображение:
+          <input
+            type="text"
+            value={newMediaUrl}
+            onChange={(e) => setNewMediaUrl(e.target.value)}
+            placeholder="https://example.com/image.jpg"
+            className="news-editor__url-input"
+          />
+          <button type="button" onClick={handleAddMediaUrl} className="news-editor__add-btn">
+            Добавить
+          </button>
+        </label>
+        <ul className="news-editor__media-list">
+          {mediaUrls.map((url, index) => (
+            <li key={index}>
+              <img src={url} alt={`media-${index}`} className="news-editor__media-preview" />
+              <span>{url.length > 40 ? url.slice(0, 40) + '...' : url}</span>
+              <button type="button" onClick={() => handleRemoveMediaUrl(url)} className="news-editor__remove-btn">
+                Удалить
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <button onClick={handleSave} className="news-editor__save-btn">
         Сохранить
       </button>
     </div>

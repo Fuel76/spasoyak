@@ -19,6 +19,8 @@ model News {
   content     String   @db.Text
   htmlContent String?  @db.LongText // Изменено на LONGTEXT
   media       Json
+  cover       String?  @db.Text // <--- ИЗМЕНИТЬ ЗДЕСЬ
+  isVisible   Boolean  @default(true) // <--- Добавить поле видимости
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -49,4 +51,9 @@ model MenuItem {
   children  MenuItem[] @relation("MenuItemToParent")
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+}
+
+model carouselImage {
+  id  Int    @id @default(autoincrement())
+  url String
 }

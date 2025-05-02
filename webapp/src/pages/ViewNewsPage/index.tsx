@@ -8,6 +8,7 @@ export const ViewNewsPage = () => {
     content: string;
     htmlContent: string | null;
     media: string | null;
+    cover: string | null;
   } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,23 +45,48 @@ export const ViewNewsPage = () => {
 
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>{error}</p>;
+  if (!news) return <p>Новость не найдена.</p>;
+
+  const coverUrl = news.cover;
 
   return (
     <div className="view-news-page">
-      <h1>{news?.title}</h1>
-      <div dangerouslySetInnerHTML={{ __html: decodeHtml(news?.htmlContent || '') }} />
-      {news?.media &&
-        (() => {
-          try {
-            const media = JSON.parse(news.media) as string[];
-            return media.map((mediaUrl, index) => (
-              <img key={index} src={`http://localhost:3000${mediaUrl}`} alt="media" />
-            ));
-          } catch (err) {
-            console.error('Ошибка при парсинге media:', err);
-            return null;
-          }
-        })()}
+      {/* Контейнер для "липкой" обложки */}
+      {coverUrl && (
+        <div className="news-cover-sticky-container">
+          <div className="news-cover-full">
+            <img src={coverUrl} alt={news.title} />
+            {/* Можно добавить градиент для плавного перехода */}
+            <div className="news-cover-gradient"></div>
+          </div>
+        </div>
+      )}
+
+      {/* Контейнер для контента, который будет скроллиться поверх обложки */}
+      <div className="news-content-scrollable">
+        <h1>{news.title}</h1>
+
+        {/* Отображаем HTML контент */}
+        <div dangerouslySetInnerHTML={{ __html: decodeHtml(news.htmlContent || '') }} />
+
+        {/* Отображаем медиа */}
+        {news.media &&
+          (() => {
+            try {
+              const media = JSON.parse(news.media) as string[];
+              return (
+                <div className="news-media-gallery">
+                  {media.map((mediaUrl, index) => (
+                    <img key={index} src={mediaUrl} alt={`media-${index}`} />
+                  ))}
+                </div>
+              );
+            } catch (err) {
+              console.error('Ошибка при парсинге media:', err);
+              return null;
+            }
+          })()}
+      </div>
     </div>
   );
 };

@@ -7,7 +7,7 @@ import { CreatePage } from './pages/CreatePage';
 import { Layout } from './components/layout';
 import { NewsEditorPage } from './pages/NewsEditorPage';
 import { PrivateRoute } from './components/PrivateRoute';
-import { AdminPage } from './pages/AdminPage';
+import AdminPage from './pages/AdminPage';
 import { LoginPage } from './pages/LoginPage';
 import { AuthProvider } from './contexts/AuthContext';
 import { PagesList } from './pages/AdminPage/PagesList';

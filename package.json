@@ -11,6 +11,7 @@
 		"prettify": "pnpm -r --parallel prettify"
 	},
 	"devDependencies": {
+		"@types/express": "4.17.21",
 		"@types/jsonwebtoken": "^9.0.9",
 		"concurrently": "^9.1.2",
 		"eslint": "^9.23.0",
@@ -22,6 +23,8 @@
 	"dependencies": {
 		"@ckeditor/ckeditor5-build-classic": "^44.3.0",
 		"@ckeditor/ckeditor5-react": "^9.5.0",
+		"@prisma/client": "^6.5.0",
+		"express": "^4.21.2",
 		"jsonwebtoken": "^9.0.2",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",

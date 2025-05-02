@@ -1,8 +1,10 @@
+import footerLogo from '../assets/лого.png';
+
 export const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-logo">
-        <img src="https://placehold.co/375x203" alt="Логотип" />
+        <img src={footerLogo} alt="Логотип" />
       </div>
       <div className="footer-text">
         <h2>Спасо-Яковлевский Димитриев Монастырь</h2>

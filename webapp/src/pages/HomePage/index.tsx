@@ -1,14 +1,56 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { trpc } from '../../lib/trpc';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 export const HomePage = () => {
-  const { data, error, isLoading, isFetching, isError } = trpc.getNews.useQuery();
+  // Заменяем trpc на обычное состояние и fetch
+  interface NewsItem {
+    id: number;
+    title: string;
+    cover: string;
+    media: string | string[];
+    htmlContent: string;
+  }
 
-  if (isLoading || isFetching) return <span>Loading...</span>;
-  if (isError) return <span>Error: {error.message}</span>;
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [carouselImages, setCarouselImages] = useState<{ id: number; url: string }[]>([]);
+
+  // Загрузка новостей
+  useEffect(() => {
+    setIsLoading(true);
+    fetch('http://localhost:3000/api/news/public')
+      .then(res => res.json())
+      .then(data => {
+        setNews(data.news); // Получаем news из объекта { news: [...] }
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error('Ошибка при загрузке новостей:', err);
+        setError(err);
+        setIsLoading(false);
+      });
+  }, []);
+
+  // Загрузка картинок для карусели
+  useEffect(() => {
+    fetch('http://localhost:3000/api/carousel')
+      .then((res) => res.json())
+      .then((data) => {
+        const uniqueImages = data.filter(
+          (img: { id: number; url: string }, idx: number, arr: any[]) =>
+            arr.findIndex((el) => el.url === img.url) === idx
+        );
+        setCarouselImages(uniqueImages);
+      })
+      .catch((error) => console.error('Ошибка при загрузке изображений карусели:', error));
+  }, []);
+
+  if (isLoading) return <span>Loading...</span>;
+  if (error) return <span>Error: {error}</span>;
 
   // Настройки для карусели
   const sliderSettings = {
@@ -21,23 +63,14 @@ export const HomePage = () => {
     autoplaySpeed: 3000,
   };
 
-  // Заглушки для изречений
-  const quotes = [
-    "Мудрость начинается с удивления. — Сократ",
-    "Счастье — это не что-то готовое. Оно зависит от ваших действий. — Далай-лама",
-    "Единственный способ сделать что-то великое — любить то, что ты делаешь. — Стив Джобс",
-    "Неудача — это просто возможность начать снова, но уже более мудро. — Генри Форд",
-    "Жизнь — это то, что происходит, пока вы строите планы. — Джон Леннон",
-  ];
-
   return (
     <div className="homepage">
       {/* Карусель */}
       <div className="carousel-container">
         <Slider {...sliderSettings}>
-          {quotes.map((quote, index) => (
-            <div key={index} className="carousel-slide">
-              <p>{quote}</p>
+          {carouselImages.map((image) => (
+            <div key={image.id} className="carousel-slide">
+              <img src={image.url} alt="carousel" />
             </div>
           ))}
         </Slider>
@@ -45,28 +78,65 @@ export const HomePage = () => {
 
       {/* Новостной блок */}
       <div className="news-block">
-        <h1>Новости</h1>
-        {data?.news.map((neww) => (
-          <div className="news-item" key={neww.id}>
-            <h2>{neww.title}</h2>
-            <p>{neww.content.slice(0, 200)}...</p>
-            {neww.media &&
-              (() => {
+        <div className="container mt-5">
+          <div className="row">
+            {news.length > 0 ? (
+              news.map((neww) => {
+                const coverUrl = neww.cover;
+                let mediaUrls: string[] = [];
                 try {
-                  const media = JSON.parse(neww.media) as string[];
-                  return media.map((mediaUrl, index) => (
-                    <img key={index} src={`http://localhost:3000/${mediaUrl}`} alt="media" />
-                  ));
-                } catch (error) {
-                  console.error('Ошибка при парсинге media:', error);
-                  return null;
+                  if (typeof neww.media === 'string') {
+                    mediaUrls = JSON.parse(neww.media);
+                  } else if (Array.isArray(neww.media)) {
+                    mediaUrls = neww.media;
+                  }
+                } catch (e) {
+                  console.error("Ошибка парсинга media:", e, neww.media);
+                  mediaUrls = [];
                 }
-              })()}
-            <Link to={`/news/${neww.id}`} className="read-more">
-              Читать дальше
-            </Link>
+
+                const decodeHtml = (html: string): string => {
+                  const txt = document.createElement('textarea');
+                  txt.innerHTML = html;
+                  return txt.value;
+                };
+
+                const previewHtml = neww.htmlContent || '';
+
+                return (
+                  <div className="col-12 col-md-6 col-lg-4" key={neww.id}>
+                    <article className="news-card">
+                      {coverUrl && (
+                        <div className="news-card__cover">
+                          <img src={coverUrl} alt={neww.title} />
+                        </div>
+                      )}
+                      <div className="news-card__body">
+                        <h5 className="news-card__title">{neww.title}</h5>
+                        <div
+                          className="news-card__preview-content formatted-content"
+                          dangerouslySetInnerHTML={{ __html: decodeHtml(previewHtml) }}
+                        />
+                        <div className="news-card__media">
+                          {mediaUrls.map((url, index) => (
+                            <img key={index} src={url} alt={`media-${index}`} className="news-card__media-thumb" />
+                          ))}
+                        </div>
+                        <a href={`/news/${neww.id}`} className="news-card__more">
+                          Читать дальше
+                        </a>
+                      </div>
+                    </article>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-12 text-center">
+                <p>Новостей пока нет</p>
+              </div>
+            )}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

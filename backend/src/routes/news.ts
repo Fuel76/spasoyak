@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
-import multer from 'multer';
-import { Request, Response } from 'express';
+import { PrismaClient, Prisma } from '@prisma/client'; // <--- Добавьте Prisma здесь
+import multer, { FileFilterCallback } from 'multer';
+import { Request, Response, NextFunction } from 'express';
 import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
@@ -11,18 +11,24 @@ const router = Router();
 
 // Настройка хранилища для загрузки файлов
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: function (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) {
     cb(null, 'uploads/news'); // Папка для сохранения файлов
   },
-  filename: (req, file, cb) => {
+  filename: function (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
     cb(null, `${Date.now()}-${file.originalname}`);
-  },
+  }
 });
 
 const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // Ограничение размера файла: 10 MB
 });
+
+const coverStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/news/covers'),
+  filename: (req, file, cb) => cb(null, `${Date.now()}-cover-${file.originalname}`)
+});
+const coverUpload = multer({ storage: coverStorage });
 
 const downloadImage = async (url: string, filename: string): Promise<string> => {
   const response = await axios.get(url, { responseType: 'stream' });
@@ -36,15 +42,26 @@ const downloadImage = async (url: string, filename: string): Promise<string> => 
 };
 
 // Получение списка новостей
-router.get('/', async (req: Request, res: Response): Promise<void> => {
+router.get('/', async (req, res) => {
   try {
     const news = await prisma.news.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'desc' }
     });
-    res.json(news);
+    res.json({ news });
   } catch (error) {
-    console.error('Ошибка при получении списка новостей:', error);
-    res.status(500).json({ error: 'Ошибка при получении списка новостей' });
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+router.get('/public', async (req, res) => {
+  try {
+    const news = await prisma.news.findMany({
+      where: { isVisible: true },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json({ news });
+  } catch (error) {
+    res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
 
@@ -69,30 +86,13 @@ router.get('/:id', async (req: Request<{ id: string }>, res: Response): Promise<
   }
 });
 
-// Создание новости
-router.post('/', upload.array('media', 10), async (req: Request, res: Response): Promise<void> => {
-  const { title, content, htmlContent } = req.body;
+// Создание новости с поддержкой cover
+router.post('/', async (req, res) => {
+  // Получаем coverUrl из тела запроса
+  const { title, content, htmlContent, coverUrl, mediaUrls } = req.body;
 
   if (!title || !content) {
-    res.status(400).json({ error: 'Заголовок и содержание обязательны' });
-    return;
-  }
-
-  const media = Array.isArray(req.files)
-    ? (req.files as Express.Multer.File[]).map((file) => `/uploads/news/${file.filename}`)
-    : [];
-
-  // Обработка изображений из HTML-контента
-  const imageUrls: string[] = [];
-  const imageRegex = /<img[^>]+src="([^">]+)"/g;
-  let match;
-  while ((match = imageRegex.exec(htmlContent)) !== null) {
-    const imageUrl = match[1];
-    if (imageUrl.startsWith('http')) {
-      const filename = `${Date.now()}-${path.basename(imageUrl)}`;
-      const localPath = await downloadImage(imageUrl, filename);
-      imageUrls.push(localPath);
-    }
+    return res.status(400).json({ error: 'Заголовок и содержание обязательны' });
   }
 
   try {
@@ -100,26 +100,33 @@ router.post('/', upload.array('media', 10), async (req: Request, res: Response):
       data: {
         title,
         content,
-        htmlContent,
-        media: JSON.stringify([...media, ...imageUrls]), // Сохраняем пути к файлам как JSON
+        htmlContent: htmlContent || '',
+        // Сохраняем ссылку на обложку напрямую
+        cover: coverUrl || null,
+        // Сохраняем массив ссылок на медиа
+        media: JSON.stringify(mediaUrls || []),
       },
     });
     res.status(201).json(news);
   } catch (error) {
     console.error('Ошибка при создании новости:', error);
-    res.status(500).json({ error: 'Ошибка при создании новости' });
+    res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
 
 // Обновление новости
-router.put('/:id', upload.array('media', 10), async (req: Request<{ id: string }>, res: Response): Promise<void> => {
+router.put('/:id', upload.array('media', 10), coverUpload.single('cover'), async (req: Request<{ id: string }>, res: Response): Promise<void> => {
   const { id } = req.params;
-  const { title, content, htmlContent } = req.body;
+  const { title, content, htmlContent, coverUrl } = req.body;
 
-  // Проверяем, что req.files является массивом
   const media = Array.isArray(req.files)
     ? (req.files as Express.Multer.File[]).map((file) => `/uploads/news/${file.filename}`)
     : [];
+
+  let coverPath = coverUrl || '';
+  if (req.file) {
+    coverPath = `/uploads/news/covers/${req.file.filename}`;
+  }
 
   try {
     const news = await prisma.news.update({
@@ -128,7 +135,8 @@ router.put('/:id', upload.array('media', 10), async (req: Request<{ id: string }
         title,
         content,
         htmlContent,
-        media: JSON.stringify(media), // Сохраняем пути к файлам как JSON
+        media: JSON.stringify(media),
+        cover: coverPath || null,
       },
     });
     res.status(200).json(news);
@@ -139,9 +147,8 @@ router.put('/:id', upload.array('media', 10), async (req: Request<{ id: string }
 });
 
 // Удаление новости
-router.delete('/:id', async (req: Request<{ id: string }>, res: Response): Promise<void> => {
-  const { id } = req.params;
-
+router.delete('/:id', async (req: Request<{ id: string }>, res: Response) => {
+  const { id } = req.params; // Убедитесь, что id извлекается здесь или выше
   try {
     await prisma.news.delete({
       where: { id: parseInt(id, 10) },
@@ -149,7 +156,58 @@ router.delete('/:id', async (req: Request<{ id: string }>, res: Response): Promi
     res.status(204).send();
   } catch (error) {
     console.error('Ошибка при удалении новости:', error);
-    res.status(500).json({ error: 'Ошибка при удалении новости' });
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === 'P2025') {
+        // Теперь return здесь не вызывает конфликта типов с сигнатурой функции
+        return res.status(404).json({ error: 'Новость не найдена' });
+      }
+    }
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+// Переключение видимости новости
+router.patch('/:id/toggle-visibility', async (req, res): Promise<void> => {
+  const { id } = req.params;
+  try {
+    const newsItem = await prisma.news.findUnique({ where: { id: parseInt(id, 10) } });
+    if (!newsItem) {
+      res.status(404).json({ error: 'Новость не найдена' });
+      return;
+    }
+    const updatedNews = await prisma.news.update({
+      where: { id: parseInt(id, 10) },
+      data: { isVisible: !newsItem.isVisible },
+    });
+    res.json(updatedNews);
+  } catch (error) {
+    console.error('Ошибка при переключении видимости:', error);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});
+
+router.post('/upload-by-url', async (req, res) => {
+  const { url, type } = req.body; // type: 'cover' или 'media'
+  if (!url) return res.status(400).json({ error: 'Нет ссылки' });
+
+  try {
+    const response = await axios.get(url, { responseType: 'stream' });
+    const ext = path.extname(url).split('?')[0] || '.jpg';
+    const filename = `${Date.now()}-${type}${ext}`;
+    const uploadPath = path.join(__dirname, '../../uploads/news', filename);
+    const writer = fs.createWriteStream(uploadPath);
+
+    response.data.pipe(writer);
+
+    writer.on('finish', () => {
+      res.json({ path: `/uploads/news/${filename}` });
+    });
+    writer.on('error', () => {
+      res.status(500).json({ error: 'Ошибка сохранения файла' });
+    });
+  } catch (e) {
+    res.status(500).json({ error: 'Ошибка загрузки по ссылке' });
   }
 });
 
