@@ -26,19 +26,28 @@ model News {
 }
 
 model Page {
-  id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255) // Ограничение длины
-  slug      String   @unique @db.VarChar(255)
-  content   String   @db.Text
-  createdAt DateTime @default(now())
+  id              Int      @id @default(autoincrement())
+  slug            String   @unique
+  title           String
+  content         String   @db.LongText
+  isVisible       Boolean  @default(true)
+  customCss       String?  @db.LongText
+  metaDescription String?  @db.Text
+  metaKeywords    String?  @db.Text
+  history         Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  role      String   @default("user") // Роль пользователя (например, admin, user)
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  name     String? // Поле name должно быть определено
+
+  role      String   @default("user")
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model MenuItem {
@@ -53,7 +62,25 @@ model MenuItem {
   updatedAt DateTime   @updatedAt
 }
 
-model carouselImage {
-  id  Int    @id @default(autoincrement())
-  url String
+// Переименовываем модель в PascalCase согласно соглашениям Prisma
+model CarouselImage {
+  id        Int      @id @default(autoincrement())
+  url       String
+  title     String? // Добавляем необязательное поле для заголовка изображения
+  alt       String? // Добавляем необязательное поле для alt-текста (доступность)
+  order     Int      @default(0) // Добавляем поле для сортировки
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("carouselImage") // Сохраняем старое имя таблицы для совместимости
+}
+
+model Treba {
+  id            Int      @id @default(autoincrement())
+  type          String // 'о здравии' или 'об упокоении'
+  names         String // Список имён (через запятую или перенос строки)
+  note          String? // Дополнительная записка
+  paymentStatus String   @default("pending") // 'pending', 'paid', 'failed'
+  paymentId     String? // ID платежа в платёжной системе
+  createdAt     DateTime @default(now())
 }

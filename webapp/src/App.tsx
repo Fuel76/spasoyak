@@ -13,6 +13,15 @@ import { AuthProvider } from './contexts/AuthContext';
 import { PagesList } from './pages/AdminPage/PagesList';
 import { NewsList } from './pages/AdminPage/NewsList';
 import { SiteMapEditor } from './pages/AdminPage/SiteMapEditor';
+import { EditNewsPage } from './pages/EditNewsPage';
+import { CreateNewsPage } from './pages/CreateNewsPage';
+import { AdminPagesPage } from './pages/AdminPagesPage';
+import { CreatePagePage } from './pages/CreatePagePage';
+import { EditPagePage } from './pages/EditPagePage';
+import { RegisterPage } from './pages/RegisterPage';
+import { RegisterAdminPage } from './pages/RegisterAdminPage';
+import TrebyPage from './pages/TrebyPage';
+import AdminTrebyPage from './pages/AdminTrebyPage';
 
 export const App = () => {
   const [pages, setPages] = useState<{ slug: string; title: string; content: string }[]>([]);
@@ -65,6 +74,11 @@ export const App = () => {
               {/* Страница авторизации */}
               <Route path="/login" element={<LoginPage />} />
 
+              {/* Страница регистрации пользователя */}
+              <Route path="/register" element={<RegisterPage />} />
+              {/* Страница регистрации администратора */}
+              <Route path="/register-admin" element={<RegisterAdminPage />} />
+
               {/* Админ страница */}
               <Route
                 path="/admin"
@@ -76,9 +90,18 @@ export const App = () => {
               />
 
               {/* Админ страницы и новости */}
-              <Route path="/admin/pages" element={<PagesList />} />
+              <Route path="/admin/pages" element={<AdminPagesPage />} />
+              <Route path="/admin/pages/create" element={<CreatePagePage />} />
+              <Route path="/admin/pages/edit/:id" element={<EditPagePage />} />
               <Route path="/admin/news" element={<NewsList />} />
               <Route path="/admin/sitemap" element={<SiteMapEditor />} />
+              <Route path="/admin/news/edit/:id" element={<EditNewsPage />} />
+              <Route path="/admin/news/create" element={<CreateNewsPage />} />
+
+              {/* Страница треб */}
+              <Route path="/treby" element={<TrebyPage />} />
+              {/* Админка заявок на требы */}
+              <Route path="/admin/treby" element={<PrivateRoute><AdminTrebyPage /></PrivateRoute>} />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import SunEditor from 'suneditor-react';
+import SunEditorCore from 'suneditor/src/lib/core';
 import 'suneditor/dist/css/suneditor.min.css';
 
 interface SunEditorComponentProps {
@@ -10,6 +11,20 @@ export const SunEditorComponent: React.FC<SunEditorComponentProps> = ({ pageId }
   const [title, setTitle] = useState<string>('');
   const [slug, setSlug] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const sunEditorRef = useRef<SunEditorCore | null>(null);
+
+  const editorOptions = {
+    height: '300px',
+    buttonList: [
+      ['undo', 'redo'],
+      ['bold', 'italic', 'underline', 'strike'],
+      ['list', 'align', 'font', 'fontSize', 'formatBlock'],
+      ['link', 'image', 'video', 'table'],
+      ['removeFormat'],
+    ],
+    imageFileInput: true,
+    imageUrlInput: true,
+  };
 
   useEffect(() => {
     if (pageId) {
@@ -79,20 +94,12 @@ export const SunEditorComponent: React.FC<SunEditorComponentProps> = ({ pageId }
         style={{ width: '100%', marginBottom: '10px', padding: '8px' }}
       />
       <SunEditor
-        setOptions={{
-          height: '300px',
-          buttonList: [
-            ['undo', 'redo'],
-            ['bold', 'italic', 'underline', 'strike'],
-            ['list', 'align', 'font', 'fontSize', 'formatBlock'],
-            ['link', 'image', 'video', 'table'], // Включаем кнопку для добавления изображений
-            ['removeFormat'],
-          ],
-          imageFileInput: true, // Включаем загрузку файлов
-          imageUrlInput: true, // Включаем вставку изображений по URL
+        getSunEditorInstance={(sunEditor: SunEditorCore) => {
+          sunEditorRef.current = sunEditor;
         }}
-        onChange={(content) => setContent(content)} // Сохраняем HTML-контент
-        defaultValue={content}
+        setOptions={editorOptions}
+        setContents={content}
+        onChange={setContent}
       />
       <button onClick={handleSave} style={{ marginTop: '20px' }}>
         Сохранить

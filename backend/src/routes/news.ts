@@ -55,9 +55,14 @@ router.get('/', async (req, res) => {
 
 router.get('/public', async (req, res) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 6;
+    const skip = (page - 1) * limit;
     const news = await prisma.news.findMany({
       where: { isVisible: true },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
+      skip,
+      take: limit,
     });
     res.json({ news });
   } catch (error) {

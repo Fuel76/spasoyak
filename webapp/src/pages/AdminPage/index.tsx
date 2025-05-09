@@ -34,7 +34,8 @@ const AdminPage = () => {
         <div className="admin-section">
           <h2>Управление страницами</h2>
           <Link to="/admin/pages">Список страниц</Link>
-          <Link to="/create">Создать новую страницу</Link>
+          {/* Обновлено: правильная ссылка на создание страницы */}
+          <Link to="/admin/pages/create">Создать новую страницу</Link>
         </div>
         <div className="admin-section">
           <h2>Управление новостями</h2>
@@ -44,6 +45,10 @@ const AdminPage = () => {
         <div className="admin-section">
           <h2>Управление схемой сайта</h2>
           <Link to="/admin/sitemap">Редактировать схему сайта</Link>
+        </div>
+        <div className="admin-section">
+          <h2>Заявки на требы</h2>
+          <Link to="/admin/treby">Просмотр заявок</Link>
         </div>
         <div className="admin-section">
           <h2>Управление каруселью</h2>

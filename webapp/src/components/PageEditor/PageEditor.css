@@ -1,0 +1,406 @@
+.page-editor {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.page-editor__form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.form-text {
+  color: #6c757d;
+  font-size: 0.875em;
+  margin-top: 5px;
+}
+
+.page-editor__actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #45a049;
+}
+
+.page-editor__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.page-editor__basic-tools,
+.page-editor__import-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.page-editor__toolbar button,
+.file-import-label {
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.page-editor__toolbar button:hover,
+.file-import-label:hover {
+  background: #f0f0f0;
+  border-color: #ccc;
+}
+
+.file-import-label {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+}
+
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.page-editor__title {
+  width: 100%;
+  padding: 10px;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.page-editor__meta {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.page-editor__meta-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.page-editor__css {
+  margin-bottom: 20px;
+}
+
+.page-editor__css h3 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.page-editor__css-textarea,
+.page-editor__html-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.page-editor__layouts {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.page-editor__layouts h3 {
+  font-size: 1rem;
+  margin: 0 0 8px 0;
+  color: #495057;
+}
+
+.page-editor__layouts-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.page-editor__layouts-buttons button {
+  padding: 8px 12px;
+  background: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.page-editor__layouts-buttons button:hover {
+  background: #dee2e6;
+  border-color: #adb5bd;
+}
+
+.page-editor__history {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.history-time {
+  flex: 0 0 150px;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.history-title {
+  flex: 1;
+  padding: 0 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-restore-btn {
+  padding: 4px 8px;
+  background: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #495057;
+  cursor: pointer;
+}
+
+.page-preview {
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  min-height: 600px;
+}
+
+/* Стили для макетов */
+.layout {
+  margin: 2rem 0;
+  display: flex;
+  gap: 20px;
+  clear: both;
+}
+
+.layout-two-columns {
+  display: flex;
+  gap: 20px;
+}
+
+.layout-two-columns .column {
+  flex: 1;
+  min-width: 0;
+}
+
+.layout-image-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.layout-image-text .image-container {
+  flex: 0 0 45%;
+}
+
+.layout-image-text .text-container {
+  flex: 1;
+}
+
+/* Стили для героя */
+.hero-section {
+  display: flex;
+  align-items: center;
+  padding: 3rem 0;
+  gap: 30px;
+}
+
+.hero-content {
+  flex: 1;
+}
+
+.hero-image {
+  flex: 1;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+/* Стили для секции преимуществ */
+.features-section {
+  padding: 3rem 0;
+  text-align: center;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+/* Стили для отзывов */
+.testimonial-section {
+  padding: 3rem 0;
+}
+
+.testimonial {
+  padding: 20px;
+  background: #f8f9fa;
+  border-left: 5px solid #007bff;
+  font-style: italic;
+  margin: 0;
+}
+
+.testimonial cite {
+  display: block;
+  margin-top: 10px;
+  font-style: normal;
+  font-weight: bold;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .hero-section,
+  .layout-image-text,
+  .layout-two-columns {
+    flex-direction: column;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Состояние загрузки и ошибки */
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background: #e9ecef;
+  color: #212529;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+  border: 1px solid #f5c6cb;
+}
+
+/* Стили для редактора SunEditor */
+.sun-editor {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.sun-editor .se-toolbar {
+  border-bottom: 1px solid #eee;
+  background-color: #f8f9fa;
+}

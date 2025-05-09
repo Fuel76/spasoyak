@@ -18,14 +18,18 @@ export const HomePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [carouselImages, setCarouselImages] = useState<{ id: number; url: string }[]>([]);
+  const PAGE_SIZE = 6;
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   // Загрузка новостей
   useEffect(() => {
     setIsLoading(true);
-    fetch('http://localhost:3000/api/news/public')
+    fetch(`http://localhost:3000/api/news/public?page=${page}&limit=${PAGE_SIZE}`)
       .then(res => res.json())
       .then(data => {
         setNews(data.news); // Получаем news из объекта { news: [...] }
+        setHasMore(data.news.length === PAGE_SIZE);
         setIsLoading(false);
       })
       .catch(err => {
@@ -33,7 +37,7 @@ export const HomePage = () => {
         setError(err);
         setIsLoading(false);
       });
-  }, []);
+  }, [page]);
 
   // Загрузка картинок для карусели
   useEffect(() => {
@@ -134,6 +138,26 @@ export const HomePage = () => {
               <div className="col-12 text-center">
                 <p>Новостей пока нет</p>
               </div>
+            )}
+          </div>
+          {/* Пагинация */}
+          <div style={{ display: 'flex', justifyContent: 'center', margin: '2rem 0 0 0' }}>
+            <button
+              className="button"
+              style={{ minWidth: 180, opacity: hasMore ? 1 : 0.5 }}
+              onClick={() => setPage((p) => p + 1)}
+              disabled={!hasMore}
+            >
+              Следующая страница
+            </button>
+            {page > 1 && (
+              <button
+                className="button"
+                style={{ minWidth: 180, marginLeft: 16 }}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
+                Предыдущая страница
+              </button>
             )}
           </div>
         </div>

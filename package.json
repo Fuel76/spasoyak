@@ -18,12 +18,16 @@
 		"eslint-config-prettier": "^10.1.1",
 		"eslint-config-react-app": "^7.0.1",
 		"eslint-config-standard-with-typescript": "^43.0.1",
-		"prettier": "^3.5.3"
+		"prettier": "^3.5.3",
+		"ts-node": "^10.9.1",
+		"ts-node-dev": "^2.0.0"
 	},
 	"dependencies": {
 		"@ckeditor/ckeditor5-build-classic": "^44.3.0",
 		"@ckeditor/ckeditor5-react": "^9.5.0",
 		"@prisma/client": "^6.5.0",
+		"@types/dompurify": "^3.2.0",
+		"dompurify": "^3.2.5",
 		"express": "^4.21.2",
 		"jsonwebtoken": "^9.0.2",
 		"react": "^19.1.0",

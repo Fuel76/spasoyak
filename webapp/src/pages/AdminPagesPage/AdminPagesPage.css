@@ -1,0 +1,114 @@
+.admin-pages {
+  padding: 20px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.admin-pages__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-pages__create-btn {
+  padding: 10px 15px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.admin-pages__create-btn:hover {
+  background-color: #45a049;
+}
+
+.admin-pages__empty {
+  text-align: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+.admin-pages__table-container {
+  overflow-x: auto;
+}
+
+.admin-pages__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-pages__table th,
+.admin-pages__table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.admin-pages__table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.admin-pages__table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.admin-pages__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.action-btn.edit:hover {
+  background-color: #e3f2fd;
+}
+
+.action-btn.delete:hover {
+  background-color: #ffebee;
+}
+
+.visibility-toggle {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.visibility-toggle.visible {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.visibility-toggle.hidden {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 15px;
+  border-radius: 4px;
+  margin: 20px 0;
+}
