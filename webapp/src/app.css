@@ -11,15 +11,30 @@ html, body {
   box-sizing: border-box; /* Гарантируем, что padding и border не выходят за пределы */
 }
 
+.ornament-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 9.5vw;
+  height: 100%;
+  background-image: url('./assets/Боковой орнамент.svg');
+  background-repeat: repeat-y;
+  background-size: contain;
+  background-position: left top;
+  z-index: 6;
+  pointer-events: none;
+}
+
 .layout {
   width: 100vw; /* Гарантируем, что не больше ширины экрана */
-  min-height: 500vh; /* Увеличиваем минимальную высоту сайта */
+  min-height: 100vh; /* Увеличиваем минимальную высоту сайта */
   margin: 0;
   display: flex;
   flex-direction: column;
   background-color: #b8a998;
-  margin-left: 9.5vw; /* Отступ равен ширине орнамента */
+  margin-left: 9.5vw; /* Оставляем место для орнамента */
   max-width: 100vw; /* Не даём выйти за пределы экрана */
+  position: relative; /* Для абсолютного позиционирования орнамента */
 }
 
 .app {
@@ -33,7 +48,7 @@ html, body {
 /* Хедер */
 .header {
   position: relative;
-  z-index: 1; /* Шапка выше основного контента */
+  z-index: 5; /* Шапка выше основного контента */
   width: 100%;
   max-width: 100vw;
   box-sizing: border-box;
@@ -50,53 +65,10 @@ html, body {
   display: block;
 }
 
-.header-title {
-  width: 50%; /* Занимает половину ширины экрана */
-  position: absolute;
-  left: 22.5%;
-  top: 8%;
-  color: rgba(51, 12, 12, 0.61);
-  font-size: 3.4vw; /* Относительный размер шрифта */
-  font-family: 'Ouverture script', serif;
-  font-weight: 550;
-  word-wrap: break-word;
-}
-
-/* Контейнер для декоративных изображений */
-.rotated-images-container {
-  position: fixed; /* Фиксированное позиционирование, чтобы орнамент всегда был сбоку */
-  left: 0;
-  top: 0;
-  width: 9.5vw; /* Используем vw для адаптивности */
-  height: 100vh; /* Всегда на всю высоту экрана */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column; /* Располагаем изображения вертикально */
-  justify-content: space-between; /* Убираем промежутки между изображениями */
-  pointer-events: none; /* Орнамент не мешает кликам */
-  z-index: 2; /* Ниже шапки, выше фона */
-  overflow: hidden; /* Убираем лишние изображения, если они выходят за пределы */
-}
-
-/* Стили для декоративных изображений */
-.rotated-image {
-  width: 100%; /* Изображения занимают всю ширину контейнера */
-  height: auto; /* Сохраняем пропорции изображения */
-  object-fit: contain; /* Сохраняем пропорции изображения */
-}
-
-.small-image {
-  width: 12.5%; /* Относительная ширина */
-  position: absolute;
-  left: 7.7%;
-  top: 10%;
-  border-radius: 12px;
-}
-
 /* Кнопки */
 .button-container {
   position: absolute;
-  top: 56.5%; /* Отступ сверху */
+  top: 51.5%; /* Отступ сверху */
   left: 7.85%; /* Отступ слева */
   display: flex;
   flex-direction: column; /* Расположение кнопок в колонку */
@@ -141,158 +113,34 @@ html, body {
 
 /* Контейнер для бокового меню и основного контента */
 .content-container {
-  left: 7.5%;
+  position: relative;
+  margin-left: 25%; /* Оставляем место для фиксированного меню */
   display: flex;
   flex-direction: row;
   height: calc(440vh - 40vh); /* Высота экрана минус шапка и подвал */
-  margin-top: -15vh; /* Отступ под шапкой */
-}
-
-/* Контейнер для sidemenu */
-.sidemenu {
-  width: 15%;
-  background: rgba(184, 169, 152, 0.85); /* Полупрозрачный бежевый */
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  padding: 2rem 1.2rem 2rem 1.2rem;
-  margin-left: 7.5%;
-  margin-top: 1%;
-  border-radius: 18px;
-  box-shadow: 0 2px 16px rgba(120, 110, 90, 0.07);
-  z-index: 2;
-  transition: box-shadow 0.2s, background 0.2s;
-  max-width: 100vw;
-  box-sizing: border-box;
-}
-
-/* Секция меню */
-.sidemenu-item {
-  padding: 1.1rem 1rem 1.1rem 1.5rem;
-  background: transparent;
-  border-radius: 12px;
-  text-align: left;
-  font-size: 1.08rem;
-  font-family: 'Inter', 'Roboto', 'Segoe UI', Arial, sans-serif;
-  font-weight: 500;
-  color: #3a3327;
-  position: relative;
-  cursor: pointer;
-  transition: background 0.18s, border-left 0.18s;
-  border-left: 4px solid transparent;
-  letter-spacing: 0.01em;
-}
-
-.sidemenu-item:hover,
-.sidemenu-item.open {
-  background: rgba(255, 181, 53, 0.09); /* Лёгкий акцент */
-  border-left: 4px solid #ffb535;
-  color: #3a3327;
-}
-
-.sidemenu-item:visited {
-  color: #3a3327 !important;
-}
-
-.sidemenu-children .sidemenu-item:visited {
-  color: #7d6f5a !important;
-}
-
-.sidemenu-item,
-.sidemenu-item:visited,
-.sidemenu-item:active,
-.sidemenu-item:focus {
-  color: #3a3327 !important;
-  text-decoration: none !important;
-}
-
-.sidemenu-children .sidemenu-item,
-.sidemenu-children .sidemenu-item:visited,
-.sidemenu-children .sidemenu-item:active,
-.sidemenu-children .sidemenu-item:focus {
-  color: #7d6f5a !important;
-  text-decoration: none !important;
-}
-
-/* Стрелочка для пунктов с подпунктами */
-.sidemenu-item .sidemenu-item-icon {
-  position: absolute;
-  right: 1.2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 18px;
-  height: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s;
-  color: #b8a998;
-}
-
-/* Поворот стрелочки при раскрытии */
-.sidemenu-item.open .sidemenu-item-icon {
-  transform: translateY(-50%) rotate(180deg);
-  color: #ffb535;
-}
-
-/* Подпункты */
-.sidemenu-children {
-  display: none;
-  position: static;
-  background: none;
-  box-shadow: none;
-  padding: 0.2rem 0 0.2rem 1.5rem;
-  border-radius: 0;
-  z-index: 10;
-}
-
-/* Показываем подпункты при раскрытии */
-.sidemenu-item.open .sidemenu-children {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.sidemenu-children .sidemenu-item {
-  font-size: 0.98rem;
-  font-weight: 400;
-  color: #7d6f5a;
-  font-family: 'Inter', 'Roboto', 'Segoe UI', Arial, sans-serif;
-  background: none;
-  border-left: 2px solid #b8a998;
-  padding: 0.7rem 0.7rem 0.7rem 1.2rem;
-  border-radius: 8px;
-  transition: background 0.15s, color 0.15s;
-}
-
-.sidemenu-children .sidemenu-item:hover {
-  color: #7d6f5a;
-  background: rgba(255, 181, 53, 0.07);
-  border-left: 2px solid #ffb535;
+  margin-top: -27vh; /* Отступ под шапкой */
+  z-index: 20;
 }
 
 @media (max-width: 900px) {
-  .sidemenu {
-    width: 100%;
-    margin-left: 0;
-    border-radius: 0 0 18px 18px;
-    flex-direction: row;
-    gap: 0.5rem;
-    padding: 1rem 0.5rem;
-    box-shadow: 0 2px 8px rgba(120, 110, 90, 0.07);
-  }
-  .sidemenu-item {
-    font-size: 1rem;
-    padding: 0.8rem 0.7rem 0.8rem 1rem;
-    border-radius: 8px;
-  }
-  .rotated-images-container {
-    display: none; /* Прячем орнамент на мобильных */
-  }
   .layout {
     margin-left: 0;
     width: 100vw;
     max-width: 100vw;
+  }
+  .button-container {
+    display: none !important;
+  }
+  .ornament-strip {
+    display: none !important;
+  }
+  .burger-menu {
+    display: block !important;
+    position: absolute;
+    left: 7.85%;
+    top: 51.5%;
+    right: auto;
+    z-index: 100;
   }
 }
 
@@ -307,9 +155,9 @@ html, body {
 .page-content {
   flex: 1; /* Занимает оставшееся пространство */
   padding: 2rem;
-  background: #B8A998; /* Цвет фона */
+
   border-radius: 10px; /* Закругленные углы */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+ 
   overflow-y: auto; /* Скроллинг, если контент превышает высоту */
   z-index: 2; /* Основной контент ниже шапки и бокового меню */
   max-width: 100vw;
@@ -1221,4 +1069,85 @@ table th {
     font-size: 0.9rem;
   }
   /* ... */
+}
+
+/* Бургер-меню */
+.burger-menu {
+  display: none;
+}
+
+.burger-icon {
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+.burger-icon span {
+  display: block;
+  width: 28px;
+  height: 4px;
+  background: #7d6f5a;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.burger-dropdown {
+  position: absolute;
+  left: 0;
+  right: auto;
+  top: 0;
+  width: 80vw;
+  max-width: 340px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: 2px 0 16px rgba(0,0,0,0.13);
+  z-index: 200;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  animation: slideInLeft 0.3s;
+}
+@keyframes slideInLeft {
+  from { left: -100vw; }
+  to { left: 0; }
+}
+
+.burger-dropdown .burger-close {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  right: auto;
+  font-size: 2rem;
+  color: #7d6f5a;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.burger-dropdown .burger-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.burger-dropdown .burger-menu-link {
+  font-size: 1.15rem;
+  color: #3a3327;
+  text-decoration: none;
+  font-family: 'Inter', 'Roboto', 'Segoe UI', Arial, sans-serif;
+  font-weight: 500;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #eee;
+  transition: color 0.18s;
+}
+.burger-dropdown .burger-menu-link:last-child {
+  border-bottom: none;
+}
+.burger-dropdown .burger-menu-link:hover {
+  color: #ffb535;
 }

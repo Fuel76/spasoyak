@@ -3,39 +3,24 @@ import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import { Sidemenu } from './Sidemenu';
 import { Footer } from './Footer';
-import ornamentImage from '../assets/Ornam.png';
+import ornamentPattern from '../assets/Боковой орнамент.svg';
 
 export const Layout = () => {
-  const decorativeElements = Array.from({ length: 10 }, (_, index) => index);
-
   return (
     <div className="layout">
-      {/* Контейнер для декоративных изображений */}
-      <div className="rotated-images-container">
-        {decorativeElements.map((_, index) => (
-          <img
-            key={index}
-            className="rotated-image"
-            src={ornamentImage}
-            alt={`Декоративное изображение ${index + 1}`}
-          />
-        ))}
-      </div>
-
+      {/* Боковой орнамент */}
+      <div className="ornament-strip" />
       {/* Шапка */}
       <Header />
-
+      {/* Sidemenu ABSOLUTE CONTAINER прямо в body/layout */}
+      <Sidemenu />
       {/* Контейнер для бокового меню и основного контента */}
       <div className="content-container">
-        {/* Боковое меню */}
-        <Sidemenu />
-
         {/* Контейнер для страниц */}
         <div className="page-content">
           <Outlet /> {/* Здесь будут отображаться страницы */}
         </div>
       </div>
-
       {/* Подвал */}
       <Footer />
     </div>

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import './Sidemenu.css';
 
 interface MenuItem {
   id: number;
@@ -12,6 +13,7 @@ interface MenuItem {
 export const Sidemenu = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [openItems, setOpenItems] = useState<number[]>([]);
+  const sidemenuWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -25,6 +27,29 @@ export const Sidemenu = () => {
     };
 
     fetchMenuItems();
+  }, []);
+
+  useEffect(() => {
+    function applyZoomCompensation() {
+      // Используем visualViewport.scale, если доступно, иначе devicePixelRatio
+      const zoom = window.visualViewport?.scale || window.devicePixelRatio || 1;
+      const wrapper = sidemenuWrapperRef.current;
+      if (wrapper) {
+        // Компенсируем zoom обратным scale
+        wrapper.style.transform = `scale(${1 / zoom})`;
+        wrapper.style.transformOrigin = 'top left';
+        // Не трогаем left/top/width/height!
+      }
+    }
+    applyZoomCompensation();
+    window.addEventListener('resize', applyZoomCompensation);
+    window.visualViewport?.addEventListener('resize', applyZoomCompensation);
+    window.visualViewport?.addEventListener('scroll', applyZoomCompensation);
+    return () => {
+      window.removeEventListener('resize', applyZoomCompensation);
+      window.visualViewport?.removeEventListener('resize', applyZoomCompensation);
+      window.visualViewport?.removeEventListener('scroll', applyZoomCompensation);
+    };
   }, []);
 
   const toggleItem = (id: number) => {
@@ -56,5 +81,11 @@ export const Sidemenu = () => {
         </div>
       ));
 
-  return <div className="sidemenu">{renderMenu(menuItems)}</div>;
+  return (
+    <div className="sidemenu-absolute-container">
+      <div className="sidemenu-fixed-wrapper" ref={sidemenuWrapperRef}>
+        <div className="sidemenu">{renderMenu(menuItems)}</div>
+      </div>
+    </div>
+  );
 };

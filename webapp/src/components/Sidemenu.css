@@ -1,0 +1,97 @@
+.sidemenu-absolute-container {
+  position: absolute;
+  top: 14%; /* высота шапки */
+  left: 5%;
+  z-index: 50; /* выше орнамента, ниже кнопок */
+  width: 20%; /* ширина меню */
+  height: calc(100vh - 64px); /* на всю высоту под шапкой */
+  pointer-events: none; /* чтобы не мешать кликам вне меню */
+  display: flex;
+  flex-direction: column;
+}
+
+.sidemenu-fixed-wrapper {
+  position: static;
+  width: 100%;
+  height: auto;
+  background: transparent;
+  pointer-events: auto;
+  box-shadow: none;
+}
+
+.sidemenu {
+  min-width: 100%;
+  max-width: 90%;
+  background:#B8A998;
+  border-radius: 12px;
+  margin: 24px 0 0 24px;
+  box-shadow: none;
+  padding: 8px 0;
+  pointer-events: auto;
+  backdrop-filter: blur(2px);
+}
+
+.sidemenu-item {
+  transition: background 0.2s;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sidemenu-item-content {
+  display: flex;
+  align-items: center;
+  padding: 8px 20px 8px 24px;
+  font-size: 1.05rem;
+  color: #222;
+  border-left: 3px solid transparent;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.sidemenu-item.open > .sidemenu-item-content {
+  background: #B8A999;
+  border-left: 3px solid #B8A997;
+}
+
+.sidemenu-item-title {
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.sidemenu-item:hover > .sidemenu-item-content {
+  background: rgba(255, 224, 224, 0.473);;
+}
+
+.sidemenu-item-icon {
+  margin-left: 8px;
+  width: 16px;
+  height: 16px;
+  background: url('/src/assets/Iconside.svg') center/contain no-repeat;
+  opacity: 0.6;
+  transition: transform 0.2s;
+}
+
+.sidemenu-item.open > .sidemenu-item-content > .sidemenu-item-icon {
+  transform: rotate(90deg);
+}
+
+.sidemenu-children {
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(.4,0,.2,1);
+  margin-left: 8px;
+  border-left: 1px solid #B8A998;;
+}
+
+.sidemenu-item:not(.open) > .sidemenu-children {
+  max-height: 0;
+  transition: max-height 0.2s cubic-bezier(.4,0,.2,1);
+}
+
+@media (max-width: 900px) {
+  .sidemenu-fixed-wrapper {
+    display: none;
+  }
+}

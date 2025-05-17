@@ -1,0 +1,125 @@
+.carousel-manager-container {
+  margin: 36px auto 0 auto;
+  max-width: 900px;
+  background: #f4f6fa;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  padding: 32px 20px 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carousel-manager-container h2 {
+  color: #4a5a6a;
+  font-size: 1.5rem;
+  margin-bottom: 18px;
+}
+
+.carousel-add-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.carousel-add-form input[type="text"] {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #e0e6ed;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #f8fafc;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.carousel-add-form input[type="text"]:focus {
+  border: 1.5px solid #5b8def;
+}
+
+.carousel-add-form button {
+  background: #8bb7f0;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.carousel-add-form button:disabled {
+  background: #bcd6f6;
+  cursor: not-allowed;
+}
+
+.carousel-preview-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.carousel-preview-card {
+  background: #fff;
+  border: 1px solid #e0e6ed;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  padding: 18px 18px 14px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 240px;
+  gap: 10px;
+  position: relative;
+}
+
+.carousel-preview-card img {
+  width: 200px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e0e6ed;
+  background: #f8fafc;
+}
+
+.carousel-preview-card button {
+  background: #f08080;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.carousel-preview-card button:disabled {
+  background: #f5bcbc;
+  cursor: not-allowed;
+}
+
+.carousel-empty {
+  color: #b0b8c1;
+  font-size: 1.1rem;
+  margin: 24px auto;
+}
+
+@media (max-width: 700px) {
+  .carousel-preview-list {
+    gap: 14px;
+  }
+  .carousel-preview-card {
+    width: 160px;
+    padding: 10px 6px 8px 6px;
+  }
+  .carousel-preview-card img {
+    width: 120px;
+    height: 80px;
+  }
+}
