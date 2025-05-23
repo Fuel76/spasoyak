@@ -1,0 +1,85 @@
+.orthodox-calendar {
+  background: #f8fafc;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 24px 20px;
+  max-width: 420px;
+  margin: 0 auto 24px auto;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+.calendar-header button {
+  background: #e3eafc;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.calendar-header button:hover {
+  background: #b6d0ff;
+}
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.calendar-weekday {
+  text-align: center;
+  font-weight: bold;
+  color: #4a5a6a;
+  padding-bottom: 2px;
+}
+.calendar-day {
+  text-align: center;
+  padding: 7px 0;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  font-size: 1rem;
+}
+.calendar-day.selected {
+  background: #5598db;
+  color: #fff;
+  font-weight: bold;
+}
+.calendar-day.today {
+  border: 2px solid #5598db;
+}
+.calendar-day.empty {
+  background: transparent;
+  cursor: default;
+}
+.calendar-saints, .calendar-readings {
+  margin-top: 10px;
+  font-size: 1rem;
+  background: #f1f6ff;
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+.calendar-saints strong, .calendar-readings strong {
+  color: #2a4d8f;
+}
+.calendar-saints ul, .calendar-readings ul {
+  margin: 6px 0 0 0;
+  padding-left: 18px;
+}
+.calendar-event-dot {
+  display: block;
+  margin: 0 auto;
+  margin-top: 2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2a4d8f;
+  box-shadow: 0 0 2px #2a4d8f;
+}

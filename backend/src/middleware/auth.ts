@@ -109,24 +109,24 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
             id: user.id,
             email: user.email,
             role: user.role,
-            isAdmin: user.role === 'admin'
+            isAdmin: user.role === 'admin' // Приведено к стилю 'admin'
           };
 
           next();
-        } catch (error) {
-          console.error('Ошибка при поиске пользователя:', error);
+        } catch (dbError) {
+          console.error('Ошибка при проверке пользователя в базе данных:', dbError);
           return res.status(500).json({
             success: false,
-            error: 'Внутренняя ошибка сервера при проверке пользователя'
+            error: 'Ошибка сервера при проверке пользователя'
           });
         }
       })();
     });
   } catch (error) {
-    console.error('Ошибка авторизации:', error);
+    console.error('Неожиданная ошибка в authenticateToken:', error);
     return res.status(500).json({
       success: false,
-      error: 'Внутренняя ошибка сервера при проверке авторизации'
+      error: 'Внутренняя ошибка сервера'
     });
   }
 };
@@ -141,7 +141,6 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
       error: 'Авторизация не выполнена'
     });
   }
-  
   if (req.user.role !== 'admin') {
     return res.status(403).json({
       success: false,
@@ -149,7 +148,6 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
       code: 'ADMIN_REQUIRED'
     });
   }
-  
   next();
 };
 
@@ -195,7 +193,7 @@ export const optionalAuth = async (req: Request, res: Response, next: NextFuncti
                 id: user.id,
                 email: user.email,
                 role: user.role,
-                isAdmin: user.role === 'admin'
+                isAdmin: user.role === 'admin' // Приведено к стилю 'admin'
               };
             }
             next();
@@ -213,3 +211,37 @@ export const optionalAuth = async (req: Request, res: Response, next: NextFuncti
     next();
   }
 };
+
+/**
+ * Проверка ролей пользователя
+ * @param allowedRoles Массив разрешенных ролей
+ */
+export const authorizeRoles = (allowedRoles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user || !req.user.role) {
+      return res.status(403).json({
+        success: false,
+        error: 'Доступ запрещен. Роль пользователя не определена.'
+      });
+    }
+
+    // Приводим к нижнему регистру для сравнения
+    const hasRole = allowedRoles.map(r => r.toLowerCase()).includes(req.user.role.toLowerCase());
+    if (!hasRole) {
+      return res.status(403).json({
+        success: false,
+        error: `Доступ запрещен. Требуется одна из ролей: ${allowedRoles.join(', ')}`
+      });
+    }
+    next();
+  };
+};
+
+// Пример использования:
+// router.get('/admin-only', authenticateToken, authorizeRoles(['ADMIN']), (req, res) => {
+//   res.json({ message: 'Добро пожаловать, администратор!' });
+// });
+
+// router.get('/user-or-admin', authenticateToken, authorizeRoles(['USER', 'ADMIN']), (req, res) => {
+//   res.json({ message: 'Доступ разрешен для пользователей и администраторов' });
+// });

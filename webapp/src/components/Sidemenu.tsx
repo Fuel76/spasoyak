@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Sidemenu.css';
+import OrthodoxCalendar from '../components/OrthodoxCalendar';
 
 interface MenuItem {
   id: number;
@@ -84,7 +85,10 @@ export const Sidemenu = () => {
   return (
     <div className="sidemenu-absolute-container">
       <div className="sidemenu-fixed-wrapper" ref={sidemenuWrapperRef}>
-        <div className="sidemenu">{renderMenu(menuItems)}</div>
+        <div className="sidemenu">
+          {renderMenu(menuItems)}
+          <OrthodoxCalendar />
+        </div>
       </div>
     </div>
   );

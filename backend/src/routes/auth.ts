@@ -135,7 +135,7 @@ router.post('/register-admin', async (req, res) => {
         email,
         password: hashedPassword,
         name: name || email.split('@')[0],
-        role: 'admin' // Устанавливаем роль admin
+        role: 'admin' // Приведено к стилю 'admin' (маленькими)
       }
     });
 

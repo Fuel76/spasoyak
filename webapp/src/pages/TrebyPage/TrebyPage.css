@@ -1,0 +1,358 @@
+/* Общие стили для страницы треб */
+.treby-page-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f4f2e8; /* Светло-бежевый фон, как на сайте Валаама */
+}
+
+.treby-page {
+  width: 100%;
+  max-width: 1200px; /* Ограничиваем максимальную ширину */
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-family: 'Times New Roman', Times, serif; /* Шрифт с засечками */
+}
+
+.treby-title {
+  text-align: center;
+  font-size: 2.5em;
+  color: #5a4a42; /* Темно-коричневый цвет заголовка */
+  margin-bottom: 30px;
+  font-weight: normal;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+/* Декоративный элемент под заголовком (можно использовать SVG или псевдоэлемент) */
+.treby-title::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 2px;
+  background-color: #b0a092; /* Светло-коричневый */
+  margin: 15px auto 0;
+}
+
+
+.treby-form-section {
+  display: flex;
+  gap: 40px; /* Пространство между формой и инструкциями */
+}
+
+.treby-form-left {
+  flex: 2; /* Форма занимает больше места */
+}
+
+.treby-instructions-right {
+  flex: 1; /* Инструкции занимают меньше места */
+  background-color: #f9f7f0; /* Слегка отличающийся фон для инструкций */
+  padding: 25px;
+  border-radius: 6px;
+  border: 1px solid #e0d8cc;
+}
+
+.treby-form .form-group {
+  margin-bottom: 25px;
+}
+
+.treby-label {
+  display: block;
+  font-size: 1.1em;
+  color: #6c5f57; /* Коричневый цвет для меток */
+  margin-bottom: 8px;
+}
+
+.form-control.treby-textarea,
+.form-control.treby-select,
+.form-control.treby-input {
+  border: 1px solid #d3c9bc; /* Граница в тон */
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.form-control.treby-textarea {
+  min-height: 220px; /* Увеличим немного высоту для лучшего вида */
+  resize: vertical;
+  border: none; /* Убираем стандартную рамку, так как будет своя */
+  padding-left: 10px; /* Отступ текста слева от края "бумаги" */
+  padding-right: 5px; /* Небольшой отступ справа */
+  padding-top: 2px;   /* Небольшой отступ сверху перед первой строкой текста */
+  padding-bottom: 2px;/* Небольшой отступ снизу */
+  background-color: transparent; /* Прозрачный фон, чтобы был виден фон обертки */
+  box-shadow: none; /* Убираем возможные тени */
+  outline: none; /* Убираем обводку при фокусе */
+  font-family: 'Times New Roman', Times, serif; /* Явно задаем шрифт для поля ввода */
+  font-size: 1.1em; /* Немного увеличим шрифт для имен */
+  line-height: 30px; /* КРИТИЧЕСКИ ВАЖНО: должно совпадать с циклом градиента */
+  color: #333; /* Цвет текста имен */
+  background-image: repeating-linear-gradient(
+    transparent, /* Начало цикла */
+    transparent 29px, /* Пространство перед линией */
+    #e0d8cc 29px,    /* Начало линии */
+    #e0d8cc 30px     /* Конец линии (толщина 1px), конец 30px цикла */
+  );
+  background-attachment: local; /* Градиент прокручивается вместе с текстом */
+  background-origin: content-box; /* Позиционирование фона относительно контентной области (после padding) */
+  background-position-y: -8px;  /* Сдвигаем фон вверх для совмещения базовой линии текста с линиями.
+                                     При font-size: 1.1em и line-height: 30px, базовая линия текста находится
+                                     примерно на 20-21px от верха строки. Линия градиента (29px в цикле)
+                                     сдвигается на -8px, т.е. становится на 21px. */
+}
+
+.form-control.treby-textarea::placeholder {
+  color: #a09387;
+  font-style: italic;
+  /* line-height для placeholder обычно наследуется, но можно указать явно при необходимости */
+  /* line-height: 30px; */
+}
+
+.form-control.treby-input {
+  border: 1px solid #d3c9bc; /* Граница в тон */
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1em;
+  color: #5a4a42;
+}
+
+.radio-group input[type="radio"] {
+  accent-color: #8c7b70; /* Цвет для выбранного радио-баттона */
+}
+
+
+.treby-submit-btn {
+  background-color: #8c7b70; /* Приглушенный коричнево-серый */
+  border-color: #8c7b70;
+  color: #fff;
+  padding: 12px 25px;
+  font-size: 1.1em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.treby-submit-btn:hover {
+  background-color: #7a6a5f;
+  border-color: #7a6a5f;
+}
+
+.treby-submit-btn:disabled {
+  background-color: #b0a092;
+  cursor: not-allowed;
+}
+
+.treby-alert {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 4px;
+  font-size: 1em;
+}
+
+.alert-success.treby-alert {
+  background-color: #e6f4e6;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.alert-danger.treby-alert {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+/* Стили для блока инструкций */
+.instruction-block {
+  margin-bottom: 25px;
+}
+
+.instruction-title {
+  font-size: 1.3em;
+  color: #5a4a42;
+  margin-bottom: 10px;
+  font-weight: bold; /* Используем bold для заголовков инструкций */
+  border-bottom: 1px solid #e0d8cc;
+  padding-bottom: 8px;
+}
+
+.instruction-block p,
+.instruction-block ul {
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: #6c5f57;
+}
+
+.instruction-block ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.instruction-block li {
+  margin-bottom: 5px;
+}
+
+.instruction-block a {
+  color: #8c7b70;
+  text-decoration: underline;
+}
+
+.instruction-block a:hover {
+  color: #5a4a42;
+}
+
+/* Стили для обертки поля имен и креста */
+.names-input-wrapper {
+  position: relative;
+  border: 1px solid #d3c9bc;
+  border-radius: 4px;
+  padding-top: 45px; /* Увеличим отступ для креста и заголовка записки */
+  padding-bottom: 15px;
+  padding-right: 15px;
+  padding-left: 15px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  margin-bottom: 20px; /* Добавим отступ снизу */
+}
+
+.names-input-wrapper::before { /* Псевдоэлемент для заголовка "О ЗДРАВИИ" / "ОБ УПОКОЕНИИ" */
+  content: attr(data-note-title);
+  position: absolute;
+  top: 28px; /* Позиционируем под крестом */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #777;
+  letter-spacing: 1px;
+}
+
+.names-input-wrapper.zdravie-style {
+  border-top: 5px solid #81c784; /* Более насыщенный зеленый */
+}
+
+.names-input-wrapper.zdravie-style::before {
+  content: 'О ЗДРАВИИ';
+  color: #38761d; /* Темно-зеленый для заголовка */
+}
+
+.names-input-wrapper.upokoi-style {
+  border-top: 5px solid #757575; /* Темно-серый */
+}
+
+.names-input-wrapper.upokoi-style::before {
+  content: 'ОБ УПОКОЕНИИ';
+  color: #434343; /* Темно-серый для заголовка */
+}
+
+.cross-icon {
+  position: absolute;
+  top: 8px; /* Сдвинем крест чуть выше */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 28px;
+}
+
+.cross-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Адаптация для textarea внутри обертки */
+.names-input-wrapper .form-control.treby-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 5px; /* Уменьшаем внутренний отступ, так как есть отступ у родителя */
+}
+
+
+/* Адаптивность */
+@media (max-width: 992px) {
+  .treby-form-section {
+    flex-direction: column;
+  }
+
+  .treby-instructions-right {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .treby-page {
+    padding: 20px;
+  }
+
+  .treby-title {
+    font-size: 2em;
+  }
+
+  .radio-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .names-input-wrapper {
+    padding-left: 10px;
+  }
+  .names-input-wrapper .form-control.treby-textarea {
+    padding-left: 5px;
+  }
+}
+
+/* Паттерны и декоративные элементы */
+/* Можно добавить сюда стили для фоновых паттернов, если они будут использоваться через CSS */
+/* Например:
+.treby-page-container {
+  background-image: url('../assets/pattern.png');
+  background-repeat: repeat;
+}
+*/
+
+/* Стили для кнопки "Перейти к оплате" и ссылки "Оплатить" */
+.btn-success.mt-2, .btn-outline-primary {
+    font-family: 'Times New Roman', Times, serif; /* Применяем шрифт */
+    font-size: 1em; /* Устанавливаем базовый размер шрифта */
+}
+
+.btn-success.mt-2 {
+    background-color: #8c7b70;
+    border-color: #8c7b70;
+    color: #fff;
+}
+
+.btn-success.mt-2:hover {
+    background-color: #7a6a5f;
+    border-color: #7a6a5f;
+}
+
+.btn-outline-primary {
+    color: #8c7b70;
+    border-color: #8c7b70;
+}
+
+.btn-outline-primary:hover {
+    background-color: #8c7b70;
+    color: #fff;
+}
+

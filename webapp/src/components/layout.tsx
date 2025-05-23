@@ -1,9 +1,9 @@
-import '../App.css';
-import { Outlet } from 'react-router-dom';
-import { Header } from './Header';
-import { Sidemenu } from './Sidemenu';
-import { Footer } from './Footer';
-import ornamentPattern from '../assets/Боковой орнамент.svg';
+import "../app.css";
+import { Outlet } from "react-router-dom";
+import { Header } from "./Header";
+import { Sidemenu } from "./Sidemenu";
+import { Footer } from "./Footer";
+import ornamentPattern from "../assets/Боковой орнамент.svg";
 
 export const Layout = () => {
   return (

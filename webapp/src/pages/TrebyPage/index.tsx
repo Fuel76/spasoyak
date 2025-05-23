@@ -1,14 +1,130 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Added useEffect, useCallback
+import './TrebyPage.css';
+import crossZdravie from '../../assets/cross_zdravie.svg';
+import crossUpokoi from '../../assets/cross_upokoi.svg';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+// Frontend interfaces matching backend Prisma models
+interface TrebaFormField {
+  id: number;
+  fieldName: string;
+  fieldType: 'TEXT' | 'TEXTAREA' | 'SELECT' | 'RADIO' | 'CHECKBOX' | 'NUMBER';
+  label: string;
+  options?: { value: string; label: string }[] | null;
+  placeholder?: string | null;
+  isRequired: boolean;
+  order: number;
+  isActive: boolean;
+  defaultValue?: string | null;
+  validationRegex?: string | null;
+  validationMessage?: string | null;
+}
+
+interface TrebaPricingRule {
+  id: number;
+  name: string; // Name of the treba (e.g., 'о здравии')
+  periodValue: string;
+  description?: string | null;
+  price: number;
+  priceType: 'PER_NAME' | 'PER_TEN_NAMES' | 'FIXED';
+  currency: string;
+  isActive: boolean;
+}
 
 const TrebyPage = () => {
   const [type, setType] = useState('о здравии');
   const [names, setNames] = useState('');
-  const [note, setNote] = useState('');
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
   const [trebaId, setTrebaId] = useState<number | null>(null);
+  const [period, setPeriod] = useState('Разовое');
+  const [email, setEmail] = useState('');
+  const [customDate, setCustomDate] = useState<Date | null>(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const [formFields, setFormFields] = useState<TrebaFormField[]>([]);
+  const [pricingRules, setPricingRules] = useState<TrebaPricingRule[]>([]);
+  const [dynamicFieldsData, setDynamicFieldsData] = useState<Record<string, any>>({});
+  const [calculatedPrice, setCalculatedPrice] = useState<number>(0);
+  const [currentCurrency, setCurrentCurrency] = useState<string>('RUB');
+
+  // Fetch form fields and pricing rules
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const [fieldsRes, rulesRes] = await Promise.all([
+          fetch('http://localhost:3000/api/treba-form-fields'),
+          fetch('http://localhost:3000/api/treba-pricing-rules')
+        ]);
+        if (!fieldsRes.ok) throw new Error('Ошибка загрузки полей формы');
+        if (!rulesRes.ok) throw new Error('Ошибка загрузки правил ценообразования');
+        
+        const fieldsData = await fieldsRes.json();
+        const rulesData = await rulesRes.json();
+
+        setFormFields(fieldsData.filter((field: TrebaFormField) => field.isActive));
+        setPricingRules(rulesData.filter((rule: TrebaPricingRule) => rule.isActive));
+        
+        // Initialize dynamicFieldsData with defaultValues
+        const initialDynamicData: Record<string, any> = {};
+        fieldsData.filter((field: TrebaFormField) => field.isActive && field.defaultValue).forEach((field: TrebaFormField) => {
+          initialDynamicData[field.fieldName] = field.defaultValue;
+        });
+        setDynamicFieldsData(initialDynamicData);
+
+      } catch (err: any) {
+        setError(err.message || 'Ошибка загрузки данных для формы');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Calculate price
+  const calculatePrice = useCallback(() => {
+    const namesArray = names.split('\n').filter(name => name.trim() !== '');
+    const namesCount = namesArray.length;
+
+    const rule = pricingRules.find(r => r.name === type && r.periodValue === period);
+
+    if (rule) {
+      let price = 0;
+      if (rule.priceType === 'PER_NAME') {
+        price = namesCount * rule.price;
+      } else if (rule.priceType === 'PER_TEN_NAMES') {
+        price = Math.ceil(namesCount / 10) * rule.price;
+      } else { // FIXED
+        price = rule.price;
+      }
+      setCalculatedPrice(price);
+      setCurrentCurrency(rule.currency);
+    } else {
+      setCalculatedPrice(0); // Default to 0 if no rule found
+      setCurrentCurrency('RUB');
+      // console.warn(`No pricing rule found for type: ${type}, period: ${period}`);
+    }
+  }, [names, type, period, pricingRules]);
+
+  useEffect(() => {
+    calculatePrice();
+  }, [calculatePrice]);
+
+  const handleDynamicFieldChange = (fieldName: string, value: any) => {
+    setDynamicFieldsData(prev => ({ ...prev, [fieldName]: value }));
+  };
+
+  const handleDateChange = (date: Date | null) => {
+    setCustomDate(date);
+    setPeriod('custom');
+    setError('');
+    setSuccess(false);
+    setPaymentUrl(null);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,14 +135,30 @@ const TrebyPage = () => {
       const res = await fetch('http://localhost:3000/api/treby', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type, names, note })
+        body: JSON.stringify({ type, names, period, email, dynamicFieldsData, customDate: period === 'custom' && customDate ? customDate : undefined })
       });
-      if (!res.ok) throw new Error('Ошибка отправки формы');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ message: 'Ошибка отправки формы' }));
+        throw new Error(errorData.error || errorData.message || 'Ошибка отправки формы');
+      }
       const data = await res.json();
       setSuccess(true);
       setNames('');
-      setNote('');
-      setTrebaId(data.id); // Сохраняем id заявки для оплаты
+      setEmail(''); 
+      // Reset dynamic fields to default or clear
+      const initialDynamicData: Record<string, any> = {};
+      formFields.forEach(field => {
+        if (field.defaultValue) {
+          initialDynamicData[field.fieldName] = field.defaultValue;
+        } else {
+          // For fields without default, decide clear strategy (e.g., empty string, false for checkbox)
+          if (field.fieldType === 'CHECKBOX') initialDynamicData[field.fieldName] = false;
+          else initialDynamicData[field.fieldName] = ''; 
+        }
+      });
+      setDynamicFieldsData(initialDynamicData);
+      setTrebaId(data.id);
+      setPaymentUrl(null); // Reset payment URL
     } catch (err: any) {
       setError(err.message || 'Ошибка');
     } finally {
@@ -52,56 +184,271 @@ const TrebyPage = () => {
   };
 
   return (
-    <div className="treby-page container mt-5">
-      <h2>Подать записку</h2>
-      <form onSubmit={handleSubmit} className="treby-form">
-        <div className="form-group mb-3">
-          <label>Тип записки:</label>
-          <select value={type} onChange={e => setType(e.target.value)} className="form-control">
-            <option value="о здравии">О здравии</option>
-            <option value="об упокоении">Об упокоении</option>
-          </select>
-        </div>
-        <div className="form-group mb-3">
-          <label>Имена (через запятую или с новой строки):</label>
-          <textarea
-            className="form-control"
-            value={names}
-            onChange={e => setNames(e.target.value)}
-            rows={4}
-            required
-          />
-        </div>
-        <div className="form-group mb-3">
-          <label>Дополнительная записка (необязательно):</label>
-          <input
-            className="form-control"
-            value={note}
-            onChange={e => setNote(e.target.value)}
-            type="text"
-          />
-        </div>
-        <button className="btn btn-primary" type="submit" disabled={isLoading}>
-          {isLoading ? 'Отправка...' : 'Отправить'}
-        </button>
-        {success && (
-          <div className="alert alert-success mt-3">
-            Ваша записка отправлена!<br />
-            <button className="btn btn-success mt-2" onClick={handlePay} disabled={isLoading || !!paymentUrl}>
-              {paymentUrl ? 'Ссылка на оплату сгенерирована' : 'Перейти к оплате'}
-            </button>
-            {paymentUrl && (
-              <div className="mt-2">
-                <a href={paymentUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary">
-                  Оплатить
-                </a>
+    <div className="treby-page-container">
+      <div className="treby-page">
+        <h1 className="treby-title">Подать записку</h1>
+
+        {isLoading && !formFields.length && !pricingRules.length && <p>Загрузка данных формы...</p>}
+        {error && !success && <div className="alert alert-danger treby-alert">{error}</div>}
+
+        <div className="treby-form-section">
+          <div className="treby-form-left">
+            <form onSubmit={handleSubmit} className="treby-form">
+              {/* 1. Выбор типа требы */}
+              <div className="form-group">
+                <label htmlFor="type" className="treby-label">Тип требы</label>
+                <select
+                  id="type"
+                  value={type}
+                  onChange={e => {
+                    setType(e.target.value);
+                    setError('');
+                    setSuccess(false);
+                    setPaymentUrl(null);
+                    // Сброс периода при смене типа
+                    setPeriod('');
+                  }}
+                  className="form-control treby-select"
+                  required
+                >
+                  <option value="" disabled>Выберите тип требы</option>
+                  {[...new Set(pricingRules.map(r => r.name))].map(name => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
+                </select>
               </div>
-            )}
+
+              {/* 2. Выбор периода */}
+              <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <label htmlFor="period" className="treby-label" style={{ minWidth: 140 }}>Период</label>
+                <select
+                  id="period"
+                  value={period}
+                  onChange={e => {
+                    setPeriod(e.target.value);
+                    setError('');
+                    setSuccess(false);
+                    setPaymentUrl(null);
+                    setCustomDate(null);
+                    setShowDatePicker(false);
+                  }}
+                  className="form-control treby-select"
+                  style={{ flex: 1 }}
+                  required
+                  disabled={!type}
+                >
+                  <option value="" disabled>Выберите период</option>
+                  {pricingRules.filter(r => r.name === type).map(r => (
+                    <option key={r.periodValue} value={r.periodValue}>{r.periodValue}</option>
+                  ))}
+                  <option value="custom">Другая дата</option>
+                </select>
+                {/* Кнопка выбора даты справа, если выбран custom */}
+                {period === 'custom' && (
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    style={{ marginLeft: 8, whiteSpace: 'nowrap' }}
+                    onClick={() => setShowDatePicker(v => !v)}
+                  >
+                    {customDate ? `Дата: ${customDate.toLocaleDateString()}` : 'Выбрать дату'}
+                  </button>
+                )}
+              </div>
+              {/* DatePicker появляется только по клику */}
+              {period === 'custom' && showDatePicker && (
+                <div style={{ marginBottom: 12 }}>
+                  <DatePicker
+                    selected={customDate}
+                    onChange={date => { setCustomDate(date); setShowDatePicker(false); }}
+                    dateFormat="dd.MM.yyyy"
+                    placeholderText="Выберите дату"
+                    className="form-control treby-input"
+                    minDate={new Date()}
+                    inline
+                  />
+                </div>
+              )}
+
+              {/* Dynamic Form Fields Rendering */} 
+              {formFields.sort((a, b) => a.order - b.order).map(field => {
+                if (!field.isActive) return null;
+                const fieldId = `dynamic-field-${field.fieldName}`;
+                switch (field.fieldType) {
+                  case 'TEXT':
+                  case 'NUMBER': // Treat number as text for input type, validation can be added
+                  case 'TEXTAREA':
+                    return (
+                      <div className="form-group" key={field.id}>
+                        <label htmlFor={fieldId} className="treby-label">{field.label}{field.isRequired && '*'}</label>
+                        {field.fieldType === 'TEXTAREA' ? (
+                          <textarea
+                            id={fieldId}
+                            className="form-control treby-textarea"
+                            value={dynamicFieldsData[field.fieldName] || ''}
+                            onChange={e => handleDynamicFieldChange(field.fieldName, e.target.value)}
+                            placeholder={field.placeholder || ''}
+                            required={field.isRequired}
+                            rows={3} // Default rows for dynamic textarea
+                          />
+                        ) : (
+                          <input
+                            id={fieldId}
+                            type={field.fieldType === 'NUMBER' ? 'number' : 'text'}
+                            className="form-control treby-input"
+                            value={dynamicFieldsData[field.fieldName] || ''}
+                            onChange={e => handleDynamicFieldChange(field.fieldName, e.target.value)}
+                            placeholder={field.placeholder || ''}
+                            required={field.isRequired}
+                          />
+                        )}
+                      </div>
+                    );
+                  case 'SELECT':
+                    return (
+                      <div className="form-group" key={field.id}>
+                        <label htmlFor={fieldId} className="treby-label">{field.label}{field.isRequired && '*'}</label>
+                        <select 
+                          id={fieldId} 
+                          className="form-control treby-select"
+                          value={dynamicFieldsData[field.fieldName] || ''}
+                          onChange={e => handleDynamicFieldChange(field.fieldName, e.target.value)}
+                          required={field.isRequired}
+                        >
+                          <option value="">{field.placeholder || 'Выберите...'}</option>
+                          {field.options?.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                        </select>
+                      </div>
+                    );
+                  case 'RADIO':
+                    return (
+                      <div className="form-group" key={field.id}>
+                        <label className="treby-label">{field.label}{field.isRequired && '*'}</label>
+                        <div className="radio-group">
+                          {field.options?.map(opt => (
+                            <label key={opt.value}>
+                              <input 
+                                type="radio" 
+                                name={field.fieldName} 
+                                value={opt.value} 
+                                checked={dynamicFieldsData[field.fieldName] === opt.value}
+                                onChange={e => handleDynamicFieldChange(field.fieldName, e.target.value)}
+                                required={field.isRequired && !field.options?.some(o => dynamicFieldsData[field.fieldName] === o.value)} // Complex required logic for radio
+                              />
+                              {opt.label}
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                    case 'CHECKBOX':
+                      return (
+                        <div className="form-group" key={field.id}>
+                          <label className="treby-label">
+                            <input 
+                              type="checkbox" 
+                              id={fieldId}
+                              checked={!!dynamicFieldsData[field.fieldName]}
+                              onChange={e => handleDynamicFieldChange(field.fieldName, e.target.checked)}
+                              // required={field.isRequired} // Required for checkbox might need specific handling
+                            />
+                            {field.label} {field.isRequired && '*'}
+                          </label>
+                        </div>
+                      );
+                  default:
+                    return <p key={field.id}>Unsupported field type: {field.fieldType}</p>;
+                }
+              })}
+
+              <div className="form-group">
+                <label htmlFor="names" className="treby-label">Имена (каждое с новой строки)</label>
+                <div className={`names-input-wrapper ${type === 'о здравии' ? 'zdravie-style' : 'upokoi-style'}`}>
+                  <div className="cross-icon">
+                    <img src={type === 'о здравии' ? crossZdravie : crossUpokoi} alt="cross" />
+                  </div>
+                  <textarea
+                    id="names"
+                    className="form-control treby-textarea"
+                    value={names}
+                    onChange={e => { setNames(e.target.value); setError(''); setSuccess(false); setPaymentUrl(null); }}
+                    rows={10}
+                    placeholder="Каждое имя на новой строке, в родительном падеже (Иоанна, Марии...)"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="email" className="treby-label">Электронная почта</label>
+                <input
+                  id="email"
+                  type="email"
+                  className="form-control treby-input"
+                  value={email}
+                  onChange={e => { setEmail(e.target.value); setError(''); }}
+                  placeholder="Для получения уведомлений"
+                  required
+                />
+              </div>
+
+              {/* Display Calculated Price */} 
+              <div className="form-group calculated-price-section">
+                <h3 className="treby-label">Сумма пожертвования:</h3>
+                <p className="calculated-price">{calculatedPrice.toFixed(2)} {currentCurrency}</p>
+              </div>
+
+              <button className="btn btn-primary treby-submit-btn" type="submit" disabled={isLoading || (success && !paymentUrl)}>
+                {isLoading ? 'Отправка...' : (success && !paymentUrl) ? 'Заявка отправлена' : 'Пожертвовать и перейти к оплате'}
+              </button>
+
+              {success && (
+                <div className="alert alert-success mt-3 treby-alert">
+                  Ваша записка отправлена! ID заявки: {trebaId}.<br />
+                  {paymentUrl ? (
+                    <div className="mt-2">
+                      <a href={paymentUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary">
+                        Оплатить ({calculatedPrice.toFixed(2)} {currentCurrency})
+                      </a>
+                    </div>
+                  ) : (
+                    <button className="btn btn-success mt-2" onClick={handlePay} disabled={isLoading || !trebaId}>
+                      Сформировать ссылку на оплату
+                    </button>
+                  )}
+                </div>
+              )}
+              {error && !success && <div className="alert alert-danger mt-3 treby-alert">{error}</div>} {/* Show general error only if not success */}
+            </form>
           </div>
-        )}
-        {error && <div className="alert alert-danger mt-3">{error}</div>}
-      </form>
-      {/* Здесь будет интеграция оплаты */}
+
+          <div className="treby-instructions-right">
+            <div className="instruction-block">
+              <h3 className="instruction-title"> Как правильно заполнить</h3>
+              <p>Имена пишутся в родительном падеже (Олега, Владимира, Наталии, Елены) без пробелов и знаков препинания.</p>
+              <p>Пометка пишется в поле справа: младенца, воина, иерея, и т.д. (В текущей форме это не реализовано, но можно добавить как отдельное поле или парсить из строки с именем)</p>
+            </div>
+            <div className="instruction-block">
+              <h3 className="instruction-title"> Рекомендуемое пожертвование за 1 имя</h3>
+              <ul>
+                <li>Молебен, панихида, разовое - 5 ₽</li>
+                <li>Проскомидия (40 дней) - 500 ₽</li>
+                <li>Проскомидия (1 год) - 2000 ₽</li>
+                <li>Неусыпаемая Псалтирь (1 год) - 2000 ₽</li>
+              </ul>
+              <p>Пожертвование добровольное. Сумму можно изменить.</p>
+            </div>
+            <div className="instruction-block">
+              <h3 className="instruction-title"> Как совершается поминовение</h3>
+              {/* Сюда можно добавить текст о том, как совершается поминовение */}
+              <p>Информация о совершении поминовения...</p>
+            </div>
+             <div className="instruction-block">
+                <p>При возникновении вопросов пишите нам на <a href="mailto:rites@example.com">rites@example.com</a></p> {/* Замените email на актуальный */}
+                <p>Не нашли то, что Вас интересует? Найдите ответ в разделе <a href="/faq">Ответы на частые вопросы</a></p> {/* Замените ссылку на актуальную */}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -22,6 +22,12 @@ import { RegisterPage } from './pages/RegisterPage';
 import { RegisterAdminPage } from './pages/RegisterAdminPage';
 import TrebyPage from './pages/TrebyPage';
 import AdminTrebyPage from './pages/AdminTrebyPage';
+import AdminTrebaFormFieldsPage from './pages/AdminTrebaFormFieldsPage';
+import AdminTrebaPricingRulesPage from './pages/AdminTrebaPricingRulesPage';
+import AddTrebaFormFieldPage from './pages/AdminTrebaFormFieldsPage/AddTrebaFormFieldPage';
+import AddTrebaPricingRulePage from './pages/AdminTrebaPricingRulesPage/AddTrebaPricingRulePage';
+import SchedulePage from './pages/SchedulePage';
+import AdminSchedulePage from './pages/AdminSchedulePage';
 
 export const App = () => {
   const [pages, setPages] = useState<{ slug: string; title: string; content: string }[]>([]);
@@ -98,10 +104,21 @@ export const App = () => {
               <Route path="/admin/news/edit/:id" element={<EditNewsPage />} />
               <Route path="/admin/news/create" element={<CreateNewsPage />} />
 
-              {/* Страница треб */}
-              <Route path="/treby" element={<TrebyPage />} />
-              {/* Админка заявок на требы */}
+              {/* Админ настройка треб */}
               <Route path="/admin/treby" element={<PrivateRoute><AdminTrebyPage /></PrivateRoute>} />
+              <Route path="/admin/treby/form-fields" element={<PrivateRoute><AdminTrebaFormFieldsPage /></PrivateRoute>} />
+              <Route path="/admin/treby/form-fields/add" element={<PrivateRoute><AddTrebaFormFieldPage /></PrivateRoute>} />
+              <Route path="/admin/treby/pricing-rules" element={<PrivateRoute><AdminTrebaPricingRulesPage /></PrivateRoute>} />
+              <Route path="/admin/treby/pricing-rules/add" element={<PrivateRoute><AddTrebaPricingRulePage /></PrivateRoute>} />
+
+              {/* Админ расписание богослужений */}
+              <Route path="/admin/schedule" element={<PrivateRoute><AdminSchedulePage /></PrivateRoute>} />
+
+              {/* Страница треб */}
+              <Route path="treby" element={<TrebyPage />} />
+
+              {/* Страница расписания богослужений */}
+              <Route path="/schedule" element={<SchedulePage />} />
             </Route>
           </Routes>
         </BrowserRouter>

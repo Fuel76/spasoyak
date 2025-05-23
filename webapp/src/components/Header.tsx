@@ -69,9 +69,9 @@ export const Header = () => {
     <header className="header">
       <img className="header-background" src={headerImage} alt="Шапка" />
       <div className="button-container">
-        <div className="button">
+        <a href="/schedule" className="button">
           Расписание <br /> Богослужений
-        </div>
+        </a>
         <a href="/treby" className="button">Требы</a>
       </div>
       <BurgerMenu />

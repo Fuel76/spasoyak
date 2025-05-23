@@ -77,11 +77,62 @@ model CarouselImage {
 }
 
 model Treba {
-  id            Int      @id @default(autoincrement())
-  type          String // 'о здравии' или 'об упокоении'
-  names         String // Список имён (через запятую или перенос строки)
-  note          String? // Дополнительная записка
-  paymentStatus String   @default("pending") // 'pending', 'paid', 'failed'
-  paymentId     String? // ID платежа в платёжной системе
-  createdAt     DateTime @default(now())
+  id                Int       @id @default(autoincrement())
+  type              String // 'о здравии' или 'об упокоении'
+  names             String    @db.Text
+  period            String    @default("Разовое")
+  email             String?
+  note              String?   @db.Text
+  paymentStatus     String    @default("pending")
+  paymentId         String?
+  dynamicFieldsData Json? // Для хранения данных из кастомных полей
+  calculatedPrice   Float? // Рассчитанная цена
+  currency          String? // Валюта (например, "RUB")
+  customDate        DateTime? // Для произвольной даты требы
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+enum FieldType {
+  TEXT
+  TEXTAREA
+  SELECT
+  RADIO
+  CHECKBOX
+  NUMBER
+}
+
+model TrebaFormField {
+  id          Int       @id @default(autoincrement())
+  fieldName   String    @unique // Уникальное имя поля (для использования в коде)
+  fieldType   FieldType // Тип поля (TEXT, TEXTAREA, SELECT и т.д.)
+  label       String // Метка поля, отображаемая пользователю
+  options     Json? // Опции для SELECT, RADIO, CHECKBOX (например, [{"value": "val1", "label": "Опция 1"}])
+  placeholder String? // Плейсхолдер для текстовых полей
+  isRequired  Boolean   @default(false)
+  order       Int       @default(0) // Порядок отображения на форме
+  isActive    Boolean   @default(true) // Активно ли поле
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum PriceType {
+  PER_NAME // Цена за каждое имя
+  PER_TEN_NAMES // Цена за каждые 10 имен
+  FIXED // Фиксированная цена за услугу (независимо от имен, но может быть базой)
+}
+
+model TrebaPricingRule {
+  id          Int       @id @default(autoincrement())
+  name        String // Название требы (например, "о здравии", "об упокоении", "Молебен", "Панихида")
+  periodValue String // Значение из поля 'period' в модели Treba (e.g., "Разовое", "40 дней")
+  description String? // Описание правила (для админки)
+  price       Float // Сумма
+  priceType   PriceType // Тип цены (PER_NAME, PER_TEN_NAMES)
+  currency    String    @default("RUB")
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([name, periodValue]) // Гарантируем уникальность комбинации названия требы и периода
 }
