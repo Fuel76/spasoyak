@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Импортируем Link и useNavigate
+import { useEffect, useState } from 'react';
 import './AdminNewsList.css'; // Создадим файл стилей
 
 // Обновляем интерфейс
@@ -10,7 +10,8 @@ interface News {
   media: string[] | string;
   createdAt: string;
   cover?: string;
-  isVisible: boolean; // Добавляем поле видимости
+  isVisible: boolean;
+  customCss?: string | null;
 }
 
 export const NewsList = () => {
@@ -115,8 +116,14 @@ export const NewsList = () => {
                   {new Date(item.createdAt).toLocaleDateString()} {new Date(item.createdAt).toLocaleTimeString()}
                   {!item.isVisible && <span className="admin-news-card__badge">Скрыто</span>}
                 </p>
-                {/* Можно добавить краткое превью контента, если нужно */}
-                {/* <div className="admin-news-card__preview" dangerouslySetInnerHTML={{ __html: item.htmlContent.slice(0, 100) + '...' }} /> */}
+                {/* Краткое превью htmlContent с customCss */}
+                {item.customCss && (
+                  <style dangerouslySetInnerHTML={{ __html: item.customCss }} />
+                )}
+                <div
+                  className="admin-news-card__preview formatted-content"
+                  dangerouslySetInnerHTML={{ __html: (item.htmlContent || '').slice(0, 300) + (item.htmlContent && item.htmlContent.length > 300 ? '...' : '') }}
+                />
               </div>
               <div className="admin-news-card__actions">
                 <button

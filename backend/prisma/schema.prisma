@@ -21,6 +21,7 @@ model News {
   media       Json
   cover       String?  @db.Text // <--- ИЗМЕНИТЬ ЗДЕСЬ
   isVisible   Boolean  @default(true) // <--- Добавить поле видимости
+  customCss   String?  @db.LongText // новое поле для кастомных стилей
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

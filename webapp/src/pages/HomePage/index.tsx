@@ -1,8 +1,7 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import Slider from 'react-slick';
-import { Link } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 export const HomePage = () => {
   // Заменяем trpc на обычное состояние и fetch
@@ -12,6 +11,7 @@ export const HomePage = () => {
     cover: string;
     media: string | string[];
     htmlContent: string;
+    customCss?: string | null;
   }
 
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -106,6 +106,7 @@ export const HomePage = () => {
                 };
 
                 const previewHtml = neww.htmlContent || '';
+                const customCss = (neww as any).customCss || '';
 
                 return (
                   <div className="col-12 col-md-6 col-lg-4" key={neww.id}>
@@ -117,6 +118,10 @@ export const HomePage = () => {
                       )}
                       <div className="news-card__body">
                         <h5 className="news-card__title">{neww.title}</h5>
+                        {/* Вставляем customCss, если есть */}
+                        {customCss && (
+                          <style dangerouslySetInnerHTML={{ __html: customCss }} />
+                        )}
                         <div
                           className="news-card__preview-content formatted-content"
                           dangerouslySetInnerHTML={{ __html: decodeHtml(previewHtml) }}

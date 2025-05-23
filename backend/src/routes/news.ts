@@ -94,7 +94,7 @@ router.get('/:id', async (req: Request<{ id: string }>, res: Response): Promise<
 // Создание новости с поддержкой cover
 router.post('/', async (req, res) => {
   // Получаем coverUrl из тела запроса
-  const { title, content, htmlContent, coverUrl, mediaUrls } = req.body;
+  const { title, content, htmlContent, coverUrl, mediaUrls, customCss } = req.body;
 
   if (!title || !content) {
     return res.status(400).json({ error: 'Заголовок и содержание обязательны' });
@@ -110,6 +110,7 @@ router.post('/', async (req, res) => {
         cover: coverUrl || null,
         // Сохраняем массив ссылок на медиа
         media: JSON.stringify(mediaUrls || []),
+        customCss: customCss || null, // Сохраняем customCss
       },
     });
     res.status(201).json(news);
@@ -122,7 +123,7 @@ router.post('/', async (req, res) => {
 // Обновление новости
 router.put('/:id', upload.array('media', 10), coverUpload.single('cover'), async (req: Request<{ id: string }>, res: Response): Promise<void> => {
   const { id } = req.params;
-  const { title, content, htmlContent, coverUrl } = req.body;
+  const { title, content, htmlContent, coverUrl, customCss } = req.body;
 
   const media = Array.isArray(req.files)
     ? (req.files as Express.Multer.File[]).map((file) => `/uploads/news/${file.filename}`)
@@ -142,6 +143,7 @@ router.put('/:id', upload.array('media', 10), coverUpload.single('cover'), async
         htmlContent,
         media: JSON.stringify(media),
         cover: coverPath || null,
+        customCss: customCss || null, // Обновляем customCss
       },
     });
     res.status(200).json(news);

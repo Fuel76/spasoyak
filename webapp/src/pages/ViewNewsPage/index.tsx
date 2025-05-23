@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 export const ViewNewsPage = () => {
@@ -9,6 +9,7 @@ export const ViewNewsPage = () => {
     htmlContent: string | null;
     media: string | null;
     cover: string | null;
+    customCss?: string | null;
   } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -65,9 +66,12 @@ export const ViewNewsPage = () => {
       {/* Контейнер для контента, который будет скроллиться поверх обложки */}
       <div className="news-content-scrollable">
         <h1>{news.title}</h1>
-
-        {/* Отображаем HTML контент */}
-        <div dangerouslySetInnerHTML={{ __html: decodeHtml(news.htmlContent || '') }} />
+        {/* Вставляем customCss, если есть */}
+        {news.customCss && (
+          <style dangerouslySetInnerHTML={{ __html: news.customCss }} />
+        )}
+        {/* Отображаем HTML контент с форматированием */}
+        <div className="formatted-content" dangerouslySetInnerHTML={{ __html: decodeHtml(news.htmlContent || '') }} />
 
         {/* Отображаем медиа */}
         {news.media &&
