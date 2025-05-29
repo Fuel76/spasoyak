@@ -13,6 +13,7 @@ interface MenuItem {
 }
 
 const staticLinks = [
+  { label: 'О монастыре', href: '/about' },
   { label: 'Расписание Богослужений', href: '/schedule' },
   { label: 'Требы', href: '/treby' },
 ];

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { TrpcProvider } from './lib/trpc';
 import { HomePage } from './pages/HomePage';
@@ -10,7 +10,6 @@ import { PrivateRoute } from './components/PrivateRoute';
 import AdminPage from './pages/AdminPage';
 import { LoginPage } from './pages/LoginPage';
 import { AuthProvider } from './contexts/AuthContext';
-import { PagesList } from './pages/AdminPage/PagesList';
 import { NewsList } from './pages/AdminPage/NewsList';
 import { SiteMapEditor } from './pages/AdminPage/SiteMapEditor';
 import { EditNewsPage } from './pages/EditNewsPage';
@@ -28,6 +27,7 @@ import AddTrebaFormFieldPage from './pages/AdminTrebaFormFieldsPage/AddTrebaForm
 import AddTrebaPricingRulePage from './pages/AdminTrebaPricingRulesPage/AddTrebaPricingRulePage';
 import SchedulePage from './pages/SchedulePage';
 import AdminSchedulePage from './pages/AdminSchedulePage';
+import AboutPage from './pages/AboutPage';
 
 export const App = () => {
   const [pages, setPages] = useState<{ slug: string; title: string; content: string }[]>([]);
@@ -119,6 +119,9 @@ export const App = () => {
 
               {/* Страница расписания богослужений */}
               <Route path="/schedule" element={<SchedulePage />} />
+
+              {/* Страница о монастыре */}
+              <Route path="/about" element={<AboutPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
