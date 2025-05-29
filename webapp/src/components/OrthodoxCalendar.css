@@ -1,85 +1,129 @@
 .orthodox-calendar {
-  background: #f8fafc;
+  background: #B8A998; /* Основной цвет фона сайта */
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: none; /* Убираем тень, как в sidemenu */
   padding: 24px 20px;
-  max-width: 420px;
-  margin: 0 auto 24px auto;
+  width: 280px;
+  margin: 60pt auto 8px auto; /* общий отступ сверху 60pt */
   font-family: 'Segoe UI', Arial, sans-serif;
+  backdrop-filter: blur(2px); /* Добавляем размытие, как в sidemenu */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Тонкая светлая граница */
+  transform: none;
+  zoom: 1;
 }
+
 .calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 16px; /* Фиксированный размер, как в остальных компонентах */
   margin-bottom: 12px;
+  color: #222; /* Темный цвет текста, как в sidemenu */
+  font-weight: 500;
 }
+
 .calendar-header button {
-  background: #e3eafc;
+  background: rgba(103, 91, 91, 0.6); /* Цвет кнопок как в основном дизайне */
   border: none;
-  border-radius: 6px;
-  padding: 4px 12px;
-  font-size: 1.1rem;
+  border-radius: 8px; /* Увеличиваем скругление */
+  padding: 6px 14px;
+  font-size: 14px;
+  color: white; /* Белый текст на темном фоне */
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s ease, transform 0.2s ease; /* Анимация как у основных кнопок */
+  font-family: 'Segoe UI', Arial, sans-serif;
+  font-weight: 350;
 }
+
 .calendar-header button:hover {
-  background: #b6d0ff;
+  background: rgba(103, 91, 91, 0.8); /* Более насыщенный цвет при наведении */
+  transform: scale(1.05); /* Легкое увеличение при наведении */
 }
+
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
   margin-bottom: 12px;
 }
+
 .calendar-weekday {
   text-align: center;
   font-weight: bold;
-  color: #4a5a6a;
-  padding-bottom: 2px;
+  color: #222; /* Темный цвет как в общем дизайне */
+  padding-bottom: 4px;
+  font-size: 12px;
+  opacity: 0.8;
 }
+
 .calendar-day {
   text-align: center;
-  padding: 7px 0;
-  border-radius: 6px;
-  background: #fff;
+  padding: 8px 0;
+  border-radius: 8px; /* Увеличиваем скругление */
+  background: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  font-size: 1rem;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  font-size: 14px;
+  color: #222;
+  border: 1px solid transparent;
 }
+
+.calendar-day:hover {
+  background: rgba(255, 224, 224, 0.8); /* Цвет hover как в sidemenu */
+  transform: scale(1.05);
+}
+
 .calendar-day.selected {
-  background: #5598db;
-  color: #fff;
+  background: rgba(103, 91, 91, 0.8); /* Цвет кнопок сайта */
+  color: white;
   font-weight: bold;
+  border: 1px solid rgba(103, 91, 91, 1);
 }
+
 .calendar-day.today {
-  border: 2px solid #5598db;
+  border: 2px solid rgba(103, 91, 91, 0.8); /* Цвет рамки в стиле сайта */
+  background: rgba(255, 255, 255, 1);
+  font-weight: 500;
 }
+
 .calendar-day.empty {
   background: transparent;
   cursor: default;
 }
+
 .calendar-saints, .calendar-readings {
-  margin-top: 10px;
-  font-size: 1rem;
-  background: #f1f6ff;
+  margin-top: 12px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон */
   border-radius: 8px;
-  padding: 10px 14px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(1px);
 }
+
 .calendar-saints strong, .calendar-readings strong {
-  color: #2a4d8f;
+  color: rgba(103, 91, 91, 0.9); /* Цвет заголовков в стиле сайта */
+  font-weight: 500;
 }
+
 .calendar-saints ul, .calendar-readings ul {
-  margin: 6px 0 0 0;
+  margin: 8px 0 0 0;
   padding-left: 18px;
+  color: #222;
 }
+
+.calendar-saints li, .calendar-readings li {
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
 .calendar-event-dot {
   display: block;
   margin: 0 auto;
   margin-top: 2px;
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background: #2a4d8f;
-  box-shadow: 0 0 2px #2a4d8f;
+  background: rgba(103, 91, 91, 0.8); /* Цвет точек в стиле сайта */
+  box-shadow: 0 0 3px rgba(103, 91, 91, 0.5);
 }

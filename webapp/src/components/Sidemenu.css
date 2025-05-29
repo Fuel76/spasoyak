@@ -1,13 +1,15 @@
 .sidemenu-absolute-container {
   position: absolute;
-  top: 14%; /* высота шапки */
-  left: 5%;
+  top: 60vh; /* расстояние сверху 60vh */
+  left: 80px; /* фиксированный отступ */
   z-index: 50; /* выше орнамента, ниже кнопок */
-  width: 20%; /* ширина меню */
-  height: calc(100vh - 64px); /* на всю высоту под шапкой */
+  width: 280px; /* фиксированная ширина */
+  height: calc(100vh - 60vh); /* высота от 60vh до низа экрана */
   pointer-events: none; /* чтобы не мешать кликам вне меню */
   display: flex;
   flex-direction: column;
+  transform: none; /* отключаем трансформации */
+  zoom: 1; /* принудительно устанавливаем масштаб */
 }
 
 .sidemenu-fixed-wrapper {
@@ -20,8 +22,7 @@
 }
 
 .sidemenu {
-  min-width: 100%;
-  max-width: 90%;
+  width: 280px; /* фиксированная ширина */
   background:#B8A998;
   border-radius: 12px;
   margin: 24px 0 0 24px;
@@ -29,6 +30,8 @@
   padding: 8px 0;
   pointer-events: auto;
   backdrop-filter: blur(2px);
+  transform: none; /* отключаем трансформации */
+  zoom: 1; /* принудительно устанавливаем масштаб */
 }
 
 .sidemenu-item {
@@ -41,7 +44,7 @@
   display: flex;
   align-items: center;
   padding: 8px 20px 8px 24px;
-  font-size: 1.05rem;
+  font-size: 16px; /* фиксированный размер шрифта */
   color: #222;
   border-left: 3px solid transparent;
   transition: background 0.2s, border-color 0.2s;

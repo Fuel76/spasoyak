@@ -25,11 +25,12 @@
 	"dependencies": {
 		"@ckeditor/ckeditor5-build-classic": "^44.3.0",
 		"@ckeditor/ckeditor5-react": "^9.5.0",
-		"@prisma/client": "^6.5.0",
+		"@prisma/client": "^6.7.0",
 		"@types/dompurify": "^3.2.0",
 		"dompurify": "^3.2.5",
 		"express": "^4.21.2",
 		"jsonwebtoken": "^9.0.2",
+		"prisma": "^6.7.0",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
 		"suneditor": "^2.47.5",

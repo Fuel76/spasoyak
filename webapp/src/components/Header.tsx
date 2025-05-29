@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import React from 'react';
 import headerImage from '../assets/Шапка.svg';
+import scheduleIcon from '../assets/Расписание.svg';
+import trebyIcon from '../assets/Требы.svg';
 
 interface MenuItem {
   id: number;
@@ -70,9 +72,11 @@ export const Header = () => {
       <img className="header-background" src={headerImage} alt="Шапка" />
       <div className="button-container">
         <a href="/schedule" className="button">
-          Расписание <br /> Богослужений
+          <img src={scheduleIcon} alt="Расписание Богослужений" className="button-icon" />
         </a>
-        <a href="/treby" className="button">Требы</a>
+        <a href="/treby" className="button">
+          <img src={trebyIcon} alt="Требы" className="button-icon" />
+        </a>
       </div>
       <BurgerMenu />
     </header>

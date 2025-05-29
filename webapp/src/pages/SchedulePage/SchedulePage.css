@@ -1,6 +1,6 @@
 .schedule-page-container {
   max-width: 900px;
-  margin: 32px auto 0 auto;
+  margin: 60pt auto 0 auto; /* общий отступ сверху 60pt */
   background: #f8fafc;
   border-radius: 16px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.04);
