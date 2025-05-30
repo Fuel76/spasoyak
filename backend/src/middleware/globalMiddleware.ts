@@ -1,15 +1,60 @@
 import { Request, Response, NextFunction } from 'express';
+import { logger } from '../utils/logger';
 
-// Логирование запросов
+/**
+ * Middleware для расширенного логирования запросов
+ */
 export const requestLogger = (req: Request, res: Response, next: NextFunction) => {
-  console.log(`${req.method} ${req.url}`);
+  const start = Date.now();
+  const { method, url, ip, headers } = req;
+  
+  // Логируем начало запроса
+  logger.info(`Запрос: ${method} ${url} от ${ip}`);
+  
+  // Добавляем слушателей для логирования ответа
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    const { statusCode } = res;
+    
+    // Форматируем сообщение о завершении запроса
+    const message = `Ответ: ${statusCode} ${method} ${url} - ${duration}ms`;
+    
+    if (statusCode >= 500) {
+      logger.error(message);
+    } else if (statusCode >= 400) {
+      logger.warn(message);
+    } else {
+      logger.info(message);
+    }
+  });
+  
   next();
 };
 
-// Middleware для обработки CORS
+/**
+ * Middleware для обработки CORS
+ */
 export const corsMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  // Получаем список разрешенных источников из переменных окружения
+  const allowedOrigins = process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL || ''] 
+    : ['http://localhost:5173', 'http://localhost:3000'];
+
+  const requestOrigin = req.headers.origin || '';
+  
+  // Проверяем, что источник запроса находится в списке разрешенных
+  if (allowedOrigins.includes(requestOrigin)) {
+    res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+  }
+  
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  
+  // Для предварительных запросов OPTIONS возвращаем 200 OK
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
   next();
 };
