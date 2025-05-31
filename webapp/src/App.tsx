@@ -28,6 +28,7 @@ import AddTrebaPricingRulePage from './pages/AdminTrebaPricingRulesPage/AddTreba
 import SchedulePage from './pages/SchedulePage';
 import AdminSchedulePage from './pages/AdminSchedulePage';
 import AboutPage from './pages/AboutPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 export const App = () => {
   const [pages, setPages] = useState<{ slug: string; title: string; content: string }[]>([]);
@@ -122,6 +123,9 @@ export const App = () => {
 
               {/* Страница о монастыре */}
               <Route path="/about" element={<AboutPage />} />
+
+              {/* Страница 404 (Не найдено) */}
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -57,13 +57,19 @@ const OrthodoxCalendar: React.FC<OrthodoxCalendarProps> = ({ showReadings = true
       try {
         // Используем backend-прокси вместо прямого запроса
         const resp = await fetch(`/api/orthodox-day/${dateStr}`);
-        if (!resp.ok) throw new Error('Нет данных');
+        if (!resp.ok) {
+          setSaints(['Нет данных о святцах']);
+          setReadings(['Нет данных о чтениях']);
+          setLoading(false);
+          return;
+        }
         const data = await resp.json();
+        console.log('Ответ с backend /api/orthodox-day:', data); // [DEBUG]
         // Святцы
-        const saintsArr = (data.saints || []).map((s: any) => s.title || s.name || s.text).filter(Boolean);
+        const saintsArr = (data.saints || []).map((s: any) => s.title || s.name || s.text || s).filter(Boolean);
         setSaints(saintsArr.length ? saintsArr : ['Нет данных о святцах']);
         // Чтения
-        const readingsArr = (data.readings || []).map((r: any) => r.title || r.text).filter(Boolean);
+        const readingsArr = (data.readings || []).map((r: any) => r.title || r.text || r).filter(Boolean);
         setReadings(readingsArr.length ? readingsArr : ['Нет данных о чтениях']);
       } catch {
         setSaints(fallbackSaints[dateStr] || ['Нет данных о святцах']);

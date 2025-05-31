@@ -1,9 +1,9 @@
 .sidemenu-absolute-container {
-  position: absolute;
-  top: 60vh; /* расстояние сверху 60vh */
-  left: 80px; /* фиксированный отступ */
+  position: relative;
+  top: -10%; /* расстояние сверху 60vh */
+  left: 6%; /* фиксированный отступ */
   z-index: 50; /* выше орнамента, ниже кнопок */
-  width: 280px; /* фиксированная ширина */
+  margin-right: 80%;
   height: calc(100vh - 60vh); /* высота от 60vh до низа экрана */
   pointer-events: none; /* чтобы не мешать кликам вне меню */
   display: flex;
@@ -22,8 +22,8 @@
 }
 
 .sidemenu {
-  width: 280px; /* фиксированная ширина */
-  background:#B8A998;
+  
+  background:#d6c3b0;
   border-radius: 12px;
   margin: 24px 0 0 24px;
   box-shadow: none;
@@ -44,15 +44,15 @@
   display: flex;
   align-items: center;
   padding: 8px 20px 8px 24px;
-  font-size: 16px; /* фиксированный размер шрифта */
+  font-size: 200%; /* фиксированный размер шрифта */
   color: #222;
   border-left: 3px solid transparent;
   transition: background 0.2s, border-color 0.2s;
 }
 
 .sidemenu-item.open > .sidemenu-item-content {
-  background: #B8A999;
-  border-left: 3px solid #B8A997;
+  background: #d6c3b0;
+  border-left: 3px solid #d6c3b0;
 }
 
 .sidemenu-item-title {
@@ -93,8 +93,96 @@
   transition: max-height 0.2s cubic-bezier(.4,0,.2,1);
 }
 
+/* Мобильное бургер-меню на всю ширину экрана, стеклянное */
+.mobile-sidemenu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: rgba(214, 195, 176, 0.85); /* полупрозрачный фон */
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  pointer-events: auto;
+  box-shadow: none;
+  padding-top: 0;
+}
+
 @media (max-width: 900px) {
+  .burger-icon {
+    display: flex !important;
+  }
   .sidemenu-fixed-wrapper {
     display: none;
   }
+  .mobile-sidemenu-overlay {
+    display: flex;
+  }
+}
+
+@media (min-width: 901px) {
+  .mobile-sidemenu-overlay {
+    display: none !important;
+  }
+  .burger-icon {
+    display: none !important;
+  }
+}
+
+.burger-icon {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  z-index: 10001;
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: 48px;
+  height: 48px;
+  background: rgba(214,195,176,0.7);
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  transition: background 0.2s;
+}
+.burger-icon span {
+  display: block;
+  width: 28px;
+  height: 4px;
+  background: #7d6f5a;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.mobile-sidemenu-overlay .burger-menu-links {
+  margin-top: 64px;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 0 24px;
+  align-items: flex-start;
+}
+
+.mobile-sidemenu-overlay .burger-menu-link {
+  font-size: 1.25rem;
+  color: #3a3327;
+  text-decoration: none;
+  font-family: 'Inter', 'Roboto', 'Segoe UI', Arial, sans-serif;
+  font-weight: 500;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #eee;
+  transition: color 0.18s;
+}
+.mobile-sidemenu-overlay .burger-menu-link:last-child {
+  border-bottom: none;
+}
+.mobile-sidemenu-overlay .burger-menu-link:hover {
+  color: #ffb535;
 }

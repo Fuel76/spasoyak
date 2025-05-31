@@ -1,9 +1,9 @@
 .orthodox-calendar {
-  background: #B8A998; /* Основной цвет фона сайта */
+  background:#d6c3b0; /* Основной цвет фона сайта */
   border-radius: 12px;
   box-shadow: none; /* Убираем тень, как в sidemenu */
   padding: 24px 20px;
-  width: 280px;
+  
   margin: 60pt auto 8px auto; /* общий отступ сверху 60pt */
   font-family: 'Segoe UI', Arial, sans-serif;
   backdrop-filter: blur(2px); /* Добавляем размытие, как в sidemenu */

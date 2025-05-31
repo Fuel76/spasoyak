@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { db } from '../utils/db';
 
 type UserRegistrationData = {
@@ -26,11 +26,12 @@ export class AuthService {
     if (!secret) {
       throw new Error('JWT_SECRET отсутствует');
     }
-    
+    const expiresIn = process.env.JWT_EXPIRES_IN || '30d';
+    const options = { expiresIn: expiresIn as any };
     return jwt.sign(
       { userId: user.id, email: user.email, role: user.role },
-      secret,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '30d' }
+      secret as string,
+      options
     );
   }
 
@@ -158,5 +159,16 @@ export class AuthService {
       user: userWithoutPassword,
       token
     };
+  }
+
+  /**
+   * Получить пользователя по ID (без пароля)
+   */
+  static async getUserById(userId: number): Promise<UserWithoutPassword | null> {
+    const user = await db.user.findUnique({ where: { id: userId } });
+    if (!user) return null;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword as UserWithoutPassword;
   }
 }

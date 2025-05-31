@@ -1,18 +1,21 @@
 import express from 'express';
-import fetch from 'node-fetch';
+import path from 'path';
+import fs from 'fs';
 
 const router = express.Router();
+const CALENDAR_PATH = path.join(__dirname, '../../orthodox-calendar.json');
 
-// Прокси для days.pravoslavie.ru
-router.get('/:date', async (req, res) => {
+// Роут для получения данных из локального файла orthodox-calendar.json
+router.get('/:date', (req, res) => {
   const { date } = req.params; // YYYY-MM-DD
   try {
-    const resp = await fetch(`https://days.pravoslavie.ru/api/day/${date}.json`);
-    if (!resp.ok) return res.status(502).json({ error: 'Ошибка получения данных с days.pravosлавие.ru' });
-    const data = await resp.json();
-    res.json(data);
+    if (!fs.existsSync(CALENDAR_PATH)) return res.status(500).json({ error: 'Файл календаря не найден' });
+    const data = JSON.parse(fs.readFileSync(CALENDAR_PATH, 'utf-8'));
+    const entry = data.find((item: any) => item.date === date);
+    if (!entry) return res.status(404).json({ error: 'Нет данных на эту дату' });
+    res.json(entry);
   } catch (e) {
-    res.status(500).json({ error: 'Ошибка проксирования календаря' });
+    res.status(500).json({ error: 'Ошибка чтения календаря' });
   }
 });
 

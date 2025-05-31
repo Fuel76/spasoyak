@@ -42,7 +42,7 @@ html, body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  background-color: #b8a998;
+  background-color: #d6c3b0;
   overflow-x: hidden; /* Важно для предотвращения горизонтального скролла */
   max-width: 100vw; /* Строго ограничиваем максимальную ширину */
   scroll-behavior: smooth; /* Плавный скролл */
@@ -55,7 +55,7 @@ html, body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  background-color: #b8a998;
+  background-color: #d6c3b0;
   overflow-x: hidden; /* И для #root на всякий случай */
   max-width: 100vw; /* Строго ограничиваем максимальную ширину */
   will-change: scroll-position;
@@ -84,7 +84,7 @@ html, body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background-color: #b8a998;
+  background-color: #d6c3b0;
   margin-left: 9.5vw; /* Оставляем место для орнамента */
   /* Ширина должна быть 100% от оставшегося пространства в #root ПОСЛЕ margin-left */
   /* Вместо width: calc(), попробуем положиться на flex-поведение и max-width родителя */
@@ -96,13 +96,14 @@ html, body {
   padding-bottom: 0;
   /* Добавим overflow-x: hidden и здесь, чтобы обрезать любой выходящий контент */
   overflow-x: hidden;
+  overflow-y: hidden !important; /* Гарантированно убираем вертикальный скролл */
 }
 
 .app {
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #b8a998;
+  background: #d6c3b0;
   overflow: hidden;
 }
 
@@ -116,6 +117,8 @@ html, body {
   top: 0;
   margin-top: 0;
   padding-top: 0;
+  overflow: visible !important;
+  max-height: none !important;
 }
 
 .header-background {
@@ -128,9 +131,11 @@ html, body {
 
 /* Кнопки */
 .button-container {
-  position: absolute;
+  position: relative;
   top: 51.5%; /* Отступ сверху */
-  left: 7.85%; /* Отступ слева */
+  left: 6.7%; /* Отступ слева */
+  margin-right: 87.5%; /* Отступ справа */
+  margin-top: -18%;
   display: flex;
   flex-direction: column; /* Расположение кнопок в колонку */
   gap: 5vh; /* Отступ между кнопками */
@@ -150,10 +155,10 @@ html, body {
 
 /* Стили для SVG иконок в кнопках */
 .button-icon {
-  width: 16vw; /* Увеличенная еще в 2 раза адаптивная ширина иконки */
-  height: auto; /* Автоматическая высота для сохранения пропорций */
-  max-width: 240px; /* Увеличенная еще в 2 раза максимальная ширина для больших экранов */
-  min-width: 160px; /* Увеличенная еще в 2 раза минимальная ширина для маленьких экранов */
+  width: 100%; /* Фиксированная ширина иконки */
+ 
+  fill: #fff; /* Белый цвет иконки */
+  transition: fill 0.2s ease; /* Плавный переход цвета при наведении */
 }
 
 /* Основной контент */
@@ -172,16 +177,22 @@ html, body {
 /* Контейнер для бокового меню и основного контента */
 .content-container {
   position: relative;
-  margin-left: 25%; /* Оставляем место для фиксированного меню */
+  margin-left: 26%; /* Оставляем место для фиксированного меню */
   display: flex;
   flex-direction: row;
-  height: calc(440vh - 40vh); /* Высота экрана минус шапка и подвал */
-  margin-top: -27vh; /* Отступ под шапкой */
+  
+  margin-top: -20%; /* Отступ под шапкой */
   z-index: 20;
 }
 
 @media (max-width: 900px) {
   /* .layout был удален отсюда, так как основные стили .layout должны быть достаточны */
+  .content-container {
+    margin-left: 0; /* Убираем отступ для мобильных устройств */
+    flex-direction: column; /* Меняем направление на колонку */
+    height: auto; /* Автоматическая высота для мобильных устройств */
+    margin-top: -50%;
+  }
   .button-container {
     display: none !important;
   }
@@ -194,9 +205,10 @@ html, body {
     left: 7.85%;
     top: 51.5%;
     right: auto;
-    z-index: 100;
+    z-index: 100  ;
   }
 }
+
 
 @media (max-width: 600px) {
   .page-content, .homepage, .main-content, .container, .row {
@@ -344,7 +356,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #b8a998;
+  color: #d6c3b0;
   font-weight: 500;
   font-size: 0.95rem;
 }
@@ -356,7 +368,7 @@ html, body {
 .news-card__month {
   font-size: 0.95rem;
   text-transform: uppercase;
-  color: #b8a998;
+  color: #d6c3b0;
 }
 .news-card__title {
   font-size: 1.1rem;
@@ -372,7 +384,7 @@ html, body {
 }
 .news-card__more {
   align-self: flex-start;
-  color: #b8a998;
+  color: #d6c3b0;
   font-weight: 500;
   text-decoration: none;
   font-size: 0.98rem;
@@ -696,10 +708,10 @@ html, body {
   width: 100%;
   height: 20vh; /* Относительная высота */
   position: relative;
-  background: rgba(255, 255, 255, 0.32);
+  background: rgb(158, 140, 90);
   opacity: 0.7;
   margin-top: auto;
-  z-index: 1; /* Подвал ниже всего */
+  z-index: 200; /* Подвал ниже всего */
   max-width: 100vw;
   box-sizing: border-box;
 }
