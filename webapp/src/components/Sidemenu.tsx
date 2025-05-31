@@ -16,6 +16,7 @@ export const Sidemenu = () => {
   const [openItems, setOpenItems] = useState<number[]>([]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const sidemenuWrapperRef = useRef<HTMLDivElement>(null);
+  const sidemenuAbsoluteRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -52,6 +53,19 @@ export const Sidemenu = () => {
       window.visualViewport?.removeEventListener('resize', applyZoomCompensation);
       window.visualViewport?.removeEventListener('scroll', applyZoomCompensation);
     };
+  }, []);
+
+  // Обновление переменной --sidemenu-height на root при изменении высоты
+  useEffect(() => {
+    function setSidemenuHeightVar() {
+      if (sidemenuAbsoluteRef.current) {
+        const height = sidemenuAbsoluteRef.current.offsetHeight;
+        document.documentElement.style.setProperty('--sidemenu-height', height + 'px');
+      }
+    }
+    setSidemenuHeightVar();
+    window.addEventListener('resize', setSidemenuHeightVar);
+    return () => window.removeEventListener('resize', setSidemenuHeightVar);
   }, []);
 
   const toggleItem = (id: number) => {
@@ -109,7 +123,7 @@ export const Sidemenu = () => {
 
   return (
     <>
-      <div className="sidemenu-absolute-container">
+      <div className="sidemenu-absolute-container" ref={sidemenuAbsoluteRef}>
         <div className="sidemenu-fixed-wrapper" ref={sidemenuWrapperRef}>
           <div className="sidemenu">
             {renderMenu(menuItems)}

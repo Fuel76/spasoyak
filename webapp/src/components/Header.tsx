@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import React from 'react';
 import headerImage from '../assets/Шапка.svg';
 import scheduleIcon from '../assets/Расписание.svg';
@@ -68,9 +68,43 @@ function BurgerMenu() {
 }
 
 export const Header = () => {
+  const headerRef = useRef<HTMLElement | null>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+
+  // Универсальная функция пересчёта высоты
+  const setHeaderHeightVar = useCallback(() => {
+    if (headerRef.current) {
+      // Если есть aspect-ratio, считаем по ширине
+      const style = window.getComputedStyle(headerRef.current);
+      const aspectRatio = style.getPropertyValue('aspect-ratio');
+      let height = headerRef.current.offsetHeight;
+      if (aspectRatio) {
+        const [w, h] = aspectRatio.split('/').map(Number);
+        if (w && h) {
+          height = headerRef.current.offsetWidth * (h / w);
+        }
+      }
+      document.documentElement.style.setProperty('--header-height', height + 'px');
+    }
+  }, []);
+
+  useEffect(() => {
+    setHeaderHeightVar();
+    window.addEventListener('resize', setHeaderHeightVar);
+    return () => window.removeEventListener('resize', setHeaderHeightVar);
+  }, [setHeaderHeightVar]);
+
+  // Пересчёт после загрузки изображения
+  useEffect(() => {
+    if (imgRef.current) {
+      imgRef.current.addEventListener('load', setHeaderHeightVar);
+      return () => imgRef.current?.removeEventListener('load', setHeaderHeightVar);
+    }
+  }, [setHeaderHeightVar]);
+
   return (
-    <header className="header">
-      <img className="header-background" src={headerImage} alt="Шапка" />
+    <header className="header" ref={headerRef}>
+      <img className="header-background" src={headerImage} alt="Шапка" ref={imgRef} />
       <div className="button-container">
         <a href="/schedule" className="button">
           <img src={scheduleIcon} alt="Расписание Богослужений" className="button-icon" />

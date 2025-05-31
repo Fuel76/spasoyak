@@ -180,8 +180,7 @@ html, body {
   margin-left: 26%; /* Оставляем место для фиксированного меню */
   display: flex;
   flex-direction: row;
-  
-  margin-top: -20%; /* Отступ под шапкой */
+  margin-top: calc(clamp(-30vh, calc(var(--header-height) - 50%), var(--header-height)) - var(--sidemenu-height)); /* Контент наслаивается, но не уходит в большой плюс */
   z-index: 20;
 }
 
@@ -191,7 +190,7 @@ html, body {
     margin-left: 0; /* Убираем отступ для мобильных устройств */
     flex-direction: column; /* Меняем направление на колонку */
     height: auto; /* Автоматическая высота для мобильных устройств */
-    margin-top: -50%;
+    margin-top: calc(clamp(-30vh, calc(var(--header-height) - 50%), var(--header-height)) - var(--sidemenu-height));
   }
   .button-container {
     display: none !important;
@@ -1217,3 +1216,14 @@ table th {
 .burger-dropdown .burger-menu-link:hover {
   color: #ffb535;
 }
+
+:root {
+  --header-height: 120px;
+  --sidemenu-height: 0px;
+}
+
+.sidemenu-absolute-container {
+  /* Если высота фиксированная, иначе будет обновляться через JS */
+  /* --sidemenu-height: 120px; */
+}
+
