@@ -22,9 +22,10 @@ interface OrthodoxCalendarProps {
   onDateSelect?: (date: Date) => void;
   selectedDate?: Date;
   eventDates?: string[]; // YYYY-MM-DD
+  className?: string;
 }
 
-const OrthodoxCalendar: React.FC<OrthodoxCalendarProps> = ({ showReadings = true, showSaints = true, onDateSelect, selectedDate: externalSelectedDate, eventDates = [] }) => {
+const OrthodoxCalendar: React.FC<OrthodoxCalendarProps> = ({ showReadings = true, showSaints = true, onDateSelect, selectedDate: externalSelectedDate, eventDates = [], className }) => {
   const [internalDate, setInternalDate] = useState(new Date());
   const selectedDate = externalSelectedDate || internalDate;
   const [saints, setSaints] = useState<string[]>([]);
@@ -82,7 +83,7 @@ const OrthodoxCalendar: React.FC<OrthodoxCalendarProps> = ({ showReadings = true
   }, [selectedDate]);
 
   return (
-    <div className="orthodox-calendar">
+    <div className={className ? `orthodox-calendar ${className}` : 'orthodox-calendar'}>
       <div className="calendar-header">
         <button onClick={() => {
           const prevMonth = new Date(year, month - 1, 1);

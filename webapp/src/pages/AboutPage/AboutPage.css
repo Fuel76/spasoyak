@@ -7,7 +7,7 @@
 }
 
 .about-container {
-  max-width: 1200px;
+  max-width: 12000px;
   margin: 60pt auto 0 auto;
   padding: 0 2rem;
   background: #ffffff;
@@ -477,46 +477,193 @@
   font-weight: 600;
 }
 
-/* Анимации появления */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* --- Бумажный стиль для страницы о монастыре --- */
+.about-page.paper-bg {
+  min-height: 100vh;
+  background: #f8f6f3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border-radius: 0px;
+  opacity: 1;
+  padding: 0;
+  height: 100%;
+}
+.about-container.paper-sheet {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fffbe9 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border-radius: 22px 22px 32px 32px/18px 18px 36px 36px;
+  box-shadow: 0 8px 32px 0 rgba(120,110,90,0.13), 0 1.5px 0 #e5d8c7 inset, 0 0 0 8px rgba(245, 240, 225, 0.18) inset;
+  padding: 38px 18px 38px 18px;
+  border: 2.5px dashed #e5d8c7;
+  outline: 1.5px solid #e5d8c7;
+  outline-offset: -8px;
+  overflow: visible;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.paper-section {
+  margin-bottom: 36px;
+  padding: 24px 0 0 0;
+}
+.paper-title {
+  text-align: left;
+  font-size: 2.1rem;
+  color: #7d6f5a;
+  margin-bottom: 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 8px #e5d8c7;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+.handwritten {
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+  letter-spacing: 0.02em;
+}
+.paper-btn {
+  display: inline-block;
+  background: #fffbe9;
+  border: 1.5px dashed #e0d8cc;
+  border-radius: 8px 16px 12px 18px/12px 18px 8px 16px;
+  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.07);
+  color: #5a4a42;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+  font-size: 1.1em;
+  padding: 10px 22px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: background 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.paper-btn:hover, .paper-btn:focus {
+  background: #f9f7f0;
+  box-shadow: 0 4px 16px 0 rgba(80, 60, 30, 0.13);
+}
+.paper-link {
+  color: #b6a48c;
+  text-decoration: underline dotted;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+}
+.paper-link:hover {
+  color: #7d6f5a;
+}
+.about-header.paper-section {
+  background: none;
+  color: #7d6f5a;
+  padding: 0 0 18px 0;
+  margin: 0 0 18px 0;
+  box-shadow: none;
+  border-radius: 0;
+  animation: none;
+}
+.about-header::after {
+  display: none;
+}
+.about-title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px #e5d8c7;
+  color: #7d6f5a;
+  background: none;
+}
+.about-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  font-style: italic;
+  font-weight: 300;
+  color: #b6a48c;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Основная информация */
+.about-main-info {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  margin-bottom: 5rem;
+  align-items: start;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(139, 108, 79, 0.08);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
 }
 
-/* Плавные переходы для свойств */
-.about-container,
-.management-info,
-.brotherhood-info,
-.shrines-grid,
-.pilgrimage-info,
-.contact-info {
-  transition: all 0.4s ease;
+.about-text-block h2 {
+  color: #8b6c4f;
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
 }
 
-.about-header,
-.about-title,
-.about-subtitle,
-.section-title,
-.management-card,
-.life-aspect-card,
-.brotherhood-structure,
-.shrine-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+.about-text-block h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #8b6c4f, #a0825e);
+  border-radius: 2px;
+}
+
+.about-text-block p {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.about-image-block {
+  display: flex;
+  justify-content: center;
+}
+
+.monastery-image-placeholder {
+  width: 100%;
+  height: 350px;
+  background: linear-gradient(135deg, #d4c4b0, #c4b49e);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b6c4f;
+  font-size: 1.3rem;
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.monastery-image-placeholder:hover {
+  transform: scale(1.02);
+}
+
+/* Общие стили для секций */
+.section-title {
+  text-align: center;
+  font-size: 2.6rem;
+  color: #8b6c4f;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #8b6c4f, #a0825e);
+  margin: 1.5rem auto 0;
+  border-radius: 2px;
 }
 
 /* Управление монастырем */
@@ -854,80 +1001,2090 @@
   font-weight: 600;
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-  .about-container {
-    margin: 60pt 1rem 0 1rem;
-    padding: 0 1rem;
-  }
-  
-  .about-title {
-    font-size: 2.2rem;
-  }
-  
-  .about-main-info {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .management-info {
-    padding: 2rem;
-  }
-  
-  .management-card {
-    padding: 2rem;
-  }
-  
-  .monastic-life-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .life-aspect-card {
-    padding: 2rem;
-  }
-  
-  .brotherhood-structure {
-    padding: 2rem;
-  }
-  
-  .shrines-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .pilgrimage-info {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .section-title {
-    font-size: 1.8rem;
-  }
-  
-  .card-icon {
-    font-size: 2.5rem;
-  }
+/* --- Бумажный стиль для страницы о монастыре --- */
+.about-page.paper-bg {
+  min-height: 100vh;
+  background: #f8f6f3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  padding: 0;
+  height: 100%;
+}
+.about-container.paper-sheet {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fffbe9 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border-radius: 22px 22px 32px 32px/18px 18px 36px 36px;
+  box-shadow: 0 8px 32px 0 rgba(120,110,90,0.13), 0 1.5px 0 #e5d8c7 inset, 0 0 0 8px rgba(245, 240, 225, 0.18) inset;
+  padding: 38px 18px 38px 18px;
+  border: 2.5px dashed #e5d8c7;
+  outline: 1.5px solid #e5d8c7;
+  outline-offset: -8px;
+  overflow: visible;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.paper-section {
+  margin-bottom: 36px;
+  padding: 24px 0 0 0;
+}
+.paper-title {
+  text-align: left;
+  font-size: 2.1rem;
+  color: #7d6f5a;
+  margin-bottom: 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 8px #e5d8c7;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+.handwritten {
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+  letter-spacing: 0.02em;
+}
+.paper-btn {
+  display: inline-block;
+  background: #fffbe9;
+  border: 1.5px dashed #e0d8cc;
+  border-radius: 8px 16px 12px 18px/12px 18px 8px 16px;
+  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.07);
+  color: #5a4a42;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+  font-size: 1.1em;
+  padding: 10px 22px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: background 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.paper-btn:hover, .paper-btn:focus {
+  background: #f9f7f0;
+  box-shadow: 0 4px 16px 0 rgba(80, 60, 30, 0.13);
+}
+.paper-link {
+  color: #b6a48c;
+  text-decoration: underline dotted;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+}
+.paper-link:hover {
+  color: #7d6f5a;
+}
+.about-header.paper-section {
+  background: none;
+  color: #7d6f5a;
+  padding: 0 0 18px 0;
+  margin: 0 0 18px 0;
+  box-shadow: none;
+  border-radius: 0;
+  animation: none;
+}
+.about-header::after {
+  display: none;
+}
+.about-title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px #e5d8c7;
+  color: #7d6f5a;
+  background: none;
+}
+.about-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  font-style: italic;
+  font-weight: 300;
+  color: #b6a48c;
 }
 
-@media (max-width: 480px) {
-  .about-title {
-    font-size: 1.8rem;
-  }
-  
-  .management-card,
-  .life-aspect-card,
-  .brotherhood-structure {
-    padding: 1.5rem;
-  }
-  
-  .monastic-life-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .structure-item {
-    padding: 1.5rem;
-  }
-  
-  .contact-info {
-    padding: 2rem;
-  }
+/* Основная информация */
+.about-main-info {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  margin-bottom: 5rem;
+  align-items: start;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(139, 108, 79, 0.08);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.about-text-block h2 {
+  color: #8b6c4f;
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.about-text-block h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #8b6c4f, #a0825e);
+  border-radius: 2px;
+}
+
+.about-text-block p {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.about-image-block {
+  display: flex;
+  justify-content: center;
+}
+
+.monastery-image-placeholder {
+  width: 100%;
+  height: 350px;
+  background: linear-gradient(135deg, #d4c4b0, #c4b49e);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b6c4f;
+  font-size: 1.3rem;
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.monastery-image-placeholder:hover {
+  transform: scale(1.02);
+}
+
+/* Общие стили для секций */
+.section-title {
+  text-align: center;
+  font-size: 2.6rem;
+  color: #8b6c4f;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #8b6c4f, #a0825e);
+  margin: 1.5rem auto 0;
+  border-radius: 2px;
+}
+
+/* Управление монастырем */
+.abbot-section {
+  margin-bottom: 5rem;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.management-info {
+  display: grid;
+  gap: 2rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.12);
+}
+
+.management-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 5px solid #a0825e;
+}
+
+.management-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(139, 108, 79, 0.15);
+}
+
+.management-card h3 {
+  color: #8b6c4f;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.management-description {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #555;
+  text-align: justify;
+}
+
+.spiritual-guidance {
+  background: linear-gradient(135deg, #d4c4b0, #c4b49e);
+  padding: 2.5rem;
+  border-radius: 20px;
+  margin-top: 2rem;
+}
+
+.spiritual-guidance h4 {
+  color: #8b6c4f;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.spiritual-guidance p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #444;
+  text-align: justify;
+}
+
+/* Монашеская жизнь */
+.brotherhood-section {
+  margin-bottom: 4rem;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.brotherhood-info {
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.12);
+}
+
+.brotherhood-description {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: #444;
+  text-align: justify;
+  margin-bottom: 3rem;
+  font-style: italic;
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  border-left: 4px solid #a0825e;
+}
+
+.monastic-life-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.life-aspect-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  transition: all 0.3s ease;
+  border-top: 4px solid #a0825e;
+}
+
+.life-aspect-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.18);
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  color: #a0825e;
+}
+
+.life-aspect-card h4 {
+  font-size: 1.5rem;
+  color: #8b6c4f;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.life-aspect-card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.brotherhood-structure {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+}
+
+.brotherhood-structure h4 {
+  color: #8b6c4f;
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.structure-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.structure-item {
+  background: linear-gradient(135deg, #f8f5f0, #d4c4b0);
+  padding: 1.8rem;
+  border-radius: 15px;
+  border-left: 4px solid #a0825e;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  transition: transform 0.3s ease;
+}
+
+.structure-item:hover {
+  transform: translateX(8px);
+}
+
+.structure-item strong {
+  color: #8b6c4f;
+  font-weight: 700;
+}
+
+.brotherhood-duties ul {
+  list-style: none;
+  padding: 0;
+}
+
+.brotherhood-duties li {
+  padding: 0.8rem 0;
+  color: #555;
+  border-bottom: 1px solid #e3eafc;
+  position: relative;
+  padding-left: 1.5rem;
+  line-height: 1.5;
+}
+
+.brotherhood-duties li:before {
+  content: '✦';
+  color: #2a4d8f;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.brotherhood-duties li:last-child {
+  border-bottom: none;
+}
+
+/* Святыни */
+.shrines-section {
+  margin-bottom: 4rem;
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.shrines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.shrine-card {
+  background: #f8f5f0;
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: center;
+  border: 2px solid #d4c4b0;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(139, 108, 79, 0.08);
+}
+
+.shrine-card:hover {
+  border-color: #8b6c4f;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.15);
+}
+
+.shrine-card h4 {
+  font-size: 1.3rem;
+  color: #8b6c4f;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.shrine-card p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+/* Паломничество */
+.pilgrimage-section {
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.8s ease-out 1s both;
+}
+
+.pilgrimage-info {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 3rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(139, 108, 79, 0.08);
+}
+
+.pilgrimage-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.pilgrimage-schedule h4,
+.contact-info h4 {
+  color: #8b6c4f;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.pilgrimage-schedule ul,
+.services-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pilgrimage-schedule li,
+.services-info li {
+  padding: 0.8rem 0;
+  color: #555;
+  border-bottom: 1px solid #e3eafc;
+  font-size: 1.1rem;
+}
+
+.pilgrimage-schedule li:last-child,
+.services-info li:last-child {
+  border-bottom: none;
+}
+
+.pilgrimage-schedule li strong,
+.services-info li strong {
+  color: #8b6c4f;
+  font-weight: 600;
+}
+
+.services-info {
+  background: linear-gradient(135deg, #f8f5f0, #d4c4b0);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-top: 2rem;
+}
+
+.services-info h4 {
+  color: #8b6c4f;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.contact-info {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  border-left: 5px solid #a0825e;
+}
+
+.contact-info h4 {
+  color: #8b6c4f;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.contact-info p {
+  margin-bottom: 1rem;
+  color: #555;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.contact-info strong {
+  color: #8b6c4f;
+  font-weight: 600;
+}
+
+/* --- Бумажный стиль для страницы о монастыре --- */
+.about-page.paper-bg {
+  min-height: 100vh;
+  background: #f8f6f3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  padding: 0;
+  height: 100%;
+}
+.about-container.paper-sheet {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fffbe9 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border-radius: 22px 22px 32px 32px/18px 18px 36px 36px;
+  box-shadow: 0 8px 32px 0 rgba(120,110,90,0.13), 0 1.5px 0 #e5d8c7 inset, 0 0 0 8px rgba(245, 240, 225, 0.18) inset;
+  padding: 38px 18px 38px 18px;
+  border: 2.5px dashed #e5d8c7;
+  outline: 1.5px solid #e5d8c7;
+  outline-offset: -8px;
+  overflow: visible;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.paper-section {
+  margin-bottom: 36px;
+  padding: 24px 0 0 0;
+}
+.paper-title {
+  text-align: left;
+  font-size: 2.1rem;
+  color: #7d6f5a;
+  margin-bottom: 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 8px #e5d8c7;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+.handwritten {
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+  letter-spacing: 0.02em;
+}
+.paper-btn {
+  display: inline-block;
+  background: #fffbe9;
+  border: 1.5px dashed #e0d8cc;
+  border-radius: 8px 16px 12px 18px/12px 18px 8px 16px;
+  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.07);
+  color: #5a4a42;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+  font-size: 1.1em;
+  padding: 10px 22px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: background 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.paper-btn:hover, .paper-btn:focus {
+  background: #f9f7f0;
+  box-shadow: 0 4px 16px 0 rgba(80, 60, 30, 0.13);
+}
+.paper-link {
+  color: #b6a48c;
+  text-decoration: underline dotted;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+}
+.paper-link:hover {
+  color: #7d6f5a;
+}
+.about-header.paper-section {
+  background: none;
+  color: #7d6f5a;
+  padding: 0 0 18px 0;
+  margin: 0 0 18px 0;
+  box-shadow: none;
+  border-radius: 0;
+  animation: none;
+}
+.about-header::after {
+  display: none;
+}
+.about-title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px #e5d8c7;
+  color: #7d6f5a;
+  background: none;
+}
+.about-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  font-style: italic;
+  font-weight: 300;
+  color: #b6a48c;
+}
+
+/* Основная информация */
+.about-main-info {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  margin-bottom: 5rem;
+  align-items: start;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(139, 108, 79, 0.08);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.about-text-block h2 {
+  color: #8b6c4f;
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.about-text-block h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #8b6c4f, #a0825e);
+  border-radius: 2px;
+}
+
+.about-text-block p {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.about-image-block {
+  display: flex;
+  justify-content: center;
+}
+
+.monastery-image-placeholder {
+  width: 100%;
+  height: 350px;
+  background: linear-gradient(135deg, #d4c4b0, #c4b49e);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b6c4f;
+  font-size: 1.3rem;
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.monastery-image-placeholder:hover {
+  transform: scale(1.02);
+}
+
+/* Общие стили для секций */
+.section-title {
+  text-align: center;
+  font-size: 2.6rem;
+  color: #8b6c4f;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #8b6c4f, #a0825e);
+  margin: 1.5rem auto 0;
+  border-radius: 2px;
+}
+
+/* Управление монастырем */
+.abbot-section {
+  margin-bottom: 5rem;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.management-info {
+  display: grid;
+  gap: 2rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.12);
+}
+
+.management-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 5px solid #a0825e;
+}
+
+.management-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(139, 108, 79, 0.15);
+}
+
+.management-card h3 {
+  color: #8b6c4f;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.management-description {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #555;
+  text-align: justify;
+}
+
+.spiritual-guidance {
+  background: linear-gradient(135deg, #d4c4b0, #c4b49e);
+  padding: 2.5rem;
+  border-radius: 20px;
+  margin-top: 2rem;
+}
+
+.spiritual-guidance h4 {
+  color: #8b6c4f;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.spiritual-guidance p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #444;
+  text-align: justify;
+}
+
+/* Монашеская жизнь */
+.brotherhood-section {
+  margin-bottom: 4rem;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.brotherhood-info {
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.12);
+}
+
+.brotherhood-description {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: #444;
+  text-align: justify;
+  margin-bottom: 3rem;
+  font-style: italic;
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  border-left: 4px solid #a0825e;
+}
+
+.monastic-life-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.life-aspect-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  transition: all 0.3s ease;
+  border-top: 4px solid #a0825e;
+}
+
+.life-aspect-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.18);
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  color: #a0825e;
+}
+
+.life-aspect-card h4 {
+  font-size: 1.5rem;
+  color: #8b6c4f;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.life-aspect-card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.brotherhood-structure {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+}
+
+.brotherhood-structure h4 {
+  color: #8b6c4f;
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.structure-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.structure-item {
+  background: linear-gradient(135deg, #f8f5f0, #d4c4b0);
+  padding: 1.8rem;
+  border-radius: 15px;
+  border-left: 4px solid #a0825e;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  transition: transform 0.3s ease;
+}
+
+.structure-item:hover {
+  transform: translateX(8px);
+}
+
+.structure-item strong {
+  color: #8b6c4f;
+  font-weight: 700;
+}
+
+.brotherhood-duties ul {
+  list-style: none;
+  padding: 0;
+}
+
+.brotherhood-duties li {
+  padding: 0.8rem 0;
+  color: #555;
+  border-bottom: 1px solid #e3eafc;
+  position: relative;
+  padding-left: 1.5rem;
+  line-height: 1.5;
+}
+
+.brotherhood-duties li:before {
+  content: '✦';
+  color: #2a4d8f;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.brotherhood-duties li:last-child {
+  border-bottom: none;
+}
+
+/* Святыни */
+.shrines-section {
+  margin-bottom: 4rem;
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.shrines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.shrine-card {
+  background: #f8f5f0;
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: center;
+  border: 2px solid #d4c4b0;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(139, 108, 79, 0.08);
+}
+
+.shrine-card:hover {
+  border-color: #8b6c4f;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.15);
+}
+
+.shrine-card h4 {
+  font-size: 1.3rem;
+  color: #8b6c4f;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.shrine-card p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+/* Паломничество */
+.pilgrimage-section {
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.8s ease-out 1s both;
+}
+
+.pilgrimage-info {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 3rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(139, 108, 79, 0.08);
+}
+
+.pilgrimage-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.pilgrimage-schedule h4,
+.contact-info h4 {
+  color: #8b6c4f;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.pilgrimage-schedule ul,
+.services-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pilgrimage-schedule li,
+.services-info li {
+  padding: 0.8rem 0;
+  color: #555;
+  border-bottom: 1px solid #e3eafc;
+  font-size: 1.1rem;
+}
+
+.pilgrimage-schedule li:last-child,
+.services-info li:last-child {
+  border-bottom: none;
+}
+
+.pilgrimage-schedule li strong,
+.services-info li strong {
+  color: #8b6c4f;
+  font-weight: 600;
+}
+
+.services-info {
+  background: linear-gradient(135deg, #f8f5f0, #d4c4b0);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-top: 2rem;
+}
+
+.services-info h4 {
+  color: #8b6c4f;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.contact-info {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  border-left: 5px solid #a0825e;
+}
+
+.contact-info h4 {
+  color: #8b6c4f;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.contact-info p {
+  margin-bottom: 1rem;
+  color: #555;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.contact-info strong {
+  color: #8b6c4f;
+  font-weight: 600;
+}
+
+/* --- Бумажный стиль для страницы о монастыре --- */
+.about-page.paper-bg {
+  min-height: 100vh;
+  background: #f8f6f3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  padding: 0;
+  height: 100%;
+}
+.about-container.paper-sheet {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fffbe9 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border-radius: 22px 22px 32px 32px/18px 18px 36px 36px;
+  box-shadow: 0 8px 32px 0 rgba(120,110,90,0.13), 0 1.5px 0 #e5d8c7 inset, 0 0 0 8px rgba(245, 240, 225, 0.18) inset;
+  padding: 38px 18px 38px 18px;
+  border: 2.5px dashed #e5d8c7;
+  outline: 1.5px solid #e5d8c7;
+  outline-offset: -8px;
+  overflow: visible;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.paper-section {
+  margin-bottom: 36px;
+  padding: 24px 0 0 0;
+}
+.paper-title {
+  text-align: left;
+  font-size: 2.1rem;
+  color: #7d6f5a;
+  margin-bottom: 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 8px #e5d8c7;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+.handwritten {
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+  letter-spacing: 0.02em;
+}
+.paper-btn {
+  display: inline-block;
+  background: #fffbe9;
+  border: 1.5px dashed #e0d8cc;
+  border-radius: 8px 16px 12px 18px/12px 18px 8px 16px;
+  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.07);
+  color: #5a4a42;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+  font-size: 1.1em;
+  padding: 10px 22px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: background 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.paper-btn:hover, .paper-btn:focus {
+  background: #f9f7f0;
+  box-shadow: 0 4px 16px 0 rgba(80, 60, 30, 0.13);
+}
+.paper-link {
+  color: #b6a48c;
+  text-decoration: underline dotted;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+}
+.paper-link:hover {
+  color: #7d6f5a;
+}
+.about-header.paper-section {
+  background: none;
+  color: #7d6f5a;
+  padding: 0 0 18px 0;
+  margin: 0 0 18px 0;
+  box-shadow: none;
+  border-radius: 0;
+  animation: none;
+}
+.about-header::after {
+  display: none;
+}
+.about-title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px #e5d8c7;
+  color: #7d6f5a;
+  background: none;
+}
+.about-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  font-style: italic;
+  font-weight: 300;
+  color: #b6a48c;
+}
+
+/* Основная информация */
+.about-main-info {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  margin-bottom: 5rem;
+  align-items: start;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(139, 108, 79, 0.08);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.about-text-block h2 {
+  color: #8b6c4f;
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.about-text-block h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #8b6c4f, #a0825e);
+  border-radius: 2px;
+}
+
+.about-text-block p {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.about-image-block {
+  display: flex;
+  justify-content: center;
+}
+
+.monastery-image-placeholder {
+  width: 100%;
+  height: 350px;
+  background: linear-gradient(135deg, #d4c4b0, #c4b49e);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b6c4f;
+  font-size: 1.3rem;
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.monastery-image-placeholder:hover {
+  transform: scale(1.02);
+}
+
+/* Общие стили для секций */
+.section-title {
+  text-align: center;
+  font-size: 2.6rem;
+  color: #8b6c4f;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #8b6c4f, #a0825e);
+  margin: 1.5rem auto 0;
+  border-radius: 2px;
+}
+
+/* Управление монастырем */
+.abbot-section {
+  margin-bottom: 5rem;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.management-info {
+  display: grid;
+  gap: 2rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.12);
+}
+
+.management-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 5px solid #a0825e;
+}
+
+.management-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(139, 108, 79, 0.15);
+}
+
+.management-card h3 {
+  color: #8b6c4f;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.management-description {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #555;
+  text-align: justify;
+}
+
+.spiritual-guidance {
+  background: linear-gradient(135deg, #d4c4b0, #c4b49e);
+  padding: 2.5rem;
+  border-radius: 20px;
+  margin-top: 2rem;
+}
+
+.spiritual-guidance h4 {
+  color: #8b6c4f;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.spiritual-guidance p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #444;
+  text-align: justify;
+}
+
+/* Монашеская жизнь */
+.brotherhood-section {
+  margin-bottom: 4rem;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.brotherhood-info {
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.12);
+}
+
+.brotherhood-description {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: #444;
+  text-align: justify;
+  margin-bottom: 3rem;
+  font-style: italic;
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  border-left: 4px solid #a0825e;
+}
+
+.monastic-life-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.life-aspect-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  transition: all 0.3s ease;
+  border-top: 4px solid #a0825e;
+}
+
+.life-aspect-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.18);
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  color: #a0825e;
+}
+
+.life-aspect-card h4 {
+  font-size: 1.5rem;
+  color: #8b6c4f;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.life-aspect-card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.brotherhood-structure {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+}
+
+.brotherhood-structure h4 {
+  color: #8b6c4f;
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.structure-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.structure-item {
+  background: linear-gradient(135deg, #f8f5f0, #d4c4b0);
+  padding: 1.8rem;
+  border-radius: 15px;
+  border-left: 4px solid #a0825e;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  transition: transform 0.3s ease;
+}
+
+.structure-item:hover {
+  transform: translateX(8px);
+}
+
+.structure-item strong {
+  color: #8b6c4f;
+  font-weight: 700;
+}
+
+.brotherhood-duties ul {
+  list-style: none;
+  padding: 0;
+}
+
+.brotherhood-duties li {
+  padding: 0.8rem 0;
+  color: #555;
+  border-bottom: 1px solid #e3eafc;
+  position: relative;
+  padding-left: 1.5rem;
+  line-height: 1.5;
+}
+
+.brotherhood-duties li:before {
+  content: '✦';
+  color: #2a4d8f;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.brotherhood-duties li:last-child {
+  border-bottom: none;
+}
+
+/* Святыни */
+.shrines-section {
+  margin-bottom: 4rem;
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.shrines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.shrine-card {
+  background: #f8f5f0;
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: center;
+  border: 2px solid #d4c4b0;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(139, 108, 79, 0.08);
+}
+
+.shrine-card:hover {
+  border-color: #8b6c4f;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.15);
+}
+
+.shrine-card h4 {
+  font-size: 1.3rem;
+  color: #8b6c4f;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.shrine-card p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+/* Паломничество */
+.pilgrimage-section {
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.8s ease-out 1s both;
+}
+
+.pilgrimage-info {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 3rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(139, 108, 79, 0.08);
+}
+
+.pilgrimage-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.pilgrimage-schedule h4,
+.contact-info h4 {
+  color: #8b6c4f;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.pilgrimage-schedule ul,
+.services-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pilgrimage-schedule li,
+.services-info li {
+  padding: 0.8rem 0;
+  color: #555;
+  border-bottom: 1px solid #e3eafc;
+  font-size: 1.1rem;
+}
+
+.pilgrimage-schedule li:last-child,
+.services-info li:last-child {
+  border-bottom: none;
+}
+
+.pilgrimage-schedule li strong,
+.services-info li strong {
+  color: #8b6c4f;
+  font-weight: 600;
+}
+
+.services-info {
+  background: linear-gradient(135deg, #f8f5f0, #d4c4b0);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-top: 2rem;
+}
+
+.services-info h4 {
+  color: #8b6c4f;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.contact-info {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  border-left: 5px solid #a0825e;
+}
+
+.contact-info h4 {
+  color: #8b6c4f;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.contact-info p {
+  margin-bottom: 1rem;
+  color: #555;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.contact-info strong {
+  color: #8b6c4f;
+  font-weight: 600;
+}
+
+/* --- Бумажный стиль для страницы о монастыре --- */
+.about-page.paper-bg {
+  min-height: 100vh;
+  background: #f8f6f3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  padding: 0;
+  height: 100%;
+}
+.about-container.paper-sheet {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fffbe9 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border-radius: 22px 22px 32px 32px/18px 18px 36px 36px;
+  box-shadow: 0 8px 32px 0 rgba(120,110,90,0.13), 0 1.5px 0 #e5d8c7 inset, 0 0 0 8px rgba(245, 240, 225, 0.18) inset;
+  padding: 38px 18px 38px 18px;
+  border: 2.5px dashed #e5d8c7;
+  outline: 1.5px solid #e5d8c7;
+  outline-offset: -8px;
+  overflow: visible;
+  animation: fadeInUp 0.7s cubic-bezier(.23,1.01,.32,1) both;
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.paper-section {
+  margin-bottom: 36px;
+  padding: 24px 0 0 0;
+}
+.paper-title {
+  text-align: left;
+  font-size: 2.1rem;
+  color: #7d6f5a;
+  margin-bottom: 18px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 8px #e5d8c7;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+.handwritten {
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+  letter-spacing: 0.02em;
+}
+.paper-btn {
+  display: inline-block;
+  background: #fffbe9;
+  border: 1.5px dashed #e0d8cc;
+  border-radius: 8px 16px 12px 18px/12px 18px 8px 16px;
+  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.07);
+  color: #5a4a42;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+  font-size: 1.1em;
+  padding: 10px 22px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  transition: background 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.paper-btn:hover, .paper-btn:focus {
+  background: #f9f7f0;
+  box-shadow: 0 4px 16px 0 rgba(80, 60, 30, 0.13);
+}
+.paper-link {
+  color: #b6a48c;
+  text-decoration: underline dotted;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+}
+.paper-link:hover {
+  color: #7d6f5a;
+}
+.about-header.paper-section {
+  background: none;
+  color: #7d6f5a;
+  padding: 0 0 18px 0;
+  margin: 0 0 18px 0;
+  box-shadow: none;
+  border-radius: 0;
+  animation: none;
+}
+.about-header::after {
+  display: none;
+}
+.about-title {
+  font-size: 2.3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px #e5d8c7;
+  color: #7d6f5a;
+  background: none;
+}
+.about-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  font-style: italic;
+  font-weight: 300;
+  color: #b6a48c;
+}
+
+/* Основная информация */
+.about-main-info {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 4rem;
+  margin-bottom: 5rem;
+  align-items: start;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(139, 108, 79, 0.08);
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.about-text-block h2 {
+  color: #8b6c4f;
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.about-text-block h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #8b6c4f, #a0825e);
+  border-radius: 2px;
+}
+
+.about-text-block p {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.about-image-block {
+  display: flex;
+  justify-content: center;
+}
+
+.monastery-image-placeholder {
+  width: 100%;
+  height: 350px;
+  background: linear-gradient(135deg, #d4c4b0, #c4b49e);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b6c4f;
+  font-size: 1.3rem;
+  font-weight: 600;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.monastery-image-placeholder:hover {
+  transform: scale(1.02);
+}
+
+/* Общие стили для секций */
+.section-title {
+  text-align: center;
+  font-size: 2.6rem;
+  color: #8b6c4f;
+  margin-bottom: 3rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #8b6c4f, #a0825e);
+  margin: 1.5rem auto 0;
+  border-radius: 2px;
+}
+
+/* Управление монастырем */
+.abbot-section {
+  margin-bottom: 5rem;
+  animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.management-info {
+  display: grid;
+  gap: 2rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.12);
+}
+
+.management-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 5px solid #a0825e;
+}
+
+.management-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(139, 108, 79, 0.15);
+}
+
+.management-card h3 {
+  color: #8b6c4f;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.management-description {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #555;
+  text-align: justify;
+}
+
+.spiritual-guidance {
+  background: linear-gradient(135deg, #d4c4b0, #c4b49e);
+  padding: 2.5rem;
+  border-radius: 20px;
+  margin-top: 2rem;
+}
+
+.spiritual-guidance h4 {
+  color: #8b6c4f;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.spiritual-guidance p {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: #444;
+  text-align: justify;
+}
+
+/* Монашеская жизнь */
+.brotherhood-section {
+  margin-bottom: 4rem;
+  animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+.brotherhood-info {
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.12);
+}
+
+.brotherhood-description {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: #444;
+  text-align: justify;
+  margin-bottom: 3rem;
+  font-style: italic;
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  border-left: 4px solid #a0825e;
+}
+
+.monastic-life-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.life-aspect-card {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  transition: all 0.3s ease;
+  border-top: 4px solid #a0825e;
+}
+
+.life-aspect-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(139, 108, 79, 0.18);
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  color: #a0825e;
+}
+
+.life-aspect-card h4 {
+  font-size: 1.5rem;
+  color: #8b6c4f;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.life-aspect-card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #555;
+}
+
+.brotherhood-structure {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+}
+
+.brotherhood-structure h4 {
+  color: #8b6c4f;
+  font-size: 1.6rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.structure-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.structure-item {
+  background: linear-gradient(135deg, #f8f5f0, #d4c4b0);
+  padding: 1.8rem;
+  border-radius: 15px;
+  border-left: 4px solid #a0825e;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  transition: transform 0.3s ease;
+}
+
+.structure-item:hover {
+  transform: translateX(8px);
+}
+
+.structure-item strong {
+  color: #8b6c4f;
+  font-weight: 700;
+}
+
+.brotherhood-duties ul {
+  list-style: none;
+  padding: 0;
+}
+
+.brotherhood-duties li {
+  padding: 0.8rem 0;
+  color: #555;
+  border-bottom: 1px solid #e3eafc;
+  position: relative;
+  padding-left: 1.5rem;
+  line-height: 1.5;
+}
+
+.brotherhood-duties li:before {
+  content: '✦';
+  color: #2a4d8f;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.brotherhood-duties li:last-child {
+  border-bottom: none;
+}
+
+/* Святыни */
+.shrines-section {
+  margin-bottom: 4rem;
+  animation: fadeInUp 0.8s ease-out 0.8s both;
+}
+
+.shrines-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.shrine-card {
+  background: #f8f5f0;
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: center;
+  border: 2px solid #d4c4b0;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(139, 108, 79, 0.08);
+}
+
+.shrine-card:hover {
+  border-color: #8b6c4f;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.15);
+}
+
+.shrine-card h4 {
+  font-size: 1.3rem;
+  color: #8b6c4f;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.shrine-card p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+/* Паломничество */
+.pilgrimage-section {
+  margin-bottom: 3rem;
+  animation: fadeInUp 0.8s ease-out 1s both;
+}
+
+.pilgrimage-info {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 3rem;
+  background: linear-gradient(135deg, #f8f5f0, #ffffff);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(139, 108, 79, 0.08);
+}
+
+.pilgrimage-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.pilgrimage-schedule h4,
+.contact-info h4 {
+  color: #8b6c4f;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.pilgrimage-schedule ul,
+.services-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.pilgrimage-schedule li,
+.services-info li {
+  padding: 0.8rem 0;
+  color: #555;
+  border-bottom: 1px solid #e3eafc;
+  font-size: 1.1rem;
+}
+
+.pilgrimage-schedule li:last-child,
+.services-info li:last-child {
+  border-bottom: none;
+}
+
+.pilgrimage-schedule li strong,
+.services-info li strong {
+  color: #8b6c4f;
+  font-weight: 600;
+}
+
+.services-info {
+  background: linear-gradient(135deg, #f8f5f0, #d4c4b0);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-top: 2rem;
+}
+
+.services-info h4 {
+  color: #8b6c4f;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.contact-info {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(139, 108, 79, 0.08);
+  border-left: 5px solid #a0825e;
+}
+
+.contact-info h4 {
+  color: #8b6c4f;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.contact-info p {
+  margin-bottom: 1rem;
+  color: #555;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.contact-info strong {
+  color: #8b6c4f;
+  font-weight: 600;
 }

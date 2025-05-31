@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import OrthodoxCalendar from '../../components/OrthodoxCalendar';
 import './SchedulePage.css';
 
@@ -14,6 +14,8 @@ const SchedulePage = () => {
   const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [calendarVisible, setCalendarVisible] = useState(false);
+  const calendarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch(`${API_URL}/api/schedule`)
@@ -39,13 +41,31 @@ const SchedulePage = () => {
   return (
     <div className="schedule-page-container">
       <h1 className="schedule-title">Расписание богослужений</h1>
-      <div className="schedule-calendar-block">
+      <button
+        className="schedule-toggle-calendar-btn"
+        onClick={() => setCalendarVisible(v => !v)}
+        aria-expanded={calendarVisible}
+        aria-controls="calendar-block"
+        style={{display: 'flex', alignItems: 'center', gap: 8, userSelect: 'none'}}
+      >
+        <span style={{fontWeight: 600}}>{calendarVisible ? 'Скрыть календарь' : 'Показать календарь'}</span>
+        <svg width="18" height="18" style={{transition: 'transform 0.3s', transform: calendarVisible ? 'rotate(90deg)' : 'rotate(0deg)'}} viewBox="0 0 20 20"><polyline points="6 8 10 12 14 8" fill="none" stroke="#7d6f5a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      </button>
+      <div
+        className={
+          'schedule-calendar-block' + (calendarVisible ? ' spoiler-open' : ' hide')
+        }
+        id="calendar-block"
+        ref={calendarRef}
+        style={{transition: 'max-height 0.5s cubic-bezier(.23,1.01,.32,1), opacity 0.4s', maxHeight: calendarVisible ? 700 : 0, opacity: calendarVisible ? 1 : 0, overflow: 'hidden'}}
+      >
         <OrthodoxCalendar
           showReadings
           showSaints
           onDateSelect={setSelectedDate}
           selectedDate={selectedDate || undefined}
           eventDates={eventDates}
+          className="orthodox-calendar--paper"
         />
       </div>
       <div className="schedule-info-block">

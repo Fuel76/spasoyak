@@ -184,93 +184,100 @@ const TrebyPage = () => {
   };
 
   return (
-    <div className="treby-page-container">
-      <div className="treby-page">
-        <h1 className="treby-title">Подать записку</h1>
+    <div className="treby-page-container paper-bg">
+      <div className="treby-page paper-sheet paper-shadow">
+        <h1 className="treby-title handwritten">Подать записку</h1>
 
-        {isLoading && !formFields.length && !pricingRules.length && <p>Загрузка данных формы...</p>}
-        {error && !success && <div className="alert alert-danger treby-alert">{error}</div>}
+        {/* Paper-like алерт загрузки */}
+        {isLoading && !formFields.length && !pricingRules.length && (
+          <div className="treby-alert paper-alert paper-alert-loading">
+            <span className="paper-spinner" /> Загрузка данных формы...
+          </div>
+        )}
+        {/* Paper-like алерт ошибки */}
+        {error && !success && <div className="treby-alert paper-alert paper-alert-error handwritten">{error}</div>}
 
         <div className="treby-form-section">
           <div className="treby-form-left">
             <form onSubmit={handleSubmit} className="treby-form">
-              {/* 1. Выбор типа требы */}
-              <div className="form-group">
-                <label htmlFor="type" className="treby-label">Тип требы</label>
-                <select
-                  id="type"
-                  value={type}
-                  onChange={e => {
-                    setType(e.target.value);
-                    setError('');
-                    setSuccess(false);
-                    setPaymentUrl(null);
-                    // Сброс периода при смене типа
-                    setPeriod('');
-                  }}
-                  className="form-control treby-select"
-                  required
-                >
-                  <option value="" disabled>Выберите тип требы</option>
-                  {[...new Set(pricingRules.map(r => r.name))].map(name => (
-                    <option key={name} value={name}>{name}</option>
-                  ))}
-                </select>
+              {/* Шаг 1: Тип требы */}
+              <div className="form-step">
+                <div className="form-step-title handwritten">Шаг 1. Тип требы</div>
+                <div className="form-group">
+                  <label htmlFor="type" className="treby-label">Тип требы</label>
+                  <select
+                    id="type"
+                    value={type}
+                    onChange={e => {
+                      setType(e.target.value);
+                      setError('');
+                      setSuccess(false);
+                      setPaymentUrl(null);
+                      setPeriod('');
+                    }}
+                    className="form-control treby-select"
+                    required
+                  >
+                    <option value="" disabled>Выберите тип требы</option>
+                    {[...new Set(pricingRules.map(r => r.name))].map(name => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
-              {/* 2. Выбор периода */}
-              <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <label htmlFor="period" className="treby-label" style={{ minWidth: 140 }}>Период</label>
-                <select
-                  id="period"
-                  value={period}
-                  onChange={e => {
-                    setPeriod(e.target.value);
-                    setError('');
-                    setSuccess(false);
-                    setPaymentUrl(null);
-                    setCustomDate(null);
-                    setShowDatePicker(false);
-                  }}
-                  className="form-control treby-select"
-                  style={{ flex: 1 }}
-                  required
-                  disabled={!type}
-                >
-                  <option value="" disabled>Выберите период</option>
-                  {pricingRules.filter(r => r.name === type).map(r => (
-                    <option key={r.periodValue} value={r.periodValue}>{r.periodValue}</option>
-                  ))}
-                  <option value="custom">Другая дата</option>
-                </select>
-                {/* Кнопка выбора даты справа, если выбран custom */}
-                {period === 'custom' && (
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    style={{ marginLeft: 8, whiteSpace: 'nowrap' }}
-                    onClick={() => setShowDatePicker(v => !v)}
+              {/* Шаг 2: Период */}
+              <div className="form-step">
+                <div className="form-step-title handwritten">Шаг 2. Период</div>
+                <div className="form-group period-group">
+                  <label htmlFor="period" className="treby-label">Период</label>
+                  <select
+                    id="period"
+                    value={period}
+                    onChange={e => {
+                      setPeriod(e.target.value);
+                      setError('');
+                      setSuccess(false);
+                      setPaymentUrl(null);
+                      setCustomDate(null);
+                      setShowDatePicker(false);
+                    }}
+                    className="form-control treby-select"
+                    required
+                    disabled={!type}
                   >
-                    {customDate ? `Дата: ${customDate.toLocaleDateString()}` : 'Выбрать дату'}
-                  </button>
+                    <option value="" disabled>Выберите период</option>
+                    {pricingRules.filter(r => r.name === type).map(r => (
+                      <option key={r.periodValue} value={r.periodValue}>{r.periodValue}</option>
+                    ))}
+                    <option value="custom">Другая дата</option>
+                  </select>
+                  {period === 'custom' && (
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary paper-btn"
+                      onClick={() => setShowDatePicker(v => !v)}
+                    >
+                      {customDate ? `Дата: ${customDate.toLocaleDateString()}` : 'Выбрать дату'}
+                    </button>
+                  )}
+                </div>
+                {period === 'custom' && showDatePicker && (
+                  <div className="datepicker-paper">
+                    <DatePicker
+                      selected={customDate}
+                      onChange={date => { setCustomDate(date); setShowDatePicker(false); }}
+                      dateFormat="dd.MM.yyyy"
+                      placeholderText="Выберите дату"
+                      className="form-control treby-input"
+                      minDate={new Date()}
+                      inline
+                    />
+                  </div>
                 )}
               </div>
-              {/* DatePicker появляется только по клику */}
-              {period === 'custom' && showDatePicker && (
-                <div style={{ marginBottom: 12 }}>
-                  <DatePicker
-                    selected={customDate}
-                    onChange={date => { setCustomDate(date); setShowDatePicker(false); }}
-                    dateFormat="dd.MM.yyyy"
-                    placeholderText="Выберите дату"
-                    className="form-control treby-input"
-                    minDate={new Date()}
-                    inline
-                  />
-                </div>
-              )}
 
-              {/* Dynamic Form Fields Rendering */} 
+              {/* Шаг 3: Динамические поля */}
               {formFields.sort((a, b) => a.order - b.order).map(field => {
                 if (!field.isActive) return null;
                 const fieldId = `dynamic-field-${field.fieldName}`;
@@ -361,74 +368,90 @@ const TrebyPage = () => {
                 }
               })}
 
-              <div className="form-group">
-                <label htmlFor="names" className="treby-label">Имена (каждое с новой строки)</label>
-                <div className={`names-input-wrapper ${type === 'о здравии' ? 'zdravie-style' : 'upokoi-style'}`}>
-                  <div className="cross-icon">
-                    <img src={type === 'о здравии' ? crossZdravie : crossUpokoi} alt="cross" />
+              {/* Шаг 4: Имена */}
+              <div className="form-step">
+                <div className="form-step-title handwritten">Шаг 3. Имена</div>
+                <div className="form-group">
+                  <label htmlFor="names" className="treby-label">Имена (каждое с новой строки)</label>
+                  <div className={`names-input-wrapper paper-names ${type === 'о здравии' ? 'zdravie-style' : 'upokoi-style'}`}> 
+                    <div className="cross-icon">
+                      <img src={type === 'о здравии' ? crossZdravie : crossUpokoi} alt="cross" />
+                    </div>
+                    <textarea
+                      id="names"
+                      className="form-control treby-textarea handwritten"
+                      value={names}
+                      onChange={e => { setNames(e.target.value); setError(''); setSuccess(false); setPaymentUrl(null); }}
+                      rows={10}
+                      placeholder="Каждое имя на новой строке, в родительном падеже (Иоанна, Марии...)"
+                      required
+                    />
                   </div>
-                  <textarea
-                    id="names"
-                    className="form-control treby-textarea"
-                    value={names}
-                    onChange={e => { setNames(e.target.value); setError(''); setSuccess(false); setPaymentUrl(null); }}
-                    rows={10}
-                    placeholder="Каждое имя на новой строке, в родительном падеже (Иоанна, Марии...)"
-                    required
-                  />
+                  <div className="field-hint handwritten">Пример: Иоанна\nМарии\nАлександра</div>
                 </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="email" className="treby-label">Электронная почта</label>
-                <input
-                  id="email"
-                  type="email"
-                  className="form-control treby-input"
-                  value={email}
-                  onChange={e => { setEmail(e.target.value); setError(''); }}
-                  placeholder="Для получения уведомлений"
-                  required
-                />
+
+              {/* Email */}
+              <div className="form-step">
+                <div className="form-step-title handwritten">Шаг 4. Контакты</div>
+                <div className="form-group">
+                  <label htmlFor="email" className="treby-label">Электронная почта</label>
+                  <input
+                    id="email"
+                    type="email"
+                    className="form-control treby-input"
+                    value={email}
+                    onChange={e => { setEmail(e.target.value); setError(''); }}
+                    placeholder="Для получения уведомлений"
+                    required
+                  />
+                  <div className="field-hint handwritten">Мы не рассылаем спам. Почта нужна только для уведомлений.</div>
+                </div>
               </div>
 
-              {/* Display Calculated Price */} 
-              <div className="form-group calculated-price-section">
-                <h3 className="treby-label">Сумма пожертвования:</h3>
-                <p className="calculated-price">{calculatedPrice.toFixed(2)} {currentCurrency}</p>
+              {/* Итоговая сумма */}
+              <div className="form-step">
+                <div className="form-step-title handwritten">Шаг 5. Пожертвование</div>
+                <div className="form-group calculated-price-section">
+                  <h3 className="treby-label">Сумма пожертвования:</h3>
+                  <p className="calculated-price handwritten">{calculatedPrice.toFixed(2)} {currentCurrency}</p>
+                </div>
               </div>
 
-              <button className="btn btn-primary treby-submit-btn" type="submit" disabled={isLoading || (success && !paymentUrl)}>
+              <button className="btn btn-primary treby-submit-btn paper-btn handwritten" type="submit" disabled={isLoading || (success && !paymentUrl)}>
                 {isLoading ? 'Отправка...' : (success && !paymentUrl) ? 'Заявка отправлена' : 'Пожертвовать и перейти к оплате'}
               </button>
 
+              {/* Paper-like алерт успеха */}
               {success && (
-                <div className="alert alert-success mt-3 treby-alert">
+                <div className="treby-alert paper-alert paper-alert-success handwritten">
                   Ваша записка отправлена! ID заявки: {trebaId}.<br />
                   {paymentUrl ? (
                     <div className="mt-2">
-                      <a href={paymentUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary">
+                      <a href={paymentUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary paper-btn">
                         Оплатить ({calculatedPrice.toFixed(2)} {currentCurrency})
                       </a>
                     </div>
                   ) : (
-                    <button className="btn btn-success mt-2" onClick={handlePay} disabled={isLoading || !trebaId}>
+                    <button className="btn btn-success mt-2 paper-btn" onClick={handlePay} disabled={isLoading || !trebaId}>
                       Сформировать ссылку на оплату
                     </button>
                   )}
                 </div>
               )}
-              {error && !success && <div className="alert alert-danger mt-3 treby-alert">{error}</div>} {/* Show general error only if not success */}
+              {/* Paper-like алерт ошибки */}
+              {error && !success && <div className="treby-alert paper-alert paper-alert-error handwritten">{error}</div>}
             </form>
           </div>
 
-          <div className="treby-instructions-right">
+          <div className="treby-instructions-right paper-sheet paper-shadow">
             <div className="instruction-block">
-              <h3 className="instruction-title"> Как правильно заполнить</h3>
+              <h3 className="instruction-title handwritten">Как правильно заполнить</h3>
               <p>Имена пишутся в родительном падеже (Олега, Владимира, Наталии, Елены) без пробелов и знаков препинания.</p>
-              <p>Пометка пишется в поле справа: младенца, воина, иерея, и т.д. (В текущей форме это не реализовано, но можно добавить как отдельное поле или парсить из строки с именем)</p>
+              <p>Пометка пишется в поле справа: младенца, воина, иерея, и т.д.</p>
             </div>
             <div className="instruction-block">
-              <h3 className="instruction-title"> Рекомендуемое пожертвование за 1 имя</h3>
+              <h3 className="instruction-title handwritten">Рекомендуемое пожертвование за 1 имя</h3>
               <ul>
                 <li>Молебен, панихида, разовое - 5 ₽</li>
                 <li>Проскомидия (40 дней) - 500 ₽</li>
@@ -438,13 +461,12 @@ const TrebyPage = () => {
               <p>Пожертвование добровольное. Сумму можно изменить.</p>
             </div>
             <div className="instruction-block">
-              <h3 className="instruction-title"> Как совершается поминовение</h3>
-              {/* Сюда можно добавить текст о том, как совершается поминовение */}
+              <h3 className="instruction-title handwritten">Как совершается поминовение</h3>
               <p>Информация о совершении поминовения...</p>
             </div>
-             <div className="instruction-block">
-                <p>При возникновении вопросов пишите нам на <a href="mailto:rites@example.com">rites@example.com</a></p> {/* Замените email на актуальный */}
-                <p>Не нашли то, что Вас интересует? Найдите ответ в разделе <a href="/faq">Ответы на частые вопросы</a></p> {/* Замените ссылку на актуальную */}
+            <div className="instruction-block">
+              <p>При возникновении вопросов пишите нам на <a href="mailto:rites@example.com">rites@example.com</a></p>
+              <p>Не нашли то, что Вас интересует? Найдите ответ в разделе <a href="/faq">Ответы на частые вопросы</a></p>
             </div>
           </div>
         </div>

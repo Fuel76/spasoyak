@@ -3,7 +3,7 @@
   top: -10%; /* расстояние сверху 60vh */
   left: 6%; /* фиксированный отступ */
   z-index: 50; /* выше орнамента, ниже кнопок */
-  margin-right: 80%;
+  margin-right: 85%;
   height: calc(100vh - 60vh); /* высота от 60vh до низа экрана */
   pointer-events: none; /* чтобы не мешать кликам вне меню */
   display: flex;
@@ -44,7 +44,7 @@
   display: flex;
   align-items: center;
   padding: 8px 20px 8px 24px;
-  font-size: 200%; /* фиксированный размер шрифта */
+  font-size: 150%; /* фиксированный размер шрифта */
   color: #222;
   border-left: 3px solid transparent;
   transition: background 0.2s, border-color 0.2s;

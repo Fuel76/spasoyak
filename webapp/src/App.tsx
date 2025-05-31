@@ -29,6 +29,7 @@ import SchedulePage from './pages/SchedulePage';
 import AdminSchedulePage from './pages/AdminSchedulePage';
 import AboutPage from './pages/AboutPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { MonasteryHistoryPage } from './pages/AboutPage';
 
 export const App = () => {
   const [pages, setPages] = useState<{ slug: string; title: string; content: string }[]>([]);
@@ -123,6 +124,8 @@ export const App = () => {
 
               {/* Страница о монастыре */}
               <Route path="/about" element={<AboutPage />} />
+              {/* Страница истории монастыря */}
+              <Route path="/about/history" element={<MonasteryHistoryPage />} />
 
               {/* Страница 404 (Не найдено) */}
               <Route path="*" element={<NotFoundPage />} />

@@ -1,15 +1,27 @@
 .orthodox-calendar {
-  background:#d6c3b0; /* Основной цвет фона сайта */
-  border-radius: 12px;
-  box-shadow: none; /* Убираем тень, как в sidemenu */
-  padding: 24px 20px;
-  
-  margin: 60pt auto 8px auto; /* общий отступ сверху 60pt */
-  font-family: 'Segoe UI', Arial, sans-serif;
-  backdrop-filter: blur(2px); /* Добавляем размытие, как в sidemenu */
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Тонкая светлая граница */
-  transform: none;
-  zoom: 1;
+  margin-top: 50px;
+  background: #f8f6f3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(120, 110, 90, 0.04);
+  border: 1.2px dashed #e5d8c7;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  padding: 22px 14px;
+  transition: box-shadow 0.3s, background 0.3s;
+}
+
+.orthodox-calendar--paper {
+  background: #f8f6f3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border-radius: 18px 18px 28px 28px / 12px 12px 32px 32px;
+  box-shadow: 0 2px 12px rgba(120, 110, 90, 0.06), 0 1.5px 0 #e5d8c7 inset;
+  border: 1.5px dashed #e5d8c7;
+  outline: 1.5px solid #e5d8c7;
+  outline-offset: -6px;
+  padding: 18px 10px 18px 10px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  filter: none;
+  opacity: 1;
+  margin-bottom: 0;
+  transition: box-shadow 0.3s, background 0.3s;
 }
 
 .calendar-header {
@@ -23,21 +35,18 @@
 }
 
 .calendar-header button {
-  background: rgba(103, 91, 91, 0.6); /* Цвет кнопок как в основном дизайне */
-  border: none;
-  border-radius: 8px; /* Увеличиваем скругление */
-  padding: 6px 14px;
-  font-size: 14px;
-  color: white; /* Белый текст на темном фоне */
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease; /* Анимация как у основных кнопок */
-  font-family: 'Segoe UI', Arial, sans-serif;
-  font-weight: 350;
+  background: #e5d8c7;
+  color: #7d6f5a;
+  border: 1.2px dashed #d6c3b0;
+  border-radius: 7px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s;
 }
 
 .calendar-header button:hover {
-  background: rgba(103, 91, 91, 0.8); /* Более насыщенный цвет при наведении */
-  transform: scale(1.05); /* Легкое увеличение при наведении */
+  background: #f8f6f3;
+  color: #b6a48c;
 }
 
 .calendar-grid {
@@ -45,6 +54,9 @@
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
   margin-bottom: 12px;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .calendar-weekday {
@@ -59,31 +71,29 @@
 .calendar-day {
   text-align: center;
   padding: 8px 0;
-  border-radius: 8px; /* Увеличиваем скругление */
-  background: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый фон */
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
-  font-size: 14px;
-  color: #222;
-  border: 1px solid transparent;
+  border-radius: 7px; /* Увеличиваем скругление */
+  background: #fffefb url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border: 1.2px dashed #e5d8c7;
+  color: #7d6f5a;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  transition: background 0.2s, color 0.2s;
 }
 
 .calendar-day:hover {
-  background: rgba(255, 224, 224, 0.8); /* Цвет hover как в sidemenu */
-  transform: scale(1.05);
+  background: #fffbe9 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  color: #b6a48c;
 }
 
 .calendar-day.selected {
-  background: rgba(103, 91, 91, 0.8); /* Цвет кнопок сайта */
-  color: white;
-  font-weight: bold;
-  border: 1px solid rgba(103, 91, 91, 1);
+  background: #ffeec2 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  color: #b6a48c;
+  border: 1.5px solid #ffb535;
 }
 
 .calendar-day.today {
-  border: 2px solid rgba(103, 91, 91, 0.8); /* Цвет рамки в стиле сайта */
-  background: rgba(255, 255, 255, 1);
-  font-weight: 500;
+  border: 2px solid #ffb535;
+  background: #fffbe9 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  color: #7d6f5a;
 }
 
 .calendar-day.empty {
@@ -91,28 +101,31 @@
   cursor: default;
 }
 
-.calendar-saints, .calendar-readings {
+.calendar-saints,
+.calendar-readings {
   margin-top: 12px;
   font-size: 14px;
-  background: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый фон */
+  background: #fffefb url('https://www.transparenttextures.com/patterns/paper-fibers.png');
   border-radius: 8px;
-  padding: 12px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(1px);
+  border: 1.2px dashed #e5d8c7;
+  color: #7d6f5a;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
-.calendar-saints strong, .calendar-readings strong {
-  color: rgba(103, 91, 91, 0.9); /* Цвет заголовков в стиле сайта */
-  font-weight: 500;
+.calendar-saints strong,
+.calendar-readings strong {
+  color: #b6a48c;
 }
 
-.calendar-saints ul, .calendar-readings ul {
+.calendar-saints ul,
+.calendar-readings ul {
   margin: 8px 0 0 0;
   padding-left: 18px;
   color: #222;
 }
 
-.calendar-saints li, .calendar-readings li {
+.calendar-saints li,
+.calendar-readings li {
   margin-bottom: 4px;
   line-height: 1.4;
 }
@@ -124,6 +137,6 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: rgba(103, 91, 91, 0.8); /* Цвет точек в стиле сайта */
-  box-shadow: 0 0 3px rgba(103, 91, 91, 0.5);
+  background: #ffb535;
+  box-shadow: 0 0 3px #ffb535;
 }

@@ -1,61 +1,215 @@
+/* --- Бумажный стиль для страницы расписаний --- */
 .schedule-page-container {
   max-width: 900px;
-  margin: 60pt auto 0 auto; /* общий отступ сверху 60pt */
-  background: #f8fafc;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-  padding: 32px 24px 32px 24px;
+  margin: 60pt auto 0 auto;
+  background: #f8f6f3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  /* Бумажная текстура */
+  border-radius: 22px 22px 32px 32px/18px 18px 36px 36px;
+  box-shadow: 0 8px 32px 0 rgba(120, 110, 90, 0.13), 0 1.5px 0 #e5d8c7 inset;
+  padding: 38px 18px 38px 18px;
+  position: relative;
+  overflow: visible;
+  animation: fadeInUp 0.7s cubic-bezier(.23, 1.01, .32, 1) both;
+  border: 2.5px dashed #e5d8c7;
+  outline: 1.5px solid #e5d8c7;
+  outline-offset: -8px;
+  /* Paper-like эффект рваных краёв */
+  box-shadow:
+    0 8px 32px 0 rgba(120, 110, 90, 0.13),
+    0 1.5px 0 #e5d8c7 inset,
+    0 0 0 8px rgba(245, 240, 225, 0.18) inset;
+  /* Добавим легкую текстуру поверх */
+  background-blend-mode: multiply;
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .schedule-title {
   text-align: center;
   font-size: 2.1rem;
-  color: #2a4d8f;
-  margin-bottom: 24px;
-  font-weight: 600;
+  color: #7d6f5a;
+  margin-bottom: 28px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 8px #e5d8c7;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
+
 .schedule-calendar-block {
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   display: flex;
   justify-content: center;
+  transition: max-height 0.5s cubic-bezier(.23, 1.01, .32, 1), opacity 0.4s;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  will-change: max-height, opacity;
 }
+
+.schedule-calendar-block.spoiler-open {
+  max-height: 700px;
+  opacity: 1;
+  margin-bottom: 24px;
+}
+
+.schedule-calendar-block.hide {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.schedule-toggle-calendar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 18px auto;
+  background: #e5d8c7;
+  color: #7d6f5a;
+  border: 1.5px dashed #d6c3b0;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(120, 110, 90, 0.04);
+  transition: background 0.2s, transform 0.2s;
+  outline: none;
+  position: relative;
+  z-index: 2;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  user-select: none;
+}
+
+.schedule-toggle-calendar-btn:hover {
+  background: #f8f6f3;
+  color: #b6a48c;
+  transform: scale(1.04);
+}
+
+@media (max-width: 900px) {
+  .schedule-toggle-calendar-btn {
+    display: flex;
+  }
+
+  .schedule-calendar-block {
+    margin-bottom: 0;
+  }
+}
+
 .schedule-info-block {
-  background: #fff;
-  border-radius: 12px;
-  padding: 24px 18px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.03);
+  background: #fffefb url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border-radius: 18px 18px 28px 28px/12px 12px 32px 32px;
+  padding: 32px 14px 18px 14px;
+  box-shadow: 0 2px 12px rgba(120, 110, 90, 0.06), 0 1.5px 0 #e5d8c7 inset;
+  animation: fadeInUp 0.8s 0.1s cubic-bezier(.23, 1.01, .32, 1) both;
+  border: 1.5px dashed #e5d8c7;
 }
+
 .schedule-list {
   margin: 0 0 12px 0;
-  padding-left: 20px;
-  font-size: 1.1rem;
+  padding-left: 0;
+  font-size: 1.13rem;
+  list-style: none;
 }
+
+.schedule-list li {
+  background: #f8f6f3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  border-radius: 10px 10px 18px 18px/8px 8px 20px 20px;
+  margin-bottom: 10px;
+  padding: 12px 18px;
+  box-shadow: 0 1px 6px rgba(120, 110, 90, 0.04);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: fadeInUp 0.5s cubic-bezier(.23, 1.01, .32, 1);
+  transition: box-shadow 0.2s;
+  border: 1.5px dashed #e5d8c7;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.schedule-list li:hover {
+  box-shadow: 0 4px 16px rgba(120, 110, 90, 0.10);
+  background: #fffbe9 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+}
+
+.schedule-list b {
+  color: #b6a48c;
+  font-weight: 700;
+  min-width: 90px;
+  letter-spacing: 0.01em;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
 .schedule-note {
-  color: #888;
-  font-size: 0.95rem;
-  margin-top: 8px;
+  color: #b6a48c;
+  font-size: 0.98rem;
+  margin-top: 12px;
+  text-align: right;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
+
 .schedule-reset-btn {
-  background: #e3eafc;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 16px;
+  background: #e5d8c7;
+  border: 1.5px dashed #d6c3b0;
+  border-radius: 8px;
+  padding: 7px 18px;
   font-size: 1rem;
-  color: #2a4d8f;
+  color: #7d6f5a;
   cursor: pointer;
-  transition: background 0.2s;
-  margin-left: 8px;
+  transition: background 0.2s, transform 0.2s;
+  margin-left: 12px;
+  font-weight: 600;
+  box-shadow: 0 1px 6px rgba(120, 110, 90, 0.07);
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
+
 .schedule-reset-btn:hover {
-  background: #cce5ff;
+  background: #f8f6f3;
+  color: #b6a48c;
+  transform: scale(1.04);
 }
 
 @media (max-width: 600px) {
-  .schedule-calendar-block {
-    flex-direction: column;
-    align-items: stretch;
+  .schedule-page-container {
+    padding: 12px 2vw 24px 2vw;
+    border-radius: 10px;
   }
+
+  .schedule-title {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+  }
+
+  .schedule-info-block {
+    padding: 14px 4vw 10px 4vw;
+    border-radius: 8px;
+  }
+
+  .schedule-list li {
+    font-size: 1rem;
+    padding: 8px 8px;
+  }
+
+  .schedule-toggle-calendar-btn {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
   .schedule-reset-btn {
     width: 100%;
     margin: 8px 0 0 0;
   }
 }
+
+/* --- Конец бумажного стиля --- */
