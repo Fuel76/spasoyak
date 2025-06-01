@@ -16,7 +16,7 @@ const AdminTrebyPage = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/treby')
+    fetch('/api/treby')
       .then(res => res.json())
       .then(data => {
         setTreby(data);
@@ -30,7 +30,7 @@ const AdminTrebyPage = () => {
 
   const handleStatusChange = async (id: number, status: string) => {
     try {
-      await fetch(`http://localhost:3000/api/treby/${id}/payment`, {
+      await fetch(`/api/treby/${id}/payment`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ paymentStatus: status })

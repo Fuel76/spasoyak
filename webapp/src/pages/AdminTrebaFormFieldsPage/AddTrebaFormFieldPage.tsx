@@ -29,7 +29,7 @@ const AddTrebaFormFieldPage = () => {
     setMessage('');
     setError('');
     try {
-      const res = await fetch('http://localhost:3000/api/treba-form-fields', {
+      const res = await fetch('/api/treba-form-fields', {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ fieldName, fieldType, label, isRequired, order, isActive })

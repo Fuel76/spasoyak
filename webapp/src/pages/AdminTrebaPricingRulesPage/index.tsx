@@ -17,7 +17,7 @@ const AdminTrebaPricingRulesPage = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/treba-pricing-rules')
+    fetch('/api/treba-pricing-rules')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {

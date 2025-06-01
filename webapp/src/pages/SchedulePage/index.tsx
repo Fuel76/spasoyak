@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useRef } from 'react';
 import OrthodoxCalendar from '../../components/OrthodoxCalendar';
 import './SchedulePage.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 interface ScheduleItem {
   date: string; // YYYY-MM-DD
@@ -18,7 +18,7 @@ const SchedulePage = () => {
   const calendarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/schedule`)
+    fetch(`${API_URL}/schedule`)
       .then(res => res.json())
       .then(data => setSchedule(Array.isArray(data) ? data : []))
       .catch(() => setSchedule([]))

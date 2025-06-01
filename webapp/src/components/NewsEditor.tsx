@@ -46,7 +46,7 @@ export const NewsEditor: React.FC<NewsEditorProps> = ({ newsId }) => {
     if (newsId) {
       setLoading(true);
       setError(null);
-      fetch(`http://localhost:3000/api/news/${newsId}`)
+      fetch(`/api/news/${newsId}`)
         .then(res => {
           if (!res.ok) {
             throw new Error(`Ошибка: ${res.status}`);
@@ -106,7 +106,7 @@ export const NewsEditor: React.FC<NewsEditorProps> = ({ newsId }) => {
 
     try {
       const method = newsId ? 'PUT' : 'POST';
-      const url = newsId ? `http://localhost:3000/api/news/${newsId}` : 'http://localhost:3000/api/news';
+      const url = newsId ? `/api/news/${newsId}` : '/api/news';
       
       const newsData = {
         title,

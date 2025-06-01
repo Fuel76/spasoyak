@@ -21,7 +21,7 @@ export const Sidemenu = () => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/menu');
+        const response = await fetch('/api/menu');
         const data = await response.json();
         setMenuItems(data);
       } catch (error) {

@@ -25,7 +25,7 @@ export const HomePage = () => {
   // Загрузка новостей
   useEffect(() => {
     setIsLoading(true);
-    fetch(`http://localhost:3000/api/news/public?page=${page}&limit=${PAGE_SIZE}`)
+    fetch(`/api/news/public?page=${page}&limit=${PAGE_SIZE}`)
       .then(res => res.json())
       .then(data => {
         setNews(data.news); // Получаем news из объекта { news: [...] }
@@ -41,7 +41,7 @@ export const HomePage = () => {
 
   // Загрузка картинок для карусели
   useEffect(() => {
-    fetch('http://localhost:3000/api/carousel')
+    fetch('/api/carousel')
       .then((res) => res.json())
       .then((data) => {
         const uniqueImages = data.filter(

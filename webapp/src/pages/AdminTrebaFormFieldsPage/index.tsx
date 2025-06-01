@@ -16,7 +16,7 @@ const AdminTrebaFormFieldsPage = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/treba-form-fields')
+    fetch('/api/treba-form-fields')
       .then(res => res.json())
       .then(data => {
         setFields(data);

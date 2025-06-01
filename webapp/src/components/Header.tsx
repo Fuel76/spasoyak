@@ -23,7 +23,7 @@ function BurgerMenu() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/menu')
+    fetch('/api/menu')
       .then((res) => res.json())
       .then((data) => setMenuItems(data.filter((item: MenuItem) => !item.mute)))
       .catch(() => setMenuItems([]));

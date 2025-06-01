@@ -25,8 +25,8 @@ export const AdminPagesPage: React.FC = () => {
 
   const fetchPages = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-      const response = await fetch(`${API_URL}/api/pages`);
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
+      const response = await fetch(`${API_URL}/pages`);
       if (!response.ok) {
         throw new Error(`Ошибка: ${response.status}`);
       }
@@ -50,12 +50,12 @@ export const AdminPagesPage: React.FC = () => {
       return;
     }
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
       const sessionData = localStorage.getItem('session');
       const token = sessionData ? JSON.parse(sessionData).token : null;
       const headers: Record<string, string> = {};
       if (token) headers['Authorization'] = `Bearer ${token}`;
-      const response = await fetch(`${API_URL}/api/pages/${id}`, {
+      const response = await fetch(`${API_URL}/pages/${id}`, {
         method: 'DELETE',
         headers,
       });
@@ -72,20 +72,20 @@ export const AdminPagesPage: React.FC = () => {
 
   const handleToggleVisibility = async (page: Page) => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const API_URL = import.meta.env.VITE_API_URL || '/api';
       const sessionData = localStorage.getItem('session');
       const token = sessionData ? JSON.parse(sessionData).token : null;
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
       if (token) headers['Authorization'] = `Bearer ${token}`;
       // Получаем актуальные данные страницы перед изменением видимости
-      const pageRes = await fetch(`${API_URL}/api/pages/${page.id}`);
+      const pageRes = await fetch(`${API_URL}/pages/${page.id}`);
       if (!pageRes.ok) {
         alert('Ошибка: страница не найдена или сервер вернул ошибку.');
         return;
       }
       const pageData = await pageRes.json();
       // Обновляем только поле isVisible, остальные данные не теряются
-      const response = await fetch(`${API_URL}/api/pages/${page.id}`, {
+      const response = await fetch(`${API_URL}/pages/${page.id}`, {
         method: 'PUT',
         headers,
         body: JSON.stringify({

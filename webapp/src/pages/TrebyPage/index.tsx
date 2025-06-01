@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'; // Added useEffect, useCallback
 import './TrebyPage.css';
-import crossZdravie from '../../assets/cross_zdravie.svg';
+import crossZdravie from '../../assets/cross_zdravие.svg';
 import crossUpokoi from '../../assets/cross_upokoi.svg';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -57,8 +57,8 @@ const TrebyPage = () => {
       setIsLoading(true);
       try {
         const [fieldsRes, rulesRes] = await Promise.all([
-          fetch('http://localhost:3000/api/treba-form-fields'),
-          fetch('http://localhost:3000/api/treba-pricing-rules')
+          fetch('/api/treba-form-fields'),
+          fetch('/api/treba-pricing-rules')
         ]);
         if (!fieldsRes.ok) throw new Error('Ошибка загрузки полей формы');
         if (!rulesRes.ok) throw new Error('Ошибка загрузки правил ценообразования');
@@ -124,7 +124,7 @@ const TrebyPage = () => {
     setError('');
     setSuccess(false);
     try {
-      const res = await fetch('http://localhost:3000/api/treby', {
+      const res = await fetch('/api/treby', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type, names, period, email, dynamicFieldsData, customDate: period === 'custom' && customDate ? customDate : undefined })

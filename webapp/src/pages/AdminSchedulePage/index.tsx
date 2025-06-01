@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './AdminSchedulePage.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 interface ScheduleItem {
   date: string; // YYYY-MM-DD
@@ -18,7 +18,7 @@ const AdminSchedulePage: React.FC = () => {
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    fetch(`${API_URL}/api/schedule`)
+    fetch(`/api/schedule`)
       .then(res => res.json())
       .then(data => setSchedule(Array.isArray(data) ? data : []))
       .catch(() => setSchedule([]));
@@ -68,7 +68,7 @@ const AdminSchedulePage: React.FC = () => {
       const token = sessionData ? JSON.parse(sessionData).token : null;
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
       if (token) headers['Authorization'] = `Bearer ${token}`;
-      const res = await fetch(`${API_URL}/api/schedule`, {
+      const res = await fetch(`/api/schedule`, {
         method: 'POST',
         headers,
         body: JSON.stringify({ schedule })

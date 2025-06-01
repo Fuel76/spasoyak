@@ -30,7 +30,7 @@ const AddTrebaPricingRulePage = () => {
     setMessage('');
     setError('');
     try {
-      const res = await fetch('http://localhost:3000/api/treba-pricing-rules', {
+      const res = await fetch('/api/treba-pricing-rules', {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ name, periodValue, description, price, priceType, currency, isActive })

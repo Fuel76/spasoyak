@@ -31,7 +31,7 @@ export const SunEditorComponent: React.FC<SunEditorComponentProps> = ({ pageId }
       // Загрузка данных страницы для редактирования
       const fetchPage = async () => {
         try {
-          const response = await fetch(`http://localhost:3000/api/pages/${pageId}`);
+          const response = await fetch(`/api/pages/${pageId}`);
           if (response.ok) {
             const page = await response.json();
             setTitle(page.title);
@@ -56,7 +56,7 @@ export const SunEditorComponent: React.FC<SunEditorComponentProps> = ({ pageId }
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/api/pages/${pageId || ''}`, {
+      const response = await fetch(`/api/pages/${pageId || ''}`, {
         method: pageId ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
