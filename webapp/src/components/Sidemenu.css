@@ -3,21 +3,25 @@
   top: -10%; /* расстояние сверху 60vh */
   left: 6%; /* фиксированный отступ */
   z-index: 50; /* выше орнамента, ниже кнопок */
-  margin-right: 85%;
+  margin-right: 85%; /* отступ справа для выравнивания */
   height: calc(100vh - 60vh); /* высота от 60vh до низа экрана */
+  width: calc(var(--layout-width) * 0.17); /* 20% от ширины layout, зависит от переменной */
+  min-width: 10%;
   pointer-events: none; /* чтобы не мешать кликам вне меню */
   display: flex;
   flex-direction: column;
   transform: none; /* отключаем трансформации */
-  zoom: 1; /* принудительно устанавливаем масштаб */
 }
 
 .sidemenu-fixed-wrapper {
   position: static;
   width: 100%;
+  min-width: 15%;
+  margin-right: 0%;
   height: auto;
   background: transparent;
   pointer-events: auto;
+  transform: none;
   box-shadow: none;
 }
 
@@ -31,7 +35,7 @@
   pointer-events: auto;
   backdrop-filter: blur(2px);
   transform: none; /* отключаем трансформации */
-  zoom: 1; /* принудительно устанавливаем масштаб */
+ 
 }
 
 .sidemenu-item {

@@ -32,29 +32,6 @@ export const Sidemenu = () => {
     fetchMenuItems();
   }, []);
 
-  useEffect(() => {
-    function applyZoomCompensation() {
-      // Используем visualViewport.scale, если доступно, иначе devicePixelRatio
-      const zoom = window.visualViewport?.scale || window.devicePixelRatio || 1;
-      const wrapper = sidemenuWrapperRef.current;
-      if (wrapper) {
-        // Компенсируем zoom обратным scale
-        wrapper.style.transform = `scale(${1 / zoom})`;
-        wrapper.style.transformOrigin = 'top left';
-        // Не трогаем left/top/width/height!
-      }
-    }
-    applyZoomCompensation();
-    window.addEventListener('resize', applyZoomCompensation);
-    window.visualViewport?.addEventListener('resize', applyZoomCompensation);
-    window.visualViewport?.addEventListener('scroll', applyZoomCompensation);
-    return () => {
-      window.removeEventListener('resize', applyZoomCompensation);
-      window.visualViewport?.removeEventListener('resize', applyZoomCompensation);
-      window.visualViewport?.removeEventListener('scroll', applyZoomCompensation);
-    };
-  }, []);
-
   // Обновление переменной --sidemenu-height на root при изменении высоты
   useEffect(() => {
     function setSidemenuHeightVar() {

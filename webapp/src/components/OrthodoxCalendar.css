@@ -1,10 +1,10 @@
 .orthodox-calendar {
   margin-top: 50px;
-  background: #f8f6f3 url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+  background: rgba(255, 255, 254, 0.432) url('https://www.transparenttextures.com/patterns/paper-fibers.png');
   border-radius: 14px;
   box-shadow: 0 2px 12px rgba(120, 110, 90, 0.04);
-  border: 1.2px dashed #e5d8c7;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  border:  #e5d8c7;
+  font-family: 'Noto Sans', sans-serif;
   padding: 22px 14px;
   transition: box-shadow 0.3s, background 0.3s;
 }
@@ -17,7 +17,7 @@
   outline: 1.5px solid #e5d8c7;
   outline-offset: -6px;
   padding: 18px 10px 18px 10px;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Noto Sans', sans-serif;
   filter: none;
   opacity: 1;
   margin-bottom: 0;
@@ -37,9 +37,9 @@
 .calendar-header button {
   background: #e5d8c7;
   color: #7d6f5a;
-  border: 1.2px dashed #d6c3b0;
+  border: 1.2px #3b342c;
   border-radius: 7px;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 600;
   transition: background 0.2s, color 0.2s;
 }
@@ -73,9 +73,9 @@
   padding: 8px 0;
   border-radius: 7px; /* Увеличиваем скругление */
   background: #fffefb url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-  border: 1.2px dashed #e5d8c7;
+  border: 1.2px solid #e5d8c7;
   color: #7d6f5a;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Noto Sans', sans-serif;
   transition: background 0.2s, color 0.2s;
 }
 
@@ -109,7 +109,7 @@
   border-radius: 8px;
   border: 1.2px dashed #e5d8c7;
   color: #7d6f5a;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .calendar-saints strong,

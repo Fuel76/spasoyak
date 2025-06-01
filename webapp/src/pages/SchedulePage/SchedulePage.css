@@ -42,7 +42,7 @@
   font-weight: 700;
   letter-spacing: 0.01em;
   text-shadow: 0 2px 8px #e5d8c7;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .schedule-calendar-block {
@@ -87,7 +87,7 @@
   outline: none;
   position: relative;
   z-index: 2;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Noto Sans', sans-serif;
   user-select: none;
 }
 
@@ -135,7 +135,7 @@
   animation: fadeInUp 0.5s cubic-bezier(.23, 1.01, .32, 1);
   transition: box-shadow 0.2s;
   border: 1.5px dashed #e5d8c7;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .schedule-list li:hover {
@@ -148,7 +148,7 @@
   font-weight: 700;
   min-width: 90px;
   letter-spacing: 0.01em;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .schedule-note {
@@ -156,7 +156,7 @@
   font-size: 0.98rem;
   margin-top: 12px;
   text-align: right;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .schedule-reset-btn {
@@ -171,7 +171,7 @@
   margin-left: 12px;
   font-weight: 600;
   box-shadow: 0 1px 6px rgba(120, 110, 90, 0.07);
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .schedule-reset-btn:hover {

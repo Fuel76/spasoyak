@@ -13,7 +13,7 @@
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  font-family: 'Times New Roman', Times, serif; /* Шрифт с засечками */
+  font-family: 'Noto Sans', sans-serif; /* Шрифт с засечками заменён на Noto Sans */
 }
 
 .treby-title {
@@ -75,6 +75,7 @@
   width: 100%;
   box-sizing: border-box;
   background-color: #fff;
+  font-family: 'Noto Sans', sans-serif; /* Для поля ввода также Noto Sans */
 }
 
 .form-control.treby-textarea {
