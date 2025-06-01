@@ -99,11 +99,6 @@ export const NewsList = () => {
       <div className="admin-news-list">
         {news.map((item) => {
           const coverUrl = item.cover; // Используем прямую ссылку
-          // Парсинг media остается таким же
-          let mediaUrls: string[] = [];
-          try {
-            mediaUrls = typeof item.media === 'string' ? JSON.parse(item.media) : (Array.isArray(item.media) ? item.media : []);
-          } catch { mediaUrls = []; }
 
           return (
             <div key={item.id} className={`admin-news-card ${!item.isVisible ? 'admin-news-card--hidden' : ''}`}>

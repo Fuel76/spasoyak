@@ -1,4 +1,3 @@
-import React from 'react';
 import { SunEditorComponent } from '../../components/SunEditor';
 
 export const CreatePage = () => {

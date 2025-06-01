@@ -87,17 +87,6 @@ export const HomePage = () => {
             {news.length > 0 ? (
               news.map((neww) => {
                 const coverUrl = neww.cover;
-                let mediaUrls: string[] = [];
-                try {
-                  if (typeof neww.media === 'string') {
-                    mediaUrls = JSON.parse(neww.media);
-                  } else if (Array.isArray(neww.media)) {
-                    mediaUrls = neww.media;
-                  }
-                } catch (e) {
-                  console.error("Ошибка парсинга media:", e, neww.media);
-                  mediaUrls = [];
-                }
 
                 const decodeHtml = (html: string): string => {
                   const txt = document.createElement('textarea');
@@ -126,11 +115,6 @@ export const HomePage = () => {
                           className="news-card__preview-content formatted-content"
                           dangerouslySetInnerHTML={{ __html: decodeHtml(previewHtml) }}
                         />
-                        <div className="news-card__media">
-                          {mediaUrls.map((url, index) => (
-                            <img key={index} src={url} alt={`media-${index}`} className="news-card__media-thumb" />
-                          ))}
-                        </div>
                         <a href={`/news/${neww.id}`} className="news-card__more">
                           Читать дальше
                         </a>

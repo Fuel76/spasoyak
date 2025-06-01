@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import AddTrebaPricingRulePage from './AddTrebaPricingRulePage';
+import { useEffect, useState } from 'react';
 
 interface TrebaPricingRule {
   id: number;

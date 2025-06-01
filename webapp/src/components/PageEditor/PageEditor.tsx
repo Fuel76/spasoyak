@@ -15,10 +15,10 @@ export const PageEditor: React.FC<PageEditorProps> = ({ pageId, slug, navigate }
   const [pageSlug, setPageSlug] = useState<string>(slug || '');
   const [content, setContent] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [metaDescription, setMetaDescription] = useState<string>('');
   const [metaKeywords, setMetaKeywords] = useState<string>('');
   const [customCss, setCustomCss] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
   
   // Состояния для управления видом редактора
   const [showCssEditor, setShowCssEditor] = useState<boolean>(false);
@@ -150,17 +150,6 @@ export const PageEditor: React.FC<PageEditorProps> = ({ pageId, slug, navigate }
     }
   };
 
-  // Сохранение версии в историю
-  const addToHistory = () => {
-    const newHistoryItem = {
-      title,
-      content,
-      timestamp: new Date()
-    };
-    
-    setHistory(prevHistory => [newHistoryItem, ...prevHistory.slice(0, 9)]); // Храним до 10 версий
-  };
-  
   // Восстановление из истории
   const restoreFromHistory = (index: number) => {
     if (window.confirm('Восстановить эту версию? Текущие изменения будут потеряны.')) {
@@ -552,6 +541,8 @@ export const PageEditor: React.FC<PageEditorProps> = ({ pageId, slug, navigate }
           </>
         )}
       </div>
+
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };

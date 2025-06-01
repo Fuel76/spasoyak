@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PageEditor } from '../../components/PageEditor/PageEditor';
 import './CreatePagePage.css';

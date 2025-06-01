@@ -118,14 +118,6 @@ const TrebyPage = () => {
     setDynamicFieldsData(prev => ({ ...prev, [fieldName]: value }));
   };
 
-  const handleDateChange = (date: Date | null) => {
-    setCustomDate(date);
-    setPeriod('custom');
-    setError('');
-    setSuccess(false);
-    setPaymentUrl(null);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);

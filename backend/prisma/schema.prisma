@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,13 +9,13 @@ datasource db {
 
 model News {
   id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255) // Ограничение длины
+  title       String   @db.VarChar(255)
   content     String   @db.Text
-  htmlContent String?  @db.LongText // Изменено на LONGTEXT
+  htmlContent String?  @db.LongText
   media       Json
-  cover       String?  @db.Text // <--- ИЗМЕНИТЬ ЗДЕСЬ
-  isVisible   Boolean  @default(true) // <--- Добавить поле видимости
-  customCss   String?  @db.LongText // новое поле для кастомных стилей
+  cover       String?  @db.Text
+  isVisible   Boolean  @default(true)
+  customCss   String?  @db.LongText
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -41,11 +35,10 @@ model Page {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  password String
-  name     String? // Поле name должно быть определено
-
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
   role      String   @default("user")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -57,40 +50,70 @@ model MenuItem {
   link      String     @db.VarChar(255)
   mute      Boolean    @default(false)
   parentId  Int?
-  parent    MenuItem?  @relation("MenuItemToParent", fields: [parentId], references: [id])
-  children  MenuItem[] @relation("MenuItemToParent")
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  parent    MenuItem?  @relation("MenuItemToParent", fields: [parentId], references: [id])
+  children  MenuItem[] @relation("MenuItemToParent")
+
+  @@index([parentId], map: "MenuItem_parentId_fkey")
 }
 
-// Переименовываем модель в PascalCase согласно соглашениям Prisma
 model CarouselImage {
   id        Int      @id @default(autoincrement())
   url       String
-  title     String? // Добавляем необязательное поле для заголовка изображения
-  alt       String? // Добавляем необязательное поле для alt-текста (доступность)
-  order     Int      @default(0) // Добавляем поле для сортировки
+  title     String?
+  alt       String?
+  order     Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("carouselImage") // Сохраняем старое имя таблицы для совместимости
+  @@map("carouselImage")
 }
 
 model Treba {
   id                Int       @id @default(autoincrement())
-  type              String // 'о здравии' или 'об упокоении'
+  type              String
   names             String    @db.Text
-  period            String    @default("Разовое")
-  email             String?
   note              String?   @db.Text
   paymentStatus     String    @default("pending")
   paymentId         String?
-  dynamicFieldsData Json? // Для хранения данных из кастомных полей
-  calculatedPrice   Float? // Рассчитанная цена
-  currency          String? // Валюта (например, "RUB")
-  customDate        DateTime? // Для произвольной даты требы
   createdAt         DateTime  @default(now())
+  email             String?
+  period            String    @default("Разовое")
   updatedAt         DateTime  @updatedAt
+  calculatedPrice   Float?
+  currency          String?
+  dynamicFieldsData Json?
+  customDate        DateTime?
+}
+
+model TrebaFormField {
+  id          Int       @id @default(autoincrement())
+  fieldName   String    @unique
+  fieldType   FieldType
+  label       String
+  options     Json?
+  placeholder String?
+  isRequired  Boolean   @default(false)
+  order       Int       @default(0)
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model TrebaPricingRule {
+  id          Int       @id @default(autoincrement())
+  periodValue String
+  description String?
+  price       Float
+  priceType   PriceType
+  currency    String    @default("RUB")
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String
+
+  @@unique([name, periodValue])
 }
 
 enum FieldType {
@@ -102,37 +125,8 @@ enum FieldType {
   NUMBER
 }
 
-model TrebaFormField {
-  id          Int       @id @default(autoincrement())
-  fieldName   String    @unique // Уникальное имя поля (для использования в коде)
-  fieldType   FieldType // Тип поля (TEXT, TEXTAREA, SELECT и т.д.)
-  label       String // Метка поля, отображаемая пользователю
-  options     Json? // Опции для SELECT, RADIO, CHECKBOX (например, [{"value": "val1", "label": "Опция 1"}])
-  placeholder String? // Плейсхолдер для текстовых полей
-  isRequired  Boolean   @default(false)
-  order       Int       @default(0) // Порядок отображения на форме
-  isActive    Boolean   @default(true) // Активно ли поле
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-}
-
 enum PriceType {
-  PER_NAME // Цена за каждое имя
-  PER_TEN_NAMES // Цена за каждые 10 имен
-  FIXED // Фиксированная цена за услугу (независимо от имен, но может быть базой)
-}
-
-model TrebaPricingRule {
-  id          Int       @id @default(autoincrement())
-  name        String // Название требы (например, "о здравии", "об упокоении", "Молебен", "Панихида")
-  periodValue String // Значение из поля 'period' в модели Treba (e.g., "Разовое", "40 дней")
-  description String? // Описание правила (для админки)
-  price       Float // Сумма
-  priceType   PriceType // Тип цены (PER_NAME, PER_TEN_NAMES)
-  currency    String    @default("RUB")
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  @@unique([name, periodValue]) // Гарантируем уникальность комбинации названия требы и периода
+  PER_NAME
+  PER_TEN_NAMES
+  FIXED
 }

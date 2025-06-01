@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import AddTrebaFormFieldPage from './AddTrebaFormFieldPage';
+import { useEffect, useState } from 'react';
 
 interface TrebaFormField {
   id: number;
