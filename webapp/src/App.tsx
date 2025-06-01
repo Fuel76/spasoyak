@@ -57,77 +57,48 @@ export const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
-              {/* Главная страница */}
               <Route index element={<HomePage />} />
-
-              {/* Просмотр новости */}
-              <Route path="news/:neww" element={<ViewNewsPage />} />
-
-              {/* Создание страницы */}
-              <Route path="create" element={<CreatePage />} />
-
-              {/* Добавление и редактирование новостей */}
-              <Route path="news/add" element={<NewsEditorPage />} />
-              <Route path="news/edit/:id" element={<NewsEditorPage />} />
-
-              {/* Динамические страницы */}
-              {pages.map((page) => (
-                <Route
-                  key={page.slug}
-                  path={page.slug}
-                  element={<div dangerouslySetInnerHTML={{ __html: page.content }} />}
-                />
-              ))}
-
-              {/* Страница авторизации */}
+              <Route path="/news/:id" element={<ViewNewsPage />} />
               <Route path="/login" element={<LoginPage />} />
-
-              {/* Страница регистрации пользователя */}
               <Route path="/register" element={<RegisterPage />} />
-              {/* Страница регистрации администратора */}
               <Route path="/register-admin" element={<RegisterAdminPage />} />
-
-              {/* Админ страница */}
-              <Route
-                path="/admin"
-                element={
-                  <PrivateRoute>
-                    <AdminPage />
-                  </PrivateRoute>
-                }
-              />
-
-              {/* Админ страницы и новости */}
-              <Route path="/admin/pages" element={<AdminPagesPage />} />
-              <Route path="/admin/pages/create" element={<CreatePagePage />} />
-              <Route path="/admin/pages/edit/:id" element={<EditPagePage />} />
-              <Route path="/admin/news" element={<NewsList />} />
-              <Route path="/admin/sitemap" element={<SiteMapEditor />} />
-              <Route path="/admin/news/edit/:id" element={<EditNewsPage />} />
-              <Route path="/admin/news/create" element={<CreateNewsPage />} />
-
-              {/* Админ настройка треб */}
+              <Route path="/treby" element={<TrebyPage />} />
+              <Route path="/schedule" element={<SchedulePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/monastery-history" element={<MonasteryHistoryPage />} />
+              
+              {/* Защищенные административные роуты */}
+              <Route path="/admin" element={<PrivateRoute><AdminPage /></PrivateRoute>} />
+              <Route path="/admin/news" element={<PrivateRoute><NewsList /></PrivateRoute>} />
+              <Route path="/admin/news/create" element={<PrivateRoute><CreateNewsPage /></PrivateRoute>} />
+              <Route path="/admin/news/edit/:id" element={<PrivateRoute><EditNewsPage /></PrivateRoute>} />
+              <Route path="/admin/pages" element={<PrivateRoute><AdminPagesPage /></PrivateRoute>} />
+              <Route path="/admin/pages/create" element={<PrivateRoute><CreatePagePage /></PrivateRoute>} />
+              <Route path="/admin/pages/edit/:id" element={<PrivateRoute><EditPagePage /></PrivateRoute>} />
+              <Route path="/admin/sitemap" element={<PrivateRoute><SiteMapEditor /></PrivateRoute>} />
               <Route path="/admin/treby" element={<PrivateRoute><AdminTrebyPage /></PrivateRoute>} />
               <Route path="/admin/treby/form-fields" element={<PrivateRoute><AdminTrebaFormFieldsPage /></PrivateRoute>} />
               <Route path="/admin/treby/form-fields/add" element={<PrivateRoute><AddTrebaFormFieldPage /></PrivateRoute>} />
               <Route path="/admin/treby/pricing-rules" element={<PrivateRoute><AdminTrebaPricingRulesPage /></PrivateRoute>} />
               <Route path="/admin/treby/pricing-rules/add" element={<PrivateRoute><AddTrebaPricingRulePage /></PrivateRoute>} />
-
-              {/* Админ расписание богослужений */}
               <Route path="/admin/schedule" element={<PrivateRoute><AdminSchedulePage /></PrivateRoute>} />
-
-              {/* Страница треб */}
-              <Route path="treby" element={<TrebyPage />} />
-
-              {/* Страница расписания богослужений */}
-              <Route path="/schedule" element={<SchedulePage />} />
-
-              {/* Страница о монастыре */}
-              <Route path="/about" element={<AboutPage />} />
-              {/* Страница истории монастыря */}
-              <Route path="/about/history" element={<MonasteryHistoryPage />} />
-
-              {/* Страница 404 (Не найдено) */}
+              <Route path="/news/add" element={<PrivateRoute><NewsEditorPage /></PrivateRoute>} />
+              <Route path="/create-page" element={<PrivateRoute><CreatePage /></PrivateRoute>} />
+              
+              {/* Динамические роуты для страниц */}
+              {pages.map((page) => (
+                <Route
+                  key={page.slug}
+                  path={`/${page.slug}`}
+                  element={
+                    <div 
+                      className="page-content" 
+                      dangerouslySetInnerHTML={{ __html: page.content }}
+                    />
+                  }
+                />
+              ))}
+              
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>

@@ -1,4 +1,3 @@
-import "../app.css";
 import { Outlet } from "react-router-dom";
 import { Header } from "./Header";
 import { Sidemenu } from "./Sidemenu";

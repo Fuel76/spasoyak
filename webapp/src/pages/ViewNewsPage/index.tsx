@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 export const ViewNewsPage = () => {
-  const { neww } = useParams<{ neww: string }>();
+  const { id } = useParams<{ id: string }>();
   const [news, setNews] = useState<{
     title: string;
     content: string;
@@ -20,7 +20,7 @@ export const ViewNewsPage = () => {
       setError(null);
 
       try {
-        const response = await fetch(`http://localhost:3000/api/news/${neww}`);
+        const response = await fetch(`http://localhost:3000/api/news/${id}`);
         if (response.ok) {
           const data = await response.json();
           setNews(data);
@@ -36,7 +36,7 @@ export const ViewNewsPage = () => {
     };
 
     fetchNews();
-  }, [neww]);
+  }, [id]);
 
   const decodeHtml = (html: string): string => {
     const txt = document.createElement('textarea');

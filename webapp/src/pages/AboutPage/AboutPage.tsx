@@ -43,7 +43,7 @@ const AboutPage: React.FC = () => {
               <li><b>Режим работы:</b> ежедневно 7:00–19:00</li>
             </ul>
             <div className="about-btns">
-              <a href="/about/history" className="paper-btn">История монастыря</a>
+              <a href="/monastery-history" className="paper-btn">История монастыря</a>
             </div>
           </div>
           <div className="about-image-block paper-names">
