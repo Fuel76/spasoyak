@@ -1,0 +1,24 @@
+# Упрощенный Dockerfile для тестирования
+FROM node:18-alpine AS base
+
+# Установка рабочей директории
+WORKDIR /app
+
+# Копируем package.json
+COPY backend/package.json ./
+
+# Используем npm вместо pnpm для упрощения
+RUN npm install
+
+# Копируем исходники
+COPY backend/src ./src
+COPY backend/tsconfig.json ./
+
+# Собираем приложение
+RUN npm run build
+
+# Экспонируем порт
+EXPOSE 3001
+
+# Запускаем приложение
+CMD ["npm", "start"]

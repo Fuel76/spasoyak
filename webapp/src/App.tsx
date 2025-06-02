@@ -37,7 +37,7 @@ export const App = () => {
   useEffect(() => {
     const fetchPages = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/pages');
+        const response = await fetch('/api/pages');
         if (!response.ok) {
           throw new Error('Ошибка при загрузке страниц');
         }

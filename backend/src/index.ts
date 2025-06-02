@@ -40,11 +40,19 @@ app.use(helmet({
 }));
 
 // CORS
+<<<<<<< HEAD
 app.use(corsMiddleware);
+=======
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.FRONTEND_URL 
+    : ['http://localhost:5173', 'http://localhost:3000'],
+  credentials: true,
+}));
+>>>>>>> norms
 
 // Логирование и парсинг
 app.use(morgan('dev'));
-app.use(requestLogger);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
@@ -55,6 +63,15 @@ app.use('/uploads', express.static('uploads'));
 app.use(express.static(path.join(__dirname, '../public')));
 
 // ---------- API МАРШРУТЫ ----------
+
+// Health check endpoint для Docker
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    service: 'monastyr-backend'
+  });
+});
 
 // tRPC маршрут
 app.use(

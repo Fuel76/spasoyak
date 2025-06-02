@@ -1,0 +1,61 @@
+# Amvera-оптимизированный Dockerfile для backend
+FROM node:18-alpine AS base
+
+# Установка pnpm
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Копируем файлы зависимостей для кеширования
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY backend/package.json backend/
+
+# Устанавливаем зависимости
+RUN pnpm install --frozen-lockfile
+
+# Копируем исходный код
+COPY backend/ backend/
+
+# Генерируем Prisma клиент
+WORKDIR /app/backend
+RUN pnpm prisma generate
+
+# Собираем приложение
+RUN pnpm build
+
+# Production stage
+FROM node:18-alpine
+
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Копируем зависимости
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY backend/package.json backend/
+
+# Устанавливаем только production зависимости
+RUN pnpm install --prod --frozen-lockfile
+
+# Копируем собранное приложение
+COPY --from=base /app/backend/dist backend/dist
+COPY --from=base /app/backend/prisma backend/prisma
+
+# Копируем node_modules с Prisma клиентом
+COPY --from=base /app/backend/node_modules/.pnpm backend/node_modules/.pnpm
+COPY --from=base /app/backend/node_modules/@prisma backend/node_modules/@prisma
+
+# Создаем директорию для постоянного хранилища (uploads)
+RUN mkdir -p /data/uploads
+
+# Настраиваем права
+RUN chown -R node:node /app /data
+USER node
+
+WORKDIR /app/backend
+
+# Экспонируем порт 80 (стандарт Amvera)
+EXPOSE 80
+
+# Запускаем приложение
+CMD ["sh", "-c", "pnpm prisma migrate deploy && PORT=80 node dist/index.js"]
