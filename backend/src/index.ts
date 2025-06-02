@@ -62,6 +62,15 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // ---------- API МАРШРУТЫ ----------
 
+// Health check endpoint для Docker
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    service: 'monastyr-backend'
+  });
+});
+
 // tRPC маршрут
 app.use(
   '/trpc',

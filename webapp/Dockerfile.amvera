@@ -1,0 +1,71 @@
+# Amvera-оптимизированный Dockerfile для frontend
+FROM node:18-alpine AS builder
+
+# Установка pnpm
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Копируем файлы зависимостей
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY webapp/package.json webapp/
+COPY webapp/tsconfig*.json webapp/
+COPY webapp/vite.config.ts webapp/
+
+# Копируем также backend package.json для workspace зависимостей
+COPY backend/package.json backend/
+
+# Устанавливаем зависимости
+RUN pnpm install --frozen-lockfile
+
+# Копируем исходный код frontend
+COPY webapp/ webapp/
+
+# Копируем необходимые типы из backend
+COPY backend/src/ backend/src/
+
+WORKDIR /app/webapp
+
+# Собираем приложение для продакшн
+RUN pnpm build
+
+# Production stage с nginx
+FROM nginx:alpine
+
+# Копируем собранное приложение
+COPY --from=builder /app/webapp/dist /usr/share/nginx/html
+
+# Создаем конфигурацию nginx
+RUN echo 'server {' > /etc/nginx/conf.d/default.conf && \
+    echo '    listen 80;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    server_name localhost;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    ' >> /etc/nginx/conf.d/default.conf && \
+    echo '    root /usr/share/nginx/html;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    index index.html;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    ' >> /etc/nginx/conf.d/default.conf && \
+    echo '    # Gzip сжатие' >> /etc/nginx/conf.d/default.conf && \
+    echo '    gzip on;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    gzip_vary on;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    gzip_min_length 1024;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    gzip_types text/plain text/css text/xml text/javascript application/javascript application/xml+rss application/json;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    ' >> /etc/nginx/conf.d/default.conf && \
+    echo '    # Обработка React Router (SPA)' >> /etc/nginx/conf.d/default.conf && \
+    echo '    location / {' >> /etc/nginx/conf.d/default.conf && \
+    echo '        try_files $uri $uri/ /index.html;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    }' >> /etc/nginx/conf.d/default.conf && \
+    echo '    ' >> /etc/nginx/conf.d/default.conf && \
+    echo '    # Статические файлы с кешированием' >> /etc/nginx/conf.d/default.conf && \
+    echo '    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {' >> /etc/nginx/conf.d/default.conf && \
+    echo '        expires 1y;' >> /etc/nginx/conf.d/default.conf && \
+    echo '        add_header Cache-Control "public, immutable";' >> /etc/nginx/conf.d/default.conf && \
+    echo '    }' >> /etc/nginx/conf.d/default.conf && \
+    echo '    ' >> /etc/nginx/conf.d/default.conf && \
+    echo '    # Безопасность' >> /etc/nginx/conf.d/default.conf && \
+    echo '    add_header X-Frame-Options DENY;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    add_header X-Content-Type-Options nosniff;' >> /etc/nginx/conf.d/default.conf && \
+    echo '    add_header X-XSS-Protection "1; mode=block";' >> /etc/nginx/conf.d/default.conf && \
+    echo '}' >> /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

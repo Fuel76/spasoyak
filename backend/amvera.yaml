@@ -1,0 +1,27 @@
+# Amvera Cloud configuration for Monastyr Backend
+# filepath: /home/danya/Документы/monastyr/backend/amvera.yaml
+
+meta:
+  environment: docker
+  toolchain:
+    name: docker
+
+build:
+  dockerfile: Dockerfile.amvera
+  context: .
+
+run:
+  containerPort: 80
+  persistenceMount: /data
+  
+  # Health check configuration
+  healthCheck:
+    path: /health
+    intervalSeconds: 30
+    timeoutSeconds: 10
+    retries: 3
+  
+  # Resource limits (adjust based on your needs)
+  resources:
+    memory: 512Mi
+    cpu: 500m
