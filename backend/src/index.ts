@@ -40,7 +40,6 @@ app.use(helmet({
 }));
 
 // CORS
-app.use(corsMiddleware);
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
     ? process.env.FRONTEND_URL 
@@ -50,7 +49,6 @@ app.use(cors({
 
 // Логирование и парсинг
 app.use(morgan('dev'));
-app.use(requestLogger);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
