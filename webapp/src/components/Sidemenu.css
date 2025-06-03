@@ -1,3 +1,28 @@
+:root {
+  --sidemenu-width: calc(var(--layout-width) * 0.17);
+  --sidemenu-content-width: calc(var(--sidemenu-width) * 0.9); /* 90% ширины контейнера */
+  --sidemenu-font-scale: 1;
+  
+  /* Базовые размеры шрифта в процентах от ширины экрана */
+  --sidemenu-base-font-percent: 1.2vw; /* базовый размер - 1.2% от ширины экрана */
+  --sidemenu-min-font: 1.0rem; /* минимальный размер */
+  --sidemenu-max-font: 4.0rem; /* максимальный размер */
+  
+  /* Динамические размеры шрифта */
+  --sidemenu-base-font: clamp(var(--sidemenu-min-font), var(--sidemenu-base-font-percent), var(--sidemenu-max-font));
+  --sidemenu-child-font: clamp(calc(var(--sidemenu-min-font) * 0.9), calc(var(--sidemenu-base-font-percent) * 0.9), calc(var(--sidemenu-max-font) * 0.9));
+  
+  /* Переменные для адаптивного масштабирования отступов */
+  --sidemenu-padding-scale: calc(var(--sidemenu-width) / 300px);
+  --sidemenu-padding-h: clamp(12px, calc(var(--sidemenu-padding-scale) * 20px), 32px);
+  --sidemenu-padding-v: clamp(8px, calc(var(--sidemenu-padding-scale) * 14px), 20px);
+  
+  /* Расстояние между пунктами меню пропорциональное размеру шрифта */
+  --sidemenu-item-spacing: calc(var(--sidemenu-base-font-percent) * 0.8); /* 80% от размера шрифта */
+  --sidemenu-item-spacing-min: 8px; /* минимальное расстояние */
+  --sidemenu-item-spacing-max: 32px; /* максимальное расстояние */
+}
+
 .sidemenu-absolute-container {
   position: relative;
   top: -10%; /* расстояние сверху 60vh */
@@ -5,7 +30,7 @@
   z-index: 50; /* выше орнамента, ниже кнопок */
   margin-right: 85%; /* отступ справа для выравнивания */
   height: calc(100vh - 60vh); /* высота от 60vh до низа экрана */
-  width: calc(var(--layout-width) * 0.17); /* 20% от ширины layout, зависит от переменной */
+  width: var(--sidemenu-width); /* используем переменную */
   min-width: 10%;
   pointer-events: none; /* чтобы не мешать кликам вне меню */
   display: flex;
@@ -31,7 +56,7 @@
   border-radius: 12px;
   margin: 24px 0 0 24px;
   box-shadow: none;
-  padding: 8px 0;
+  padding: clamp(8px, calc(var(--sidemenu-padding-scale) * 12px), 20px) 0;
   pointer-events: auto;
   backdrop-filter: blur(2px);
   transform: none; /* отключаем трансформации */
@@ -42,16 +67,20 @@
   transition: background 0.2s;
   cursor: pointer;
   user-select: none;
+  margin-bottom: clamp(var(--sidemenu-item-spacing-min), var(--sidemenu-item-spacing), var(--sidemenu-item-spacing-max)); /* расстояние пропорциональное размеру шрифта */
 }
 
 .sidemenu-item-content {
   display: flex;
   align-items: center;
-  padding: 8px 20px 8px 24px;
-  font-size: 150%; /* фиксированный размер шрифта */
+  padding: var(--sidemenu-padding-v) var(--sidemenu-padding-h);
+  font-size: var(--sidemenu-base-font); /* используем переменную для размера шрифта */
   color: #222;
   border-left: 3px solid transparent;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background 0.2s, border-color 0.2s, font-size 0.2s;
+  white-space: nowrap; /* предотвращает перенос текста */
+  overflow: visible; /* показываем весь текст */
+  min-width: 0; /* позволяет flex элементам сжиматься */
 }
 
 .sidemenu-item.open > .sidemenu-item-content {
@@ -65,6 +94,9 @@
   color: inherit;
   font-weight: 500;
   transition: color 0.2s;
+  white-space: nowrap; /* предотвращает перенос текста */
+  overflow: visible; /* показываем весь текст */
+  min-width: 0; /* позволяет flex элементам сжиматься */
 }
 
 .sidemenu-item:hover > .sidemenu-item-content {
@@ -89,12 +121,26 @@
   overflow: hidden;
   transition: max-height 0.3s cubic-bezier(.4,0,.2,1);
   margin-left: 8px;
-  border-left: 1px solid #B8A998;;
+  border-left: 1px solid #B8A998;
 }
 
 .sidemenu-item:not(.open) > .sidemenu-children {
   max-height: 0;
   transition: max-height 0.2s cubic-bezier(.4,0,.2,1);
+}
+
+/* Стили для дочерних элементов меню */
+.sidemenu-children .sidemenu-item-content {
+  font-size: var(--sidemenu-base-font); /* используем тот же размер шрифта, что и для основных пунктов */
+  padding: calc(var(--sidemenu-padding-v) * 0.75) calc(var(--sidemenu-padding-h) * 0.8); /* пропорциональные отступы */
+}
+
+.sidemenu-children .sidemenu-item-title {
+  white-space: normal; /* разрешаем перенос текста для подпунктов */
+  overflow: visible; /* показываем весь текст */
+  min-width: 0; /* позволяет flex элементам сжиматься */
+  word-wrap: break-word; /* переносим длинные слова */
+  line-height: 1.3; /* улучшаем читаемость многострочного текста */
 }
 
 /* Мобильное бургер-меню на всю ширину экрана, стеклянное */
@@ -114,6 +160,87 @@
   pointer-events: auto;
   box-shadow: none;
   padding-top: 0;
+}
+
+/* Настройки для разных размеров экранов */
+@media (min-width: 2000px) {
+  :root {
+    /* Очень широкие экраны - максимальное увеличение */
+    --sidemenu-base-font-percent: 2.0vw;
+    --sidemenu-max-font: 8.0rem;
+    --sidemenu-min-font: 1.5rem;
+    
+    /* Увеличиваем расстояния для очень широких экранов */
+    --sidemenu-item-spacing: calc(2.0vw * 0.8);
+    --sidemenu-item-spacing-max: 64px;
+  }
+}
+
+@media (min-width: 1600px) and (max-width: 1999px) {
+  :root {
+    /* Широкие экраны */
+    --sidemenu-base-font-percent: 1.8vw;
+    --sidemenu-max-font: 6.0rem;
+    --sidemenu-min-font: 1.3rem;
+    
+    /* Расстояния для широких экранов */
+    --sidemenu-item-spacing: calc(1.8vw * 0.8);
+    --sidemenu-item-spacing-max: 48px;
+  }
+}
+
+@media (min-width: 1400px) and (max-width: 1599px) {
+  :root {
+    /* Увеличиваем процент для больших экранов */
+    --sidemenu-base-font-percent: 1.5vw;
+    --sidemenu-max-font: 5.0rem;
+    --sidemenu-min-font: 1.1rem;
+    
+    /* Расстояния для больших экранов */
+    --sidemenu-item-spacing: calc(1.5vw * 0.8);
+    --sidemenu-item-spacing-max: 40px;
+    
+    /* Увеличиваем отступы для больших экранов */
+    --sidemenu-padding-h: clamp(16px, calc(var(--sidemenu-padding-scale) * 24px), 40px);
+    --sidemenu-padding-v: clamp(12px, calc(var(--sidemenu-padding-scale) * 18px), 28px);
+  }
+}
+
+@media (max-width: 1200px) {
+  :root {
+    --sidemenu-base-font-percent: 1.1vw;
+    --sidemenu-min-font: 0.9rem;
+    --sidemenu-max-font: 3.0rem;
+    
+    /* Расстояния для средних экранов */
+    --sidemenu-item-spacing: calc(1.1vw * 0.8);
+    --sidemenu-item-spacing-max: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --sidemenu-base-font-percent: 1.0vw;
+    --sidemenu-min-font: 0.8rem;
+    --sidemenu-max-font: 2.5rem;
+    
+    /* Расстояния для планшетов */
+    --sidemenu-item-spacing: calc(1.0vw * 0.8);
+    --sidemenu-item-spacing-max: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --sidemenu-base-font-percent: 0.9vw;
+    --sidemenu-min-font: 0.7rem;
+    --sidemenu-max-font: 2.0rem;
+    
+    /* Расстояния для мобильных устройств */
+    --sidemenu-item-spacing: calc(0.9vw * 0.8);
+    --sidemenu-item-spacing-max: 16px;
+    --sidemenu-item-spacing-min: 6px;
+  }
 }
 
 @media (max-width: 900px) {
