@@ -31,6 +31,10 @@ import AdminSchedulePage from './pages/AdminSchedulePage';
 import AboutPage from './pages/AboutPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { MonasteryHistoryPage } from './pages/AboutPage';
+import AdminCalendarPage from './pages/AdminCalendarPage';
+import AdminSaintsPage from './pages/AdminSaintsPage';
+import AdminReadingsPage from './pages/AdminReadingsPage';
+import AdminCalendarDayPage from './pages/AdminCalendarDayPage';
 
 export const App = () => {
   const [pages, setPages] = useState<{ slug: string; title: string; content: string }[]>([]);
@@ -83,6 +87,10 @@ export const App = () => {
               <Route path="/admin/treby/pricing-rules" element={<PrivateRoute><AdminTrebaPricingRulesPage /></PrivateRoute>} />
               <Route path="/admin/treby/pricing-rules/add" element={<PrivateRoute><AddTrebaPricingRulePage /></PrivateRoute>} />
               <Route path="/admin/schedule" element={<PrivateRoute><AdminSchedulePage /></PrivateRoute>} />
+              <Route path="/admin/calendar" element={<PrivateRoute><AdminCalendarPage /></PrivateRoute>} />
+              <Route path="/admin/calendar/saints" element={<PrivateRoute><AdminSaintsPage /></PrivateRoute>} />
+              <Route path="/admin/calendar/readings" element={<PrivateRoute><AdminReadingsPage /></PrivateRoute>} />
+              <Route path="/admin/calendar/day/:date" element={<PrivateRoute><AdminCalendarDayPage /></PrivateRoute>} />
               <Route path="/news/add" element={<PrivateRoute><NewsEditorPage /></PrivateRoute>} />
               <Route path="/create-page" element={<PrivateRoute><CreatePage /></PrivateRoute>} />
               

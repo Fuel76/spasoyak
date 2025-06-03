@@ -28,6 +28,13 @@ const AdminPage = () => {
           </div>
           
           <div className="system-content-card">
+            <h2>Православный календарь</h2>
+            <Link to="/admin/calendar" className="system-btn-link">Управление календарем</Link>
+            <Link to="/admin/calendar/saints" className="system-btn-link">Управление святцами</Link>
+            <Link to="/admin/calendar/readings" className="system-btn-link">Управление чтениями</Link>
+          </div>
+          
+          <div className="system-content-card">
             <h2>Заявки на требы</h2>
             <div className="admin-treby-links">
               <Link to="/admin/treby" className="system-btn-link">Просмотр заявок</Link>

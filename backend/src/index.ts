@@ -21,7 +21,7 @@ import trebyRouter from './routes/treby';
 import trebaFormFieldsRouter from './routes/trebaFormFields';
 import trebaPricingRulesRouter from './routes/trebaPricingRules';
 import scheduleRouter from './routes/schedule';
-import orthodoxDayRouter from './routes/orthodoxDay'; // Add this line
+import calendarRouter from './routes/calendar';
 import { requestLogger, corsMiddleware } from './middleware/globalMiddleware';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -81,8 +81,8 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/treby', trebyRouter);
 app.use('/api/treba-form-fields', trebaFormFieldsRouter);
 app.use('/api/treba-pricing-rules', trebaPricingRulesRouter);
-app.use('/api/schedule', scheduleRouter); // Add this line
-app.use('/api/orthodox-day', orthodoxDayRouter); // Add this line
+app.use('/api/schedule', scheduleRouter);
+app.use('/api/calendar', calendarRouter);
 app.use('/carousel', carouselRouter); // Совместимость со старым API
 
 // ---------- ОБРАБОТКА ОШИБОК ----------

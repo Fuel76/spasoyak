@@ -104,7 +104,12 @@ export const Sidemenu = () => {
         <div className="sidemenu-fixed-wrapper" ref={sidemenuWrapperRef}>
           <div className="sidemenu">
             {renderMenu(menuItems)}
-            <OrthodoxCalendar />
+            <OrthodoxCalendar 
+              compact={true}
+              showReadings={false}
+              showSaints={false}
+              className="orthodox-calendar--sidemenu"
+            />
           </div>
         </div>
       </div>
@@ -113,7 +118,12 @@ export const Sidemenu = () => {
         <div className="burger-menu-links">
           {renderMobileMenu(menuItems)}
           <div style={{ marginTop: 32, width: '100%' }}>
-            <OrthodoxCalendar />
+            <OrthodoxCalendar 
+              compact={true}
+              showReadings={false}
+              showSaints={false}
+              className="orthodox-calendar--mobile"
+            />
           </div>
         </div>
       </div>

@@ -1,13 +1,23 @@
 import { useEffect, useState, useMemo, useRef } from 'react';
 import OrthodoxCalendar from '../../components/OrthodoxCalendar';
+import ServiceIcon, { ServiceType, ServicePriority } from '../../components/ServiceIcon';
+import { formatDateSafe, extractDateFromISO } from '../../utils/dateUtils';
 import './SchedulePage.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 interface ScheduleItem {
-  date: string; // YYYY-MM-DD
+  id: number;
+  date: string; // YYYY-MM-DD или ISO string
   time: string; // HH:mm
-  description: string;
+  title: string;
+  description?: string;
+  type: ServiceType;
+  priority: ServicePriority;
+  isVisible: boolean;
+  calendarDayId?: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const SchedulePage = () => {
@@ -20,7 +30,15 @@ const SchedulePage = () => {
   useEffect(() => {
     fetch(`${API_URL}/api/schedule`)
       .then(res => res.json())
-      .then(data => setSchedule(Array.isArray(data) ? data : []))
+      .then(data => {
+        // Преобразуем данные API в нужный формат
+        const transformedData = Array.isArray(data) ? data.map(item => ({
+          ...item,
+          date: extractDateFromISO(item.date), // Используем безопасное извлечение даты
+          description: item.description || item.title // Используем description или title как fallback
+        })) : [];
+        setSchedule(transformedData);
+      })
       .catch(() => setSchedule([]))
       .finally(() => setLoading(false));
   }, []);
@@ -34,7 +52,7 @@ const SchedulePage = () => {
   // Фильтрация событий по выбранной дате
   const filtered = useMemo(() => {
     if (!selectedDate) return schedule;
-    const dateStr = selectedDate.toISOString().slice(0, 10);
+    const dateStr = formatDateSafe(selectedDate);
     return schedule.filter(ev => ev.date === dateStr);
   }, [schedule, selectedDate]);
 
@@ -93,15 +111,61 @@ const SchedulePage = () => {
               {filtered.length === 0 ? (
                 <div className="system-alert-warning">На выбранную дату нет богослужений.</div>
               ) : (
-                <ul className="schedule-list">
-                  {filtered
-                    .sort((a, b) => a.time.localeCompare(b.time))
-                    .map((item, i) => (
-                      <li key={i} className="schedule-item">
-                        <b>{item.date.split('-').reverse().join('.')}</b> {item.time} — {item.description}
-                      </li>
-                    ))}
-                </ul>
+                <div className="schedule-grouped">
+                  {Object.entries(
+                    filtered
+                      .sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time))
+                      .reduce((groups, item) => {
+                        const dateKey = item.date;
+                        if (!groups[dateKey]) groups[dateKey] = [];
+                        groups[dateKey].push(item);
+                        return groups;
+                      }, {} as Record<string, typeof filtered>)
+                  ).map(([date, services]) => (
+                    <div key={date} className="schedule-date-group">
+                      <h3 className="schedule-date-header">
+                        {new Date(date).toLocaleDateString('ru-RU', { 
+                          weekday: 'long', 
+                          day: 'numeric', 
+                          month: 'long',
+                          year: 'numeric'
+                        })}
+                      </h3>
+                      <ul className="schedule-services-list">
+                        {services
+                          .sort((a, b) => {
+                            // Сортировка сначала по приоритету, потом по времени
+                            const priorityOrder = { HOLIDAY: 0, SPECIAL: 1, NORMAL: 2 };
+                            const aPriority = priorityOrder[a.priority || 'NORMAL'];
+                            const bPriority = priorityOrder[b.priority || 'NORMAL'];
+                            
+                            if (aPriority !== bPriority) {
+                              return aPriority - bPriority;
+                            }
+                            
+                            return a.time.localeCompare(b.time);
+                          })
+                          .map((item, i) => (
+                            <li key={i} className="schedule-service-item" data-priority={item.priority?.toLowerCase() || 'normal'}>
+                              <div className="schedule-service-content">
+                                <div className="schedule-service-time-icon">
+                                  <ServiceIcon 
+                                    type={item.type} 
+                                    priority={item.priority}
+                                    title={`${item.description || item.title} (${item.priority === 'HOLIDAY' ? 'Праздничная служба' : item.priority === 'SPECIAL' ? 'Особая служба' : 'Обычная служба'})`}
+                                  />
+                                  <span className="schedule-time">{item.time}</span>
+                                </div>
+                                <div className="schedule-service-description">
+                                  {item.description || item.title}
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
               )}
             </>
           )}

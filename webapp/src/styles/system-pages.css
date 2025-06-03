@@ -962,153 +962,241 @@
   }
 }
 
-/* Стили для админ панели */
-.admin-sections {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
+/* =============================================================================
+   ГРУППИРОВАННОЕ РАСПИСАНИЕ ПО ДАТАМ
+   ============================================================================= */
 
-.admin-treby-links {
+/* Контейнер для группированного расписания */
+.schedule-grouped {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 2rem;
 }
 
-.system-btn-link {
-  display: block;
-  padding: 0.75rem 1rem;
-  background: var(--bg-paper-warm);
-  color: var(--text-primary);
-  text-decoration: none;
-  border-radius: var(--radius-paper);
-  transition: var(--transition);
-  /* Монастырские тени */
-  box-shadow: var(--shadow-soft);
-  filter: drop-shadow(0 0 1px rgba(224, 216, 204, 0.3));
-}
-
-.system-btn-link:hover {
+/* Группа служб на одну дату */
+.schedule-date-group {
   background: var(--bg-paper);
-  /* Убираем резкий сдвиг */
-  transform: translateY(-1px);
-  text-decoration: none;
-  color: var(--accent-color);
-  filter: drop-shadow(0 0 3px rgba(160, 130, 94, 0.2));
+  border-radius: var(--radius-paper);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  border: 1px solid var(--border-paper);
 }
 
-/* Утилиты */
-.system-text-center { text-align: center; }
-.system-text-left { text-align: left; }
-.system-text-right { text-align: right; }
-
-.system-mb-1 { margin-bottom: 0.5rem; }
-.system-mb-2 { margin-bottom: 1rem; }
-.system-mb-3 { margin-bottom: 1.5rem; }
-.system-mb-4 { margin-bottom: 2rem; }
-
-.system-mt-1 { margin-top: 0.5rem; }
-.system-mt-2 { margin-top: 1rem; }
-.system-mt-3 { margin-top: 1.5rem; }
-.system-mt-4 { margin-top: 2rem; }
-
-.system-p-1 { padding: 0.5rem; }
-.system-p-2 { padding: 1rem; }
-.system-p-3 { padding: 1.5rem; }
-.system-p-4 { padding: 2rem; }
-
-.system-d-flex { display: flex; }
-.system-d-grid { display: grid; }
-.system-d-block { display: block; }
-.system-d-none { display: none; }
-
-.system-flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Заголовок даты */
+.schedule-date-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: white;
+  padding: 1rem 1.5rem;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-.system-flex-between {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.system-flex-wrap { flex-wrap: wrap; }
-.system-flex-column { flex-direction: column; }
-.system-flex-1 { flex: 1; }
-.system-align-center { align-items: center; }
-.system-justify-center { justify-content: center; }
-
-.system-gap-1 { gap: 0.5rem; }
-.system-gap-2 { gap: 1rem; }
-.system-gap-3 { gap: 1.5rem; }
-
-.system-w-full { width: 100%; }
-.system-h-full { height: 100%; }
-
-/* Дополнительные стили для списков */
-.system-list {
+/* Список служб */
+.schedule-services-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.system-list-item {
-  padding: 0.75rem;
-  border-bottom: 1px solid var(--border-color);
+/* Отдельная служба */
+.schedule-service-item {
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color var(--transition);
+}
+
+.schedule-service-item:last-child {
+  border-bottom: none;
+}
+
+.schedule-service-item:hover {
+  background: var(--bg-soft);
+}
+
+/* Контент службы */
+.schedule-service-content {
+  padding: 1rem 1.5rem;
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.system-list-item:last-child {
-  border-bottom: none;
+/* Время и иконка */
+.schedule-service-time-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 120px;
+  flex-shrink: 0;
 }
 
-/* Панель инструментов */
-.system-toolbar {
+.schedule-time {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+/* Описание службы */
+.schedule-service-description {
+  flex: 1;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* Приоритеты для групп дат */
+.schedule-service-item[data-priority="holiday"] {
+  background: linear-gradient(90deg, #f8fff8 0%, var(--bg-paper) 10%);
+  border-left: 4px solid #6b8b47;
+}
+
+.schedule-service-item[data-priority="special"] {
+  background: linear-gradient(90deg, #fffef8 0%, var(--bg-paper) 10%);
+  border-left: 4px solid #d4a853;
+}
+
+.schedule-service-item[data-priority="holiday"]:hover {
+  background: linear-gradient(90deg, #f4f9f4 0%, var(--bg-soft) 10%);
+}
+
+.schedule-service-item[data-priority="special"]:hover {
+  background: linear-gradient(90deg, #fffcf4 0%, var(--bg-soft) 10%);
+}
+
+/* Адаптивность для группированного расписания */
+@media (max-width: 768px) {
+  .schedule-grouped {
+    gap: 1.5rem;
+  }
+  
+  .schedule-date-header {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .schedule-service-content {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .schedule-service-time-icon {
+    min-width: auto;
+    gap: 0.5rem;
+  }
+  
+  .schedule-time {
+    font-size: 0.9rem;
+  }
+  
+  .schedule-service-description {
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+}
+
+/* =============================================================================
+   КОНЕЦ ГРУППИРОВАННОГО РАСПИСАНИЯ
+   ============================================================================= */
+
+/* =============================================================================
+   СТИЛИ ДЛЯ АДМИНСКОЙ ПАНЕЛИ РАСПИСАНИЯ
+   ============================================================================= */
+
+/* Элементы службы в админке */
+.service-item-content {
+  flex: 1;
+}
+
+.service-item-header {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.service-item-header .service-icon {
+  margin-right: 0.75rem;
+}
+
+.service-item-meta {
+  margin-top: 0.5rem;
+  display: flex;
   gap: 0.5rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--border-color);
-  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
-/* Действия */
-.system-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding: 1.5rem 0;
-  margin-top: auto;
+/* Бейджи для типов и приоритетов служб */
+.service-type-badge,
+.service-priority-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  background: var(--bg-soft);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
 }
 
-/* Вспомогательные классы для текста */
-.system-text-muted {
-  color: rgba(var(--text-rgb), 0.6);
-  font-size: 0.9rem;
+.service-priority-badge.priority-holiday {
+  background: #e8f5e8;
+  color: #2d5a2d;
+  border-color: #6b8b47;
 }
 
-/* Система сетки */
-.system-grid {
-  display: grid;
-  gap: 1.5rem;
+.service-priority-badge.priority-special {
+  background: #fff7f0;
+  color: #8b5a3c;
+  border-color: #d4a853;
 }
 
-.system-grid-cols-2 {
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+/* Стили для разных приоритетов в списке админки */
+.service-item-normal {
+  background: var(--bg-paper);
 }
 
-.system-grid-cols-3 {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+.service-item-holiday {
+  background: #f8fef8;
+  border-left: 4px solid #6b8b47;
 }
 
-.system-grid-cols-4 {
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+.service-item-special {
+  background: #fffef8;
+  border-left: 4px solid #d4a853;
 }
+
+/* Адаптивность для мобильных в админке */
+@media (max-width: 768px) {
+  .service-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .service-item-header .service-icon {
+    margin-right: 0.5rem;
+  }
+  
+  .service-item-meta {
+    margin-top: 0.75rem;
+  }
+  
+  .service-type-badge,
+  .service-priority-badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+  }
+}
+
+/* =============================================================================
+   КОНЕЦ СТИЛЕЙ АДМИНСКОЙ ПАНЕЛИ
+   ============================================================================= */
 
 /* =============================================================================
    СТИЛИ АУТЕНТИФИКАЦИИ
@@ -1147,3 +1235,236 @@
     margin: 1rem;
   }
 }
+
+/* =============================================================================
+   ИКОНКИ СЛУЖБ И СИСТЕМА ПРИОРИТЕТОВ
+   ============================================================================= */
+
+/* Иконки служб */
+.service-icon {
+  display: inline-block;
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  /* Мягкое свечение для лучшей видимости */
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.1));
+  transition: transform 0.2s ease;
+}
+
+.service-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Стили для разных типов служб */
+.schedule-item-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.schedule-service-info {
+  flex: 1;
+}
+
+.schedule-service-time {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.schedule-service-description {
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Приоритеты служб */
+.schedule-item[data-priority="holiday"] {
+  background: #f4f7f0;
+  border: 1px solid #6b8b47;
+  box-shadow: var(--shadow-medium);
+}
+
+.schedule-item[data-priority="special"] {
+  background: #fff7f0;
+  border: 1px solid #d4a853;
+  box-shadow: var(--shadow-medium);
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .service-icon {
+    font-size: 1.1rem;
+    margin-right: 0.4rem;
+  }
+  
+  .schedule-item-with-icon {
+    gap: 0.5rem;
+  }
+}
+
+/* =============================================================================
+   КОНЕЦ ИКОНОК СЛУЖБ
+   ============================================================================= */
+
+/* =============================================================================
+   ГРУППИРОВАННОЕ РАСПИСАНИЕ В АДМИНКЕ
+   ============================================================================= */
+
+/* Контейнер для админского группированного расписания */
+.admin-schedule-grouped {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Группа служб на одну дату в админке */
+.admin-schedule-date-group {
+  background: var(--bg-paper);
+  border-radius: var(--radius-paper);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  border: 1px solid var(--border-paper);
+}
+
+/* Заголовок даты в админке */
+.admin-schedule-date-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: white;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Список служб в админке */
+.admin-services-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Отдельная служба в админке */
+.admin-service-item {
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color var(--transition);
+}
+
+.admin-service-item:last-child {
+  border-bottom: none;
+}
+
+.admin-service-item:hover {
+  background: var(--bg-soft);
+}
+
+/* Контент службы в админке */
+.admin-service-content {
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Основная информация о службе */
+.admin-service-main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* Время и иконка в админке */
+.admin-service-time-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
+.admin-service-time {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+/* Информация о службе */
+.admin-service-info {
+  flex: 1;
+}
+
+.admin-service-description {
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* Приоритеты для админских групп */
+.admin-service-item.service-item-holiday {
+  background: linear-gradient(90deg, #f8fff8 0%, var(--bg-paper) 8%);
+  border-left: 4px solid #6b8b47;
+}
+
+.admin-service-item.service-item-special {
+  background: linear-gradient(90deg, #fffef8 0%, var(--bg-paper) 8%);
+  border-left: 4px solid #d4a853;
+}
+
+.admin-service-item.service-item-holiday:hover {
+  background: linear-gradient(90deg, #f4f9f4 0%, var(--bg-soft) 8%);
+}
+
+.admin-service-item.service-item-special:hover {
+  background: linear-gradient(90deg, #fffcf4 0%, var(--bg-soft) 8%);
+}
+
+/* Адаптивность для админского группированного расписания */
+@media (max-width: 768px) {
+  .admin-schedule-grouped {
+    gap: 1rem;
+  }
+  
+  .admin-schedule-date-header {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .admin-service-content {
+    padding: 0.75rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .admin-service-main {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .admin-service-time-icon {
+    min-width: auto;
+    gap: 0.4rem;
+  }
+  
+  .admin-service-time {
+    font-size: 0.85rem;
+  }
+  
+  .admin-service-description {
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .system-card-actions {
+    align-self: flex-end;
+    margin-top: 0.5rem;
+  }
+}
+
+/* =============================================================================
+   КОНЕЦ ГРУППИРОВАННОГО РАСПИСАНИЯ В АДМИНКЕ
+   ============================================================================= */

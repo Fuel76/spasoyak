@@ -116,6 +116,75 @@ model TrebaPricingRule {
   @@unique([name, periodValue])
 }
 
+// Orthodox Calendar Models
+model CalendarDay {
+  id          Int         @id @default(autoincrement())
+  date        DateTime    @unique @db.Date
+  priority    DayPriority @default(NORMAL)
+  fastingType FastingType @default(NONE)
+  isHoliday   Boolean     @default(false)
+  color       String? // цвет дня (красный, золотой и т.д.)
+  note        String?     @db.Text
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  saints    Saint[]
+  readings  Reading[]
+  schedules Schedule[]
+
+  @@map("calendar_days")
+}
+
+model Saint {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(500)
+  description String?       @db.Text
+  icon        String? // URL иконы святого
+  priority    SaintPriority @default(COMMEMORATED)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  calendarDays CalendarDay[]
+
+  @@map("saints")
+}
+
+model Reading {
+  id        Int         @id @default(autoincrement())
+  type      ReadingType
+  reference String      @db.VarChar(255) // например "Деян. 15:5-34"
+  title     String?     @db.VarChar(500) // заголовок чтения
+  text      String?     @db.LongText // полный текст чтения
+  order     Int         @default(0) // порядок чтения в дне
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  calendarDays CalendarDay[]
+
+  @@map("readings")
+}
+
+model Schedule {
+  id            Int             @id @default(autoincrement())
+  calendarDayId Int?
+  date          DateTime        @db.Date
+  time          String          @db.VarChar(10)
+  title         String          @db.VarChar(255)
+  description   String?         @db.Text
+  type          ServiceType     @default(REGULAR)
+  priority      ServicePriority @default(NORMAL)
+  isVisible     Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  calendarDay CalendarDay? @relation(fields: [calendarDayId], references: [id])
+
+  @@index([date])
+  @@index([calendarDayId])
+  @@map("schedules")
+}
+
+// Enums
 enum FieldType {
   TEXT
   TEXTAREA
@@ -129,4 +198,55 @@ enum PriceType {
   PER_NAME
   PER_TEN_NAMES
   FIXED
+}
+
+enum DayPriority {
+  GREAT_FEAST // Великие праздники (красный)
+  TWELVE_FEAST // Двунадесятые праздники (золотой)
+  POLYELEOS // Полиелейные святые (синий)
+  VIGIL // Всенощное бдение (зеленый)
+  SIXTH_CLASS // Шестеричные святые (черный)
+  NORMAL // Обычные дни (черный)
+}
+
+enum FastingType {
+  NONE // Нет поста
+  STRICT // Строгий пост
+  FISH_ALLOWED // Разрешена рыба
+  WINE_OIL // Вино и елей
+  DRY_EATING // Сухоядение
+  FULL_FAST // Полное воздержание
+}
+
+enum SaintPriority {
+  GREAT_SAINT // Великий святой
+  POLYELEOS_SAINT // Полиелейный святой
+  VIGIL_SAINT // Святой со всенощным бдением
+  SIXTH_CLASS // Шестеричный святой
+  COMMEMORATED // Поминаемый
+}
+
+enum ReadingType {
+  APOSTLE // Апостольское чтение
+  GOSPEL // Евангельское чтение
+  OLD_TESTAMENT // Ветхозаветное чтение
+  PROKEIMENON // Прокимен
+  ALLELUIA // Аллилуйя
+}
+
+enum ServiceType {
+  REGULAR // Обычная служба
+  LITURGY // Литургия
+  VESPERS // Вечерня
+  MATINS // Утреня
+  MOLEBEN // Молебен
+  PANIKHIDA // Панихида
+  AKATHIST // Акафист
+  SPECIAL // Особая служба
+}
+
+enum ServicePriority {
+  HOLIDAY // Праздничная
+  SPECIAL // Особая
+  NORMAL // Обычная
 }
