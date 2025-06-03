@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import './CarouselManager.css';
+// Удаляем старый CSS
+// import './CarouselManager.css';
 
 const CarouselManager = () => {
   const [images, setImages] = useState<{ id: number; url: string }[]>([]);
@@ -34,27 +35,50 @@ const CarouselManager = () => {
   };
 
   return (
-    <div className="carousel-manager-container">
-      <h2>Управление каруселью</h2>
-      <div className="carousel-add-form">
-        <input
-          type="text"
-          placeholder="Введите URL изображения"
-          value={newImageUrl}
-          onChange={(e) => setNewImageUrl(e.target.value)}
-          disabled={loading}
-        />
-        <button onClick={addImage} disabled={loading || !newImageUrl.trim()}>
-          Добавить изображение
+    <div>
+      <h2 className="system-card-title">Управление каруселью</h2>
+      
+      <div className="system-form-row system-mb-3">
+        <div className="system-form-group system-flex-1">
+          <input
+            type="text"
+            placeholder="Введите URL изображения"
+            value={newImageUrl}
+            onChange={(e) => setNewImageUrl(e.target.value)}
+            disabled={loading}
+            className="system-form-input"
+          />
+        </div>
+        <button 
+          onClick={addImage} 
+          disabled={loading || !newImageUrl.trim()}
+          className="system-btn-primary"
+        >
+          {loading ? 'Добавление...' : 'Добавить изображение'}
         </button>
       </div>
-      <div className="carousel-preview-list">
-        {images.length === 0 && <div className="carousel-empty">Нет изображений</div>}
+      
+      <div className="system-grid system-grid-cols-3">
+        {images.length === 0 && (
+          <div className="system-alert system-alert-info" style={{ gridColumn: '1 / -1' }}>
+            Нет изображений в карусели
+          </div>
+        )}
         {images.map((image) => (
-          <div className="carousel-preview-card" key={image.id}>
-            <img src={image.url} alt="carousel" />
-            <button onClick={() => deleteImage(image.id)} disabled={loading}>
-              Удалить
+          <div className="system-content-card system-p-2" key={image.id}>
+            <img 
+              src={image.url} 
+              alt="carousel" 
+              className="system-news-cover"
+              style={{ height: '150px' }}
+            />
+            <button 
+              onClick={() => deleteImage(image.id)} 
+              disabled={loading}
+              className="system-btn-outline system-btn-sm system-btn-danger system-mt-2"
+              style={{ width: '100%' }}
+            >
+              {loading ? 'Удаление...' : 'Удалить'}
             </button>
           </div>
         ))}

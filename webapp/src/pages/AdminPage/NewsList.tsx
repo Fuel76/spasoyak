@@ -1,6 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom'; // Импортируем Link и useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import './AdminNewsList.css'; // Создадим файл стилей
+// Удаляем импорт старых стилей
+// import './AdminNewsList.css';
 
 // Обновляем интерфейс
 interface News {
@@ -85,67 +86,85 @@ export const NewsList = () => {
     }
   };
 
-  if (loading) return <p>Загрузка новостей...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (loading) return (
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <div className="system-alert system-alert-info">Загрузка новостей...</div>
+      </div>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <div className="system-alert system-alert-error">{error}</div>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="admin-news-list-container">
-      <div className="admin-news-header">
-        <h1>Список новостей</h1>
-        <Link to="/admin/news/create" className="admin-button admin-button-create">
-          + Создать новость
-        </Link>
-      </div>
-      <div className="admin-news-list">
-        {news.map((item) => {
-          const coverUrl = item.cover; // Используем прямую ссылку
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <div className="system-flex-between system-mb-3">
+          <h1 className="system-page-title">Список новостей</h1>
+          <Link to="/admin/news/create" className="system-btn-primary">
+            + Создать новость
+          </Link>
+        </div>
+        
+        <div className="system-grid system-grid-cols-2">
+          {news.map((item) => {
+            const coverUrl = item.cover;
 
-          return (
-            <div key={item.id} className={`admin-news-card ${!item.isVisible ? 'admin-news-card--hidden' : ''}`}>
-              {coverUrl && (
-                <img src={coverUrl} alt={item.title} className="admin-news-card__cover" />
-              )}
-              <div className="admin-news-card__body">
-                <h3 className="admin-news-card__title">{item.title}</h3>
-                <p className="admin-news-card__date">
-                  {new Date(item.createdAt).toLocaleDateString()} {new Date(item.createdAt).toLocaleTimeString()}
-                  {!item.isVisible && <span className="admin-news-card__badge">Скрыто</span>}
-                </p>
-                {/* Краткое превью htmlContent с customCss */}
-                {item.customCss && (
-                  <style dangerouslySetInnerHTML={{ __html: item.customCss }} />
+            return (
+              <div key={item.id} className={`system-content-card ${!item.isVisible ? 'system-opacity-50' : ''}`}>
+                {coverUrl && (
+                  <img src={coverUrl} alt={item.title} className="system-news-cover" />
                 )}
-                <div
-                  className="admin-news-card__preview formatted-content"
-                  dangerouslySetInnerHTML={{ __html: (item.htmlContent || '').slice(0, 300) + (item.htmlContent && item.htmlContent.length > 300 ? '...' : '') }}
-                />
+                <div className="system-p-3">
+                  <h3 className="system-card-title">{item.title}</h3>
+                  <div className="system-flex-between system-mb-2">
+                    <span className="system-text-muted system-text-sm">
+                      {new Date(item.createdAt).toLocaleDateString()} {new Date(item.createdAt).toLocaleTimeString()}
+                    </span>
+                    {!item.isVisible && <span className="system-badge system-badge-warning">Скрыто</span>}
+                  </div>
+                  {/* Краткое превью htmlContent с customCss */}
+                  {item.customCss && (
+                    <style dangerouslySetInnerHTML={{ __html: item.customCss }} />
+                  )}
+                  <div
+                    className="system-text-content system-mb-3"
+                    dangerouslySetInnerHTML={{ __html: (item.htmlContent || '').slice(0, 300) + (item.htmlContent && item.htmlContent.length > 300 ? '...' : '') }}
+                  />
+                </div>
+                <div className="system-card-actions">
+                  <button
+                    onClick={() => handleEdit(item.id)}
+                    className="system-btn-outline system-btn-sm"
+                    title="Редактировать"
+                  >
+                    ✏️ Изменить
+                  </button>
+                  <button
+                    onClick={() => handleToggleVisibility(item.id)}
+                    className={`system-btn-outline system-btn-sm ${item.isVisible ? 'system-btn-warning' : 'system-btn-success'}`}
+                    title={item.isVisible ? 'Скрыть' : 'Показать'}
+                  >
+                    {item.isVisible ? '👁️ Скрыть' : '🚫 Показать'}
+                  </button>
+                  <button
+                    onClick={() => handleDelete(item.id)}
+                    className="system-btn-outline system-btn-sm system-btn-danger"
+                    title="Удалить"
+                  >
+                    🗑️ Удалить
+                  </button>
+                </div>
               </div>
-              <div className="admin-news-card__actions">
-                <button
-                  onClick={() => handleEdit(item.id)}
-                  className="admin-button admin-button-edit"
-                  title="Редактировать"
-                >
-                  ✏️
-                </button>
-                <button
-                  onClick={() => handleToggleVisibility(item.id)}
-                  className={`admin-button ${item.isVisible ? 'admin-button-hide' : 'admin-button-show'}`}
-                  title={item.isVisible ? 'Скрыть' : 'Показать'}
-                >
-                  {item.isVisible ? '👁️' : '🚫'}
-                </button>
-                <button
-                  onClick={() => handleDelete(item.id)}
-                  className="admin-button admin-button-delete"
-                  title="Удалить"
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );

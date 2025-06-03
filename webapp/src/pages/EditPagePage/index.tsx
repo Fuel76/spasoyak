@@ -1,7 +1,8 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { PageEditor } from '../../components/PageEditor/PageEditor';
-import './EditPagePage.css';
+// Удаляем старый CSS
+// import './EditPagePage.css';
 
 export const EditPagePage: React.FC = () => {
   const { id, slug } = useParams<{ id?: string; slug?: string }>();
@@ -13,15 +14,17 @@ export const EditPagePage: React.FC = () => {
   };
 
   return (
-    <div className="edit-page">
-      <div className="edit-page__header">
-        <button onClick={handleBack} className="back-button">
-          ← Вернуться к списку страниц
-        </button>
-        <h1>Редактирование страницы</h1>
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <div className="system-mb-3">
+          <button onClick={handleBack} className="system-btn-link">
+            ← Вернуться к списку страниц
+          </button>
+          <h1 className="system-page-title">Редактирование страницы</h1>
+        </div>
+        
+        <PageEditor pageId={pageId} slug={slug} />
       </div>
-      
-      <PageEditor pageId={pageId} slug={slug} />
     </div>
   );
 };

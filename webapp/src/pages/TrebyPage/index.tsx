@@ -176,18 +176,18 @@ const TrebyPage = () => {
   };
 
   return (
-    <div className="treby-page-container paper-bg">
-      <div className="treby-page paper-sheet paper-shadow">
-        <h1 className="treby-title handwritten">Подать записку</h1>
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <h1 className="system-page-title handwritten">Подать записку</h1>
 
-        {/* Paper-like алерт загрузки */}
+        {/* Алерт загрузки */}
         {isLoading && !formFields.length && !pricingRules.length && (
-          <div className="treby-alert paper-alert paper-alert-loading">
-            <span className="paper-spinner" /> Загрузка данных формы...
+          <div className="system-alert-info">
+            Загрузка данных формы...
           </div>
         )}
-        {/* Paper-like алерт ошибки */}
-        {error && !success && <div className="treby-alert paper-alert paper-alert-error handwritten">{error}</div>}
+        {/* Алерт ошибки */}
+        {error && !success && <div className="system-alert-error">{error}</div>}
 
         <div className="treby-form-section">
           <div className="treby-form-left">

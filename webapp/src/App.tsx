@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { TrpcProvider } from './lib/trpc';
+import './styles/system-pages.css';
 import { HomePage } from './pages/HomePage';
 import { ViewNewsPage } from './pages/ViewNewsPage';
 import { CreatePage } from './pages/CreatePage';

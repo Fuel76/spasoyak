@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { PageEditor } from '../../components/PageEditor/PageEditor';
-import './CreatePagePage.css';
+// Удаляем старый CSS
+// import './CreatePagePage.css';
 
 export const CreatePagePage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,15 +11,17 @@ export const CreatePagePage: React.FC = () => {
   };
 
   return (
-    <div className="create-page">
-      <div className="create-page__header">
-        <button onClick={handleBack} className="back-button">
-          ← Вернуться к списку страниц
-        </button>
-        <h1>Создание новой страницы</h1>
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <div className="system-mb-3">
+          <button onClick={handleBack} className="system-btn-link">
+            ← Вернуться к списку страниц
+          </button>
+          <h1 className="system-page-title">Создание новой страницы</h1>
+        </div>
+        
+        <PageEditor navigate={navigate} />
       </div>
-      
-      <PageEditor navigate={navigate} />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import '../../styles/system-pages.css';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
@@ -30,31 +31,42 @@ export function LoginPage() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h1>Вход в систему</h1>
-        {error && <div className="auth-error">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={loading}
-          />
-          <input
-            type="password"
-            placeholder="Пароль"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            disabled={loading}
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? 'Вход...' : 'Войти'}
-          </button>
-        </form>
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <div className="system-auth-card">
+          <h1 className="system-page-title">Вход в систему</h1>
+          {error && <div className="system-error-message">{error}</div>}
+          <form onSubmit={handleSubmit} className="system-auth-form">
+            <div className="system-form-group">
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading}
+                className="system-input"
+              />
+            </div>
+            <div className="system-form-group">
+              <input
+                type="password"
+                placeholder="Пароль"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={loading}
+                className="system-input"
+              />
+            </div>
+            <button type="submit" disabled={loading} className="system-btn system-btn-primary">
+              {loading ? 'Вход...' : 'Войти'}
+            </button>
+          </form>
+          <div className="system-auth-links">
+            <a href="/register" className="system-link">Нет аккаунта? Зарегистрироваться</a>
+          </div>
+        </div>
       </div>
     </div>
   );

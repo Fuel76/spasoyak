@@ -109,15 +109,29 @@ export const SiteMapEditor = () => {
   };
 
   return (
-    <div>
-      <h1>Редактор схемы сайта</h1>
-      <button onClick={() => addMenuItem()}>Добавить пункт</button>
-      <SiteMapList
-        items={siteMap}
-        onAdd={addMenuItem}
-        onUpdate={updateMenuItem}
-        onDelete={deleteMenuItem}
-      />
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <h1 className="system-page-title">Редактор схемы сайта</h1>
+        
+        <div className="system-content-card">
+          <div className="system-flex-between system-mb-3">
+            <h2 className="system-card-title">Структура меню</h2>
+            <button 
+              onClick={() => addMenuItem()} 
+              className="system-btn-primary"
+            >
+              + Добавить пункт
+            </button>
+          </div>
+          
+          <SiteMapList
+            items={siteMap}
+            onAdd={addMenuItem}
+            onUpdate={updateMenuItem}
+            onDelete={deleteMenuItem}
+          />
+        </div>
+      </div>
     </div>
   );
 };
@@ -133,38 +147,75 @@ const SiteMapList = ({
   onUpdate: (id: number, newTitle: string, newLink: string, newMute: boolean) => void;
   onDelete: (id: number) => void;
 }) => (
-  <ul>
+  <div className="system-list">
     {items.map((item) => (
-      <li key={item.id}>
-        <input
-          type="text"
-          value={item.title}
-          onChange={(e) => onUpdate(item.id, e.target.value, item.link, item.mute)}
-        />
-        <input
-          type="text"
-          value={item.link}
-          onChange={(e) => onUpdate(item.id, item.title, e.target.value, item.mute)}
-        />
-        <label>
-          <input
-            type="checkbox"
-            checked={item.mute}
-            onChange={(e) => onUpdate(item.id, item.title, item.link, e.target.checked)}
-          />
-          Скрыть из меню
-        </label>
-        <button onClick={() => onAdd(item.id)}>Добавить подменю</button>
-        <button onClick={() => onDelete(item.id)}>Удалить</button>
-        {item.children && (
-          <SiteMapList
-            items={item.children}
-            onAdd={onAdd}
-            onUpdate={onUpdate}
-            onDelete={onDelete}
-          />
+      <div key={item.id} className="system-content-card">
+        <div className="system-form-row">
+          <div className="system-form-group">
+            <label className="system-form-label">Название</label>
+            <input
+              type="text"
+              value={item.title}
+              onChange={(e) => onUpdate(item.id, e.target.value, item.link, item.mute)}
+              className="system-form-input"
+              placeholder="Название пункта меню"
+            />
+          </div>
+          
+          <div className="system-form-group">
+            <label className="system-form-label">Ссылка</label>
+            <input
+              type="text"
+              value={item.link}
+              onChange={(e) => onUpdate(item.id, item.title, e.target.value, item.mute)}
+              className="system-form-input"
+              placeholder="/страница или https://..."
+            />
+          </div>
+          
+          <div className="system-form-group">
+            <label className="system-form-label system-d-flex system-align-center system-gap-1">
+              <input
+                type="checkbox"
+                checked={item.mute}
+                onChange={(e) => onUpdate(item.id, item.title, item.link, e.target.checked)}
+              />
+              Скрыть из меню
+            </label>
+          </div>
+        </div>
+        
+        <div className="system-flex-between system-mt-2">
+          <div className="system-d-flex system-gap-1">
+            <button 
+              onClick={() => onAdd(item.id)} 
+              className="system-btn-outline system-btn-sm"
+              title="Добавить подменю"
+            >
+              + Подменю
+            </button>
+          </div>
+          
+          <button 
+            onClick={() => onDelete(item.id)} 
+            className="system-btn-outline system-btn-sm system-btn-danger"
+            title="Удалить пункт"
+          >
+            🗑️ Удалить
+          </button>
+        </div>
+        
+        {item.children && item.children.length > 0 && (
+          <div className="system-mt-3" style={{ paddingLeft: '1rem', borderLeft: '2px solid var(--border-color)' }}>
+            <SiteMapList
+              items={item.children}
+              onAdd={onAdd}
+              onUpdate={onUpdate}
+              onDelete={onDelete}
+            />
+          </div>
         )}
-      </li>
+      </div>
     ))}
-  </ul>
+  </div>
 );

@@ -132,21 +132,12 @@ export const PageEditor: React.FC<PageEditorProps> = ({ pageId, slug, navigate }
     if (!file) return;
     
     try {
-      const cssText = await file.text();
-      
-      // Если уже есть CSS, спрашиваем подтверждение
-      if (customCss && !window.confirm('Заменить текущие стили?')) {
-        return;
-      }
-      
-      setCustomCss(cssText);
+      const text = await file.text();
+      setCustomCss(text);
+      alert('CSS файл успешно импортирован');
     } catch (err) {
       alert('Ошибка при импорте CSS файла');
       console.error(err);
-    }
-    
-    if (cssInputRef.current) {
-      cssInputRef.current.value = '';
     }
   };
 
@@ -360,124 +351,134 @@ export const PageEditor: React.FC<PageEditorProps> = ({ pageId, slug, navigate }
   };
 
   if (loading && !content) {
-    return <div className="loading">Загрузка...</div>;
+    return (
+      <div className="system-page-container">
+        <div className="system-page-content">
+          <div className="system-alert system-alert-info">Загрузка...</div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="page-editor">
-      <div className="page-editor__toolbar">
-        <div className="page-editor__basic-tools">
-          <button onClick={handleSave} disabled={loading}>
-            {loading ? 'Сохранение...' : 'Сохранить'}
-          </button>
-          
-          <button onClick={() => setPreviewMode(!previewMode)}>
-            {previewMode ? 'Редактор' : 'Предпросмотр'}
-          </button>
-          
-          <button onClick={handleExport}>
-            Экспортировать HTML
-          </button>
-          
-          <button onClick={() => setShowHistory(!showHistory)}>
-            История изменений ({history.length})
-          </button>
-          
-          <button onClick={() => setShowCssEditor(!showCssEditor)}>
-            {showCssEditor ? 'Скрыть CSS' : 'Показать CSS'}
-          </button>
-          
-          <button onClick={() => setShowHtmlView(!showHtmlView)}>
-            {showHtmlView ? 'Визуальный редактор' : 'HTML редактор'}
-          </button>
-        </div>
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <h1 className="system-page-title">
+          {pageId ? 'Редактирование страницы' : 'Создание страницы'}
+        </h1>
         
-        <div className="page-editor__import-tools">
-          <label className="file-import-label">
-            Импорт HTML
-            <input
-              type="file"
-              accept=".html,.htm"
-              onChange={handleHtmlImport}
-              ref={htmlInputRef}
-              className="file-input"
-            />
-          </label>
-          
-          <label className="file-import-label">
-            Импорт CSS
-            <input
-              type="file"
-              accept=".css"
-              onChange={handleCssImport}
-              ref={cssInputRef}
-              className="file-input"
-            />
-          </label>
-        </div>
-      </div>
-
-      <div className="page-editor__main">
-        {previewMode ? (
-          <div className="page-preview">
-            <style dangerouslySetInnerHTML={{ __html: customCss }} />
-            <h1>{title}</h1>
-            <div dangerouslySetInnerHTML={{ __html: content }} />
+        <div className="system-content-card">
+          <div className="system-toolbar">
+            <button onClick={handleSave} disabled={loading} className="system-btn-primary">
+              {loading ? 'Сохранение...' : 'Сохранить'}
+            </button>
+            
+            <button onClick={() => setPreviewMode(!previewMode)} className="system-btn-secondary">
+              {previewMode ? 'Редактор' : 'Предпросмотр'}
+            </button>
+            
+            <button onClick={handleExport} className="system-btn-secondary">
+              Экспортировать HTML
+            </button>
+            
+            <button onClick={() => setShowHistory(!showHistory)} className="system-btn-secondary">
+              История изменений ({history.length})
+            </button>
+            
+            <button onClick={() => setShowCssEditor(!showCssEditor)} className="system-btn-secondary">
+              {showCssEditor ? 'Скрыть CSS' : 'Показать CSS'}
+            </button>
+            
+            <button onClick={() => setShowHtmlView(!showHtmlView)} className="system-btn-secondary">
+              {showHtmlView ? 'Визуальный редактор' : 'HTML редактор'}
+            </button>
+            
+            <label className="system-btn-outline" style={{ cursor: 'pointer' }}>
+              Импорт HTML
+              <input
+                type="file"
+                accept=".html,.htm"
+                onChange={handleHtmlImport}
+                ref={htmlInputRef}
+                style={{ display: 'none' }}
+              />
+            </label>
+            
+            <label className="system-btn-outline" style={{ cursor: 'pointer' }}>
+              Импорт CSS
+              <input
+                type="file"
+                accept=".css"
+                onChange={handleCssImport}
+                ref={cssInputRef}
+                style={{ display: 'none' }}
+              />
+            </label>
           </div>
-        ) : (
-          <>
-            <div className="page-editor__form">
-              <div className="form-group">
-                <label htmlFor="title">Заголовок страницы</label>
-                <input
+
+          {previewMode ? (
+            <div className="system-content-card">
+              <h3 className="system-form-label">Предпросмотр</h3>
+              <div className="page-preview">
+                <style dangerouslySetInnerHTML={{ __html: customCss }} />
+                <h1>{title}</h1>
+                <div dangerouslySetInnerHTML={{ __html: content }} />
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="system-content-card">
+                <div className="system-form-group">
+                  <label htmlFor="title" className="system-form-label">Заголовок страницы</label>
+                  <input
                   type="text"
                   id="title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="form-control"
+                  className="system-form-input"
                   placeholder="Введите заголовок страницы"
                 />
               </div>
               
-              <div className="form-group">
-                <label htmlFor="slug">URL страницы (slug)</label>
+              <div className="system-form-group">
+                <label htmlFor="slug" className="system-form-label">URL страницы (slug)</label>
                 <input
                   type="text"
                   id="slug"
                   value={pageSlug}
                   onChange={(e) => setPageSlug(e.target.value)}
-                  className="form-control"
+                  className="system-form-input"
                   placeholder="например: about-us, contacts"
                 />
               </div>
               
-              <div className="form-group">
-                <label>Мета-теги для SEO</label>
+              <div className="system-form-group">
+                <label className="system-form-label">Мета-теги для SEO</label>
                 <input
                   type="text"
                   placeholder="Meta Description"
                   value={metaDescription}
                   onChange={(e) => setMetaDescription(e.target.value)}
-                  className="form-control"
+                  className="system-form-input"
                 />
                 <input
                   type="text"
                   placeholder="Meta Keywords"
                   value={metaKeywords}
                   onChange={(e) => setMetaKeywords(e.target.value)}
-                  className="form-control"
+                  className="system-form-input"
                   style={{ marginTop: '10px' }}
                 />
               </div>
             </div>
             
             {showCssEditor && (
-              <div className="page-editor__css">
-                <h3>CSS стили страницы</h3>
+              <div className="system-content-card">
+                <h3 className="system-form-label">CSS стили страницы</h3>
                 <textarea
                   value={customCss}
                   onChange={(e) => setCustomCss(e.target.value)}
-                  className="page-editor__css-textarea"
+                  className="system-form-textarea"
                   rows={10}
                   placeholder="Введите CSS стили для страницы"
                 />
@@ -485,20 +486,20 @@ export const PageEditor: React.FC<PageEditorProps> = ({ pageId, slug, navigate }
             )}
             
             {showHistory && (
-              <div className="page-editor__history">
-                <h3>История изменений</h3>
+              <div className="system-content-card">
+                <h3 className="system-form-label">История изменений</h3>
                 {history.length === 0 ? (
                   <p>История изменений пуста</p>
                 ) : (
-                  <ul className="history-list">
+                  <ul className="system-list">
                     {history.map((item, index) => (
-                      <li key={index} className="history-item">
-                        <span className="history-time">
+                      <li key={index} className="system-list-item">
+                        <span className="system-text-muted">
                           {item.timestamp.toLocaleString()}
                         </span>
-                        <span className="history-title">{item.title}</span>
+                        <span className="system-flex-1">{item.title}</span>
                         <button 
-                          className="history-restore-btn"
+                          className="system-btn-link"
                           onClick={() => restoreFromHistory(index)}
                         >
                           Восстановить
@@ -510,39 +511,42 @@ export const PageEditor: React.FC<PageEditorProps> = ({ pageId, slug, navigate }
               </div>
             )}
 
-            <div className="page-editor__layouts">
-              <h3>Вставить макет:</h3>
-              <div className="page-editor__layouts-buttons">
-                <button onClick={() => handleInsertLayout('hero')}>Герой-секция</button>
-                <button onClick={() => handleInsertLayout('features')}>Блок преимуществ</button>
-                <button onClick={() => handleInsertLayout('two-columns')}>Две колонки</button>
-                <button onClick={() => handleInsertLayout('image-text')}>Изображение + текст</button>
+            <div className="system-content-card">
+              <h3 className="system-form-label">Вставить макет:</h3>
+              <div className="system-toolbar">
+                <button onClick={() => handleInsertLayout('hero')} className="system-btn-outline">Герой-секция</button>
+                <button onClick={() => handleInsertLayout('features')} className="system-btn-outline">Блок преимуществ</button>
+                <button onClick={() => handleInsertLayout('two-columns')} className="system-btn-outline">Две колонки</button>
+                <button onClick={() => handleInsertLayout('image-text')} className="system-btn-outline">Изображение + текст</button>
               </div>
             </div>
 
-            {showHtmlView ? (
-              <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="page-editor__html-textarea"
-                rows={20}
-                placeholder="Введите HTML код страницы"
-              />
-            ) : (
-              <SunEditor
-                getSunEditorInstance={(editor) => {
-                  sunEditorRef.current = editor;
-                }}
-                setOptions={editorOptions}
-                setContents={content}
-                onChange={setContent}
-              />
-            )}
+            <div className="system-content-card">
+              {showHtmlView ? (
+                <textarea
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  className="system-form-textarea"
+                  rows={20}
+                  placeholder="Введите HTML код страницы"
+                />
+              ) : (
+                <SunEditor
+                  getSunEditorInstance={(editor) => {
+                    sunEditorRef.current = editor;
+                  }}
+                  setOptions={editorOptions}
+                  setContents={content}
+                  onChange={setContent}
+                />
+              )}
+            </div>
           </>
         )}
-      </div>
 
-      {error && <div className="error-message">{error}</div>}
+        {error && <div className="system-alert system-alert-error">{error}</div>}
+        </div>
+      </div>
     </div>
   );
 };
