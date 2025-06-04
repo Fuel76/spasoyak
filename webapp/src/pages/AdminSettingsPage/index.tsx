@@ -40,6 +40,38 @@ const AdminSettingsPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  // Функция для получения токена авторизации
+  const getAuthToken = (): string | null => {
+    const sessionData = localStorage.getItem('session');
+    return sessionData ? JSON.parse(sessionData).token : null;
+  };
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    try {
+      const response = await fetch('/api/settings', {
+        headers: {
+          'Authorization': `Bearer ${getAuthToken()}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSettings(data);
+      } else {
+        setMessage({ type: 'error', text: 'Ошибка загрузки настроек. Используются значения по умолчанию.' });
+        setTimeout(() => setMessage(null), 3000);
+      }
+    } catch (error) {
+      console.error('Ошибка загрузки настроек:', error);
+      setMessage({ type: 'error', text: 'Ошибка подключения к серверу. Используются значения по умолчанию.' });
+      setTimeout(() => setMessage(null), 3000);
+    }
+  };
+
   const handleChange = (field: keyof SystemSettings, value: any) => {
     setSettings(prev => ({ ...prev, [field]: value }));
   };
@@ -47,11 +79,26 @@ const AdminSettingsPage: React.FC = () => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      // Здесь должен быть API вызов для сохранения настроек
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Имитация API вызова
-      setMessage({ type: 'success', text: 'Настройки успешно сохранены!' });
+      const response = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getAuthToken()}`
+        },
+        body: JSON.stringify(settings)
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSettings(data.settings);
+        setMessage({ type: 'success', text: 'Настройки успешно сохранены!' });
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Ошибка сохранения настроек');
+      }
     } catch (error) {
-      setMessage({ type: 'error', text: 'Ошибка при сохранении настроек' });
+      console.error('Ошибка сохранения настроек:', error);
+      setMessage({ type: 'error', text: `Ошибка при сохранении настроек: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}` });
     } finally {
       setLoading(false);
       setTimeout(() => setMessage(null), 3000);

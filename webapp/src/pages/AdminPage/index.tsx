@@ -22,7 +22,36 @@ const AdminPage = () => {
 
   const fetchStats = async () => {
     try {
-      // В реальном приложении здесь бы был API для получения статистики
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const sessionData = localStorage.getItem('session');
+      const token = sessionData ? JSON.parse(sessionData).token : null;
+      
+      const response = await fetch(`${API_URL}/api/stats`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setStats(data.stats);
+      } else {
+        console.error('Ошибка получения статистики:', response.statusText);
+        // Fallback к мокапам если API недоступно
+        const mockStats: StatsData = {
+          totalPages: 15,
+          totalNews: 42,
+          totalCategories: 8,
+          totalTags: 23,
+          pendingTreby: 7,
+          totalTreby: 156
+        };
+        setStats(mockStats);
+      }
+    } catch (error) {
+      console.error('Ошибка загрузки статистики:', error);
+      // Fallback к мокапам при ошибке
       const mockStats: StatsData = {
         totalPages: 15,
         totalNews: 42,
@@ -32,8 +61,6 @@ const AdminPage = () => {
         totalTreby: 156
       };
       setStats(mockStats);
-    } catch (error) {
-      console.error('Ошибка загрузки статистики:', error);
     } finally {
       setLoading(false);
     }

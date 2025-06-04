@@ -24,6 +24,11 @@ import scheduleRouter from './routes/schedule';
 import calendarRouter from './routes/calendar';
 import categoriesRouter from './routes/categories';
 import tagsRouter from './routes/tags';
+import statsRouter from './routes/stats';
+import usersRouter from './routes/users';
+import mediaRouter from './routes/media';
+import backupRouter from './routes/backup';
+import settingsRouter from './routes/settings';
 import { requestLogger, corsMiddleware } from './middleware/globalMiddleware';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -87,6 +92,11 @@ app.use('/api/schedule', scheduleRouter);
 app.use('/api/calendar', calendarRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/tags', tagsRouter);
+app.use('/api/stats', statsRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/media', mediaRouter);
+app.use('/api/backup', backupRouter);
+app.use('/api/settings', settingsRouter);
 app.use('/carousel', carouselRouter); // Совместимость со старым API
 
 // ---------- ОБРАБОТКА ОШИБОК ----------

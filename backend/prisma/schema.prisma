@@ -12,25 +12,24 @@ model News {
   title           String    @db.VarChar(255)
   content         String    @db.Text
   htmlContent     String?   @db.LongText
-  excerpt         String?   @db.Text
   media           Json
   cover           String?   @db.Text
   isVisible       Boolean   @default(true)
   customCss       String?   @db.LongText
-  categoryId      Int?
-  authorId        Int?
-  publishedAt     DateTime?
-  metaTitle       String?   @db.VarChar(255)
-  metaDescription String?   @db.Text
-  slug            String?   @unique @db.VarChar(255)
-  viewCount       Int       @default(0)
-  isPinned        Boolean   @default(false)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
-
-  category Category? @relation(fields: [categoryId], references: [id])
-  author   User?     @relation(fields: [authorId], references: [id])
-  tags     NewsTag[]
+  authorId        Int?
+  categoryId      Int?
+  excerpt         String?   @db.Text
+  isPinned        Boolean   @default(false)
+  metaDescription String?   @db.Text
+  metaTitle       String?   @db.VarChar(255)
+  publishedAt     DateTime?
+  slug            String?   @unique @db.VarChar(255)
+  viewCount       Int       @default(0)
+  author          User?     @relation(fields: [authorId], references: [id])
+  category        Category? @relation(fields: [categoryId], references: [id])
+  tags            NewsTag[]
 
   @@index([categoryId])
   @@index([authorId])
@@ -43,38 +42,36 @@ model Category {
   name        String   @unique @db.VarChar(100)
   description String?  @db.Text
   slug        String   @unique @db.VarChar(100)
-  color       String?  @db.VarChar(7) // HEX цвет
+  color       String?  @db.VarChar(7)
   icon        String?  @db.VarChar(50)
   isVisible   Boolean  @default(true)
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  news News[]
+  news        News[]
 }
 
 model Tag {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique @db.VarChar(50)
-  slug        String   @unique @db.VarChar(50)
-  color       String?  @db.VarChar(7) // HEX цвет
-  description String?  @db.Text
-  isVisible   Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  news NewsTag[]
+  id          Int       @id @default(autoincrement())
+  name        String    @unique @db.VarChar(50)
+  slug        String    @unique @db.VarChar(50)
+  color       String?   @db.VarChar(7)
+  description String?   @db.Text
+  isVisible   Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  news        NewsTag[]
 }
 
 model NewsTag {
-  id     Int @id @default(autoincrement())
+  id     Int  @id @default(autoincrement())
   newsId Int
   tagId  Int
-
-  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
-  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  news   News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@unique([newsId, tagId])
+  @@index([tagId], map: "NewsTag_tagId_fkey")
 }
 
 model Page {
@@ -99,8 +96,7 @@ model User {
   role      String   @default("user")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  news News[]
+  news      News[]
 }
 
 model MenuItem {
@@ -175,50 +171,46 @@ model TrebaPricingRule {
   @@unique([name, periodValue])
 }
 
-// Orthodox Calendar Models
 model CalendarDay {
   id          Int         @id @default(autoincrement())
   date        DateTime    @unique @db.Date
   priority    DayPriority @default(NORMAL)
   fastingType FastingType @default(NONE)
   isHoliday   Boolean     @default(false)
-  color       String? // цвет дня (красный, золотой и т.д.)
+  color       String?
   note        String?     @db.Text
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-
-  saints    Saint[]
-  readings  Reading[]
-  schedules Schedule[]
+  schedules   Schedule[]
+  readings    Reading[]   @relation("CalendarDayToReading")
+  saints      Saint[]     @relation("CalendarDayToSaint")
 
   @@map("calendar_days")
 }
 
 model Saint {
-  id          Int           @id @default(autoincrement())
-  name        String        @db.VarChar(500)
-  description String?       @db.Text
-  icon        String? // URL иконы святого
-  priority    SaintPriority @default(COMMEMORATED)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-
-  calendarDays CalendarDay[]
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(500)
+  description  String?       @db.Text
+  icon         String?
+  priority     SaintPriority @default(COMMEMORATED)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  calendarDays CalendarDay[] @relation("CalendarDayToSaint")
 
   @@map("saints")
 }
 
 model Reading {
-  id        Int         @id @default(autoincrement())
-  type      ReadingType
-  reference String      @db.VarChar(255) // например "Деян. 15:5-34"
-  title     String?     @db.VarChar(500) // заголовок чтения
-  text      String?     @db.LongText // полный текст чтения
-  order     Int         @default(0) // порядок чтения в дне
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-
-  calendarDays CalendarDay[]
+  id           Int           @id @default(autoincrement())
+  type         ReadingType
+  reference    String        @db.VarChar(255)
+  title        String?       @db.VarChar(500)
+  text         String?       @db.LongText
+  order        Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  calendarDays CalendarDay[] @relation("CalendarDayToReading")
 
   @@map("readings")
 }
@@ -235,15 +227,13 @@ model Schedule {
   isVisible     Boolean         @default(true)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
-
-  calendarDay CalendarDay? @relation(fields: [calendarDayId], references: [id])
+  calendarDay   CalendarDay?    @relation(fields: [calendarDayId], references: [id])
 
   @@index([date])
   @@index([calendarDayId])
   @@map("schedules")
 }
 
-// Enums
 enum FieldType {
   TEXT
   TEXTAREA
@@ -260,52 +250,52 @@ enum PriceType {
 }
 
 enum DayPriority {
-  GREAT_FEAST // Великие праздники (красный)
-  TWELVE_FEAST // Двунадесятые праздники (золотой)
-  POLYELEOS // Полиелейные святые (синий)
-  VIGIL // Всенощное бдение (зеленый)
-  SIXTH_CLASS // Шестеричные святые (черный)
-  NORMAL // Обычные дни (черный)
+  GREAT_FEAST
+  TWELVE_FEAST
+  POLYELEOS
+  VIGIL
+  SIXTH_CLASS
+  NORMAL
 }
 
 enum FastingType {
-  NONE // Нет поста
-  STRICT // Строгий пост
-  FISH_ALLOWED // Разрешена рыба
-  WINE_OIL // Вино и елей
-  DRY_EATING // Сухоядение
-  FULL_FAST // Полное воздержание
+  NONE
+  STRICT
+  FISH_ALLOWED
+  WINE_OIL
+  DRY_EATING
+  FULL_FAST
 }
 
 enum SaintPriority {
-  GREAT_SAINT // Великий святой
-  POLYELEOS_SAINT // Полиелейный святой
-  VIGIL_SAINT // Святой со всенощным бдением
-  SIXTH_CLASS // Шестеричный святой
-  COMMEMORATED // Поминаемый
+  GREAT_SAINT
+  POLYELEOS_SAINT
+  VIGIL_SAINT
+  SIXTH_CLASS
+  COMMEMORATED
 }
 
 enum ReadingType {
-  APOSTLE // Апостольское чтение
-  GOSPEL // Евангельское чтение
-  OLD_TESTAMENT // Ветхозаветное чтение
-  PROKEIMENON // Прокимен
-  ALLELUIA // Аллилуйя
+  APOSTLE
+  GOSPEL
+  OLD_TESTAMENT
+  PROKEIMENON
+  ALLELUIA
 }
 
 enum ServiceType {
-  REGULAR // Обычная служба
-  LITURGY // Литургия
-  VESPERS // Вечерня
-  MATINS // Утреня
-  MOLEBEN // Молебен
-  PANIKHIDA // Панихида
-  AKATHIST // Акафист
-  SPECIAL // Особая служба
+  REGULAR
+  LITURGY
+  VESPERS
+  MATINS
+  MOLEBEN
+  PANIKHIDA
+  AKATHIST
+  SPECIAL
 }
 
 enum ServicePriority {
-  HOLIDAY // Праздничная
-  SPECIAL // Особая
-  NORMAL // Обычная
+  HOLIDAY
+  SPECIAL
+  NORMAL
 }

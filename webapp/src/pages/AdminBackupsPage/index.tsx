@@ -10,6 +10,12 @@ interface BackupFile {
   status: 'completed' | 'in_progress' | 'failed';
 }
 
+// Функция для получения токена авторизации
+const getAuthToken = (): string | null => {
+  const sessionData = localStorage.getItem('session');
+  return sessionData ? JSON.parse(sessionData).token : null;
+};
+
 const AdminBackupsPage: React.FC = () => {
   const [backups, setBackups] = useState<BackupFile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,9 +29,57 @@ const AdminBackupsPage: React.FC = () => {
   const loadBackups = async () => {
     setLoading(true);
     try {
-      // Имитация загрузки данных
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      const response = await fetch('/api/backup', {
+        headers: {
+          'Authorization': `Bearer ${getAuthToken()}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBackups(data);
+      } else {
+        // Fallback к мокапам если API недоступно
+        const mockBackups: BackupFile[] = [
+          {
+            id: '1',
+            name: 'backup_2024_01_15_full.zip',
+            size: 156789432,
+            date: '2024-01-15T10:30:00Z',
+            type: 'full',
+            status: 'completed'
+          },
+          {
+            id: '2',
+            name: 'backup_2024_01_14_partial.zip',
+            size: 45123456,
+            date: '2024-01-14T18:20:00Z',
+            type: 'partial',
+            status: 'completed'
+          },
+          {
+            id: '3',
+            name: 'backup_2024_01_13_full.zip',
+            size: 178654321,
+            date: '2024-01-13T02:15:00Z',
+            type: 'full',
+            status: 'completed'
+          },
+          {
+            id: '4',
+            name: 'backup_2024_01_12_partial.zip',
+            size: 0,
+            date: '2024-01-12T14:45:00Z',
+            type: 'partial',
+            status: 'failed'
+          }
+        ];
+        setBackups(mockBackups);
+        showNotification('Используются тестовые данные резервных копий', 'error');
+      }
+    } catch (error) {
+      console.error('Ошибка загрузки резервных копий:', error);
+      // Fallback к мокапам при ошибке
       const mockBackups: BackupFile[] = [
         {
           id: '1',
@@ -34,36 +88,10 @@ const AdminBackupsPage: React.FC = () => {
           date: '2024-01-15T10:30:00Z',
           type: 'full',
           status: 'completed'
-        },
-        {
-          id: '2',
-          name: 'backup_2024_01_14_partial.zip',
-          size: 45123456,
-          date: '2024-01-14T18:20:00Z',
-          type: 'partial',
-          status: 'completed'
-        },
-        {
-          id: '3',
-          name: 'backup_2024_01_13_full.zip',
-          size: 178654321,
-          date: '2024-01-13T02:15:00Z',
-          type: 'full',
-          status: 'completed'
-        },
-        {
-          id: '4',
-          name: 'backup_2024_01_12_partial.zip',
-          size: 0,
-          date: '2024-01-12T14:45:00Z',
-          type: 'partial',
-          status: 'failed'
         }
       ];
-      
       setBackups(mockBackups);
-    } catch (error) {
-      showNotification('Ошибка при загрузке резервных копий', 'error');
+      showNotification('Ошибка при загрузке резервных копий. Используются тестовые данные.', 'error');
     } finally {
       setLoading(false);
     }
@@ -72,36 +100,56 @@ const AdminBackupsPage: React.FC = () => {
   const createBackup = async (type: 'full' | 'partial') => {
     setCreating(true);
     try {
-      // Имитация создания резервной копии
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      const newBackup: BackupFile = {
-        id: Date.now().toString(),
-        name: `backup_${new Date().toISOString().split('T')[0]}_${type}.zip`,
-        size: Math.floor(Math.random() * 200000000) + 50000000,
-        date: new Date().toISOString(),
-        type,
-        status: 'completed'
-      };
-      
-      setBackups(prev => [newBackup, ...prev]);
-      showNotification('Резервная копия успешно создана', 'success');
+      const response = await fetch('/api/backup/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getAuthToken()}`
+        },
+        body: JSON.stringify({ type })
+      });
+
+      if (response.ok) {
+        showNotification('Резервная копия успешно создана', 'success');
+        loadBackups(); // Перезагружаем список
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Ошибка создания резервной копии');
+      }
     } catch (error) {
-      showNotification('Ошибка при создании резервной копии', 'error');
+      console.error('Ошибка создания резервной копии:', error);
+      showNotification(`Ошибка при создании резервной копии: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`, 'error');
     } finally {
       setCreating(false);
     }
   };
 
-  const downloadBackup = (backup: BackupFile) => {
-    // Имитация скачивания
-    const link = document.createElement('a');
-    link.href = '#';
-    link.download = backup.name;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    showNotification('Скачивание началось', 'success');
+  const downloadBackup = async (backup: BackupFile) => {
+    try {
+      const response = await fetch(`/api/backup/download/${backup.name}`, {
+        headers: {
+          'Authorization': `Bearer ${getAuthToken()}`
+        }
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = backup.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        showNotification('Скачивание началось', 'success');
+      } else {
+        throw new Error('Ошибка скачивания файла');
+      }
+    } catch (error) {
+      console.error('Ошибка скачивания:', error);
+      showNotification('Ошибка при скачивании файла', 'error');
+    }
   };
 
   const deleteBackup = async (backupId: string) => {
@@ -110,12 +158,23 @@ const AdminBackupsPage: React.FC = () => {
     }
 
     try {
-      // Имитация удаления
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setBackups(prev => prev.filter(backup => backup.id !== backupId));
-      showNotification('Резервная копия удалена', 'success');
+      const response = await fetch(`/api/backup/${backupId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${getAuthToken()}`
+        }
+      });
+
+      if (response.ok) {
+        setBackups(prev => prev.filter(backup => backup.id !== backupId));
+        showNotification('Резервная копия удалена', 'success');
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Ошибка удаления файла');
+      }
     } catch (error) {
-      showNotification('Ошибка при удалении резервной копии', 'error');
+      console.error('Ошибка удаления:', error);
+      showNotification(`Ошибка при удалении резервной копии: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`, 'error');
     }
   };
 

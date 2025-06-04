@@ -25,7 +25,7 @@ async function migrateCalendarData() {
       console.log(`Обрабатываем дату: ${item.date}`);
       
       // Определяем приоритет дня на основе праздников
-      let priority = DayPriority.NORMAL;
+      let priority: DayPriority = DayPriority.NORMAL;
       let isHoliday = false;
       let color = null;
       
@@ -73,7 +73,7 @@ async function migrateCalendarData() {
       // Добавляем святых
       for (const saintName of item.saints) {
         // Определяем приоритет святого
-        let saintPriority = SaintPriority.COMMEMORATED;
+        let saintPriority: SaintPriority = SaintPriority.COMMEMORATED;
         const saintText = saintName.toLowerCase();
         
         if (saintText.includes('вмч.') || saintText.includes('великомученик')) {
@@ -99,7 +99,7 @@ async function migrateCalendarData() {
       let order = 0;
       for (const reading of item.readings) {
         // Определяем тип чтения
-        let readingType = ReadingType.APOSTLE;
+        let readingType: ReadingType = ReadingType.APOSTLE;
         const readingText = reading.toLowerCase();
         
         if (readingText.includes('ин.') || readingText.includes('мф.') || 

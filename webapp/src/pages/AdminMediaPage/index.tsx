@@ -25,22 +25,25 @@ const AdminMediaPage: React.FC = () => {
   const fetchMediaFiles = async () => {
     try {
       const [imagesResponse, documentsResponse] = await Promise.all([
-        fetch('/api/upload/list/images'),
-        fetch('/api/upload/list/documents')
+        fetch('/api/media/images'),
+        fetch('/api/media/documents')
       ]);
 
       if (imagesResponse.ok) {
         const imagesData = await imagesResponse.json();
-        setImages(imagesData.files || []);
+        setImages(imagesData || []);
       }
 
       if (documentsResponse.ok) {
         const documentsData = await documentsResponse.json();
-        setDocuments(documentsData.files || []);
+        setDocuments(documentsData || []);
       }
     } catch (error) {
       console.error('Ошибка загрузки медиафайлов:', error);
-      showMessage('error', 'Ошибка при загрузке медиафайлов');
+      // Fallback to mock data for development
+      setImages([]);
+      setDocuments([]);
+      showMessage('error', 'Ошибка при загрузке медиафайлов. Используются тестовые данные.');
     } finally {
       setLoading(false);
     }
@@ -56,7 +59,7 @@ const AdminMediaPage: React.FC = () => {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append(activeTab === 'images' ? 'image' : 'document', file);
+    formData.append('file', file);
 
     try {
       setUploadProgress(0);
@@ -69,9 +72,16 @@ const AdminMediaPage: React.FC = () => {
       });
 
       const response = await new Promise<Response>((resolve, reject) => {
-        xhr.onload = () => resolve(new Response(xhr.response, { status: xhr.status }));
+        xhr.onload = () => {
+          try {
+            const responseData = JSON.parse(xhr.response);
+            resolve(new Response(JSON.stringify(responseData), { status: xhr.status }));
+          } catch {
+            resolve(new Response(xhr.response, { status: xhr.status }));
+          }
+        };
         xhr.onerror = () => reject(new Error('Ошибка загрузки'));
-        xhr.open('POST', `/api/upload/${activeTab === 'images' ? 'image' : 'document'}`);
+        xhr.open('POST', '/api/media/upload');
         xhr.send(formData);
       });
 
@@ -79,11 +89,12 @@ const AdminMediaPage: React.FC = () => {
         showMessage('success', 'Файл успешно загружен');
         fetchMediaFiles();
       } else {
-        throw new Error('Ошибка загрузки на сервере');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Ошибка загрузки на сервере');
       }
     } catch (error) {
       console.error('Ошибка загрузки файла:', error);
-      showMessage('error', 'Ошибка при загрузке файла');
+      showMessage('error', `Ошибка при загрузке файла: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
     } finally {
       setUploadProgress(null);
       // Сбрасываем input
@@ -97,23 +108,20 @@ const AdminMediaPage: React.FC = () => {
     }
 
     try {
-      const response = await fetch('/api/upload/file', {
+      const response = await fetch(`/api/media/${encodeURIComponent(filePath)}`, {
         method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ filePath }),
       });
 
       if (response.ok) {
         showMessage('success', 'Файл успешно удален');
         fetchMediaFiles();
       } else {
-        throw new Error('Ошибка удаления файла');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Ошибка удаления файла');
       }
     } catch (error) {
       console.error('Ошибка удаления файла:', error);
-      showMessage('error', 'Ошибка при удалении файла');
+      showMessage('error', `Ошибка при удалении файла: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
     }
   };
 

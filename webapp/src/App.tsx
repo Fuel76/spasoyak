@@ -38,7 +38,7 @@ import NewsPage from './pages/NewsPage';
 import NewsDetailPage from './pages/NewsDetailPage';
 import AdminCategoriesPage from './pages/AdminCategoriesPage';
 import AdminTagsPage from './pages/AdminTagsPage';
-import AdminUsersPage from './pages/AdminUsersPage';
+import AdminUsersPage from './pages/AdminUsersPage/AdminUsersPage';
 import AdminSettingsPage from './pages/AdminSettingsPage';
 import AdminMediaPage from './pages/AdminMediaPage';
 import AdminBackupsPage from './pages/AdminBackupsPage';

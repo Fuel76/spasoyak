@@ -6,6 +6,7 @@
 		"b": "pnpm --filter @monastyr/backend",
 		"w": "pnpm --filter @monastyr/webapp",
 		"dev": "pnpm -r --parallel dev",
+		"dev-build": "pnpm b build && pnpm -r --parallel dev",
 		"types": "concurrently \"pnpm --filter @monastyr/backend types\" \"pnpm --filter @monastyr/webapp types\"",
 		"lint": "concurrently 'pnpm b lint' 'pnpm w lint'",
 		"prettify": "pnpm -r --parallel prettify"
