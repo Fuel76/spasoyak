@@ -1187,14 +1187,6 @@ table th {
   gap: 10px;
 }
 
-.news-media-gallery img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 4px;
-  border: 1px solid #eee;
-}
-
 /* Общие стили для форматированного контента */
 .formatted-content {
   font-size: 1rem;
@@ -1391,4 +1383,131 @@ body { overflow-x: hidden !important; }
 .content-container { flex-grow: 1; overflow-x: hidden !important; }
 .page-content { overflow-x: hidden !important; }
 .footer { overflow-x: hidden !important; }
+
+/* Встроенная секция новостей на главной странице */
+.embedded-news-section {
+  margin-top: 3rem;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Убираем дублирующий фон для встроенной страницы новостей */
+.embedded-news-section .news-page {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  min-height: auto;
+}
+
+.embedded-news-section .news-page-content {
+  padding: 1rem 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Адаптируем заголовок страницы новостей для главной */
+.embedded-news-section .page-header {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 2rem;
+}
+
+.embedded-news-section .page-title {
+  text-align: center;
+  color: var(--primary-color, #8b6c4f);
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.embedded-news-section .page-description {
+  text-align: center;
+  color: var(--text-muted, #7d6f5a);
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+/* Адаптируем кнопки управления */
+.embedded-news-section .header-actions {
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Убираем лишние отступы для фильтров */
+.embedded-news-section .filters-panel {
+  margin-top: 1rem;
+}
+
+/* Адаптируем сетку новостей для главной */
+.embedded-news-section .news-grid {
+  margin-top: 2rem;
+}
+
+/* Адаптируем пагинацию */
+.embedded-news-section .pagination {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+/* Дополнительные стили для плавной интеграции новостей */
+.embedded-news-section .news-page {
+  max-width: none;
+  width: 100%;
+}
+
+/* Плавный переход от карусели к новостям */
+.carousel-container + .embedded-news-section {
+  border-top: 3px solid var(--accent-color, #a0825e);
+  position: relative;
+}
+
+.carousel-container + .embedded-news-section::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 6px;
+  background: linear-gradient(135deg, var(--primary-color, #8b6c4f) 0%, var(--accent-color, #a0825e) 100%);
+  border-radius: 3px;
+}
+
+/* Убираем избыточные отступы в homepage */
+.homepage .embedded-news-section .news-page-content {
+  max-width: 100%;
+  margin: 0;
+}
+
+/* Адаптируем grid новостей для главной страницы */
+.embedded-news-section .news-grid.grid {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto 0 auto;
+}
+
+/* Адаптируем список новостей для главной */
+.embedded-news-section .news-grid.list {
+  max-width: 1200px;
+  margin: 2rem auto 0 auto;
+}
+
+/* Стилизация заголовка для лучшей интеграции */
+.embedded-news-section .page-header .header-content {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.embedded-news-section .page-title {
+  background: linear-gradient(135deg, var(--primary-color, #8b6c4f) 0%, var(--accent-color, #a0825e) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  text-shadow: none;
+}
 
