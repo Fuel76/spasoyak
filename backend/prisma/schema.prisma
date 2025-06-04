@@ -8,16 +8,73 @@ datasource db {
 }
 
 model News {
+  id              Int       @id @default(autoincrement())
+  title           String    @db.VarChar(255)
+  content         String    @db.Text
+  htmlContent     String?   @db.LongText
+  excerpt         String?   @db.Text
+  media           Json
+  cover           String?   @db.Text
+  isVisible       Boolean   @default(true)
+  customCss       String?   @db.LongText
+  categoryId      Int?
+  authorId        Int?
+  publishedAt     DateTime?
+  metaTitle       String?   @db.VarChar(255)
+  metaDescription String?   @db.Text
+  slug            String?   @unique @db.VarChar(255)
+  viewCount       Int       @default(0)
+  isPinned        Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  category Category? @relation(fields: [categoryId], references: [id])
+  author   User?     @relation(fields: [authorId], references: [id])
+  tags     NewsTag[]
+
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([publishedAt])
+  @@index([slug])
+}
+
+model Category {
   id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
-  content     String   @db.Text
-  htmlContent String?  @db.LongText
-  media       Json
-  cover       String?  @db.Text
+  name        String   @unique @db.VarChar(100)
+  description String?  @db.Text
+  slug        String   @unique @db.VarChar(100)
+  color       String?  @db.VarChar(7) // HEX цвет
+  icon        String?  @db.VarChar(50)
   isVisible   Boolean  @default(true)
-  customCss   String?  @db.LongText
+  order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  news News[]
+}
+
+model Tag {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(50)
+  slug        String   @unique @db.VarChar(50)
+  color       String?  @db.VarChar(7) // HEX цвет
+  description String?  @db.Text
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  news NewsTag[]
+}
+
+model NewsTag {
+  id     Int @id @default(autoincrement())
+  newsId Int
+  tagId  Int
+
+  news News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([newsId, tagId])
 }
 
 model Page {
@@ -42,6 +99,8 @@ model User {
   role      String   @default("user")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  news News[]
 }
 
 model MenuItem {

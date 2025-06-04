@@ -16,7 +16,7 @@ export const HomePage = () => {
 
   const [news, setNews] = useState<NewsItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [carouselImages, setCarouselImages] = useState<{ id: number; url: string }[]>([]);
   const PAGE_SIZE = 6;
   const [page, setPage] = useState(1);
@@ -34,7 +34,7 @@ export const HomePage = () => {
       })
       .catch(err => {
         console.error('Ошибка при загрузке новостей:', err);
-        setError(err);
+        setError(err.message || 'Произошла ошибка при загрузке новостей');
         setIsLoading(false);
       });
   }, [page]);
@@ -115,7 +115,7 @@ export const HomePage = () => {
                           className="news-card__preview-content formatted-content"
                           dangerouslySetInnerHTML={{ __html: decodeHtml(previewHtml) }}
                         />
-                        <a href={`/news/${neww.id}`} className="news-card__more">
+                        <a href={`/news/${neww.slug}`} className="news-card__more">
                           Читать дальше
                         </a>
                       </div>

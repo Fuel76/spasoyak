@@ -22,6 +22,8 @@ import trebaFormFieldsRouter from './routes/trebaFormFields';
 import trebaPricingRulesRouter from './routes/trebaPricingRules';
 import scheduleRouter from './routes/schedule';
 import calendarRouter from './routes/calendar';
+import categoriesRouter from './routes/categories';
+import tagsRouter from './routes/tags';
 import { requestLogger, corsMiddleware } from './middleware/globalMiddleware';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -83,6 +85,8 @@ app.use('/api/treba-form-fields', trebaFormFieldsRouter);
 app.use('/api/treba-pricing-rules', trebaPricingRulesRouter);
 app.use('/api/schedule', scheduleRouter);
 app.use('/api/calendar', calendarRouter);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/tags', tagsRouter);
 app.use('/carousel', carouselRouter); // Совместимость со старым API
 
 // ---------- ОБРАБОТКА ОШИБОК ----------

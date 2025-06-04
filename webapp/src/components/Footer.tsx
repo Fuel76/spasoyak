@@ -18,31 +18,31 @@ export const Footer = () => {
           <h3>Контакты</h3>
           <div className="contact-item">
             <span className="contact-label">Адрес:</span>
-            <span>152151, Ярославская область, г. Ростов, пос. Борисоглебский</span>
+            <span>152151, Ярославская область, г. Ростов Великий</span>
           </div>
           <div className="contact-item">
             <span className="contact-label">Телефон:</span>
-            <span>+7 (48536) 3-37-25</span>
+            <span>+7(48536)7-43-69</span>
           </div>
           <div className="contact-item">
             <span className="contact-label">Email:</span>
-            <span>info@rostov-monastyr.ru</span>
+            <span>http://rostov-monastir.ru</span>
           </div>
         </div>
         
         <div className="footer-section footer-schedule">
           <h3>Богослужения</h3>
           <div className="schedule-item">
-            <span>Утреня: 6:00</span>
-          </div>
-          <div className="schedule-item">
+            <span>Понедельник - Пятница:</span>
             <span>Литургия: 8:00</span>
           </div>
           <div className="schedule-item">
-            <span>Вечерня: 17:00</span>
+            <span>Суббота:</span>
+            <span>Литургия: 8:00</span>
           </div>
           <div className="schedule-item">
-            <span>Повечерие: 20:00</span>
+            <span>Воскресенье:</span>
+            <span>Литургия: 9:00</span> 
           </div>
         </div>
       </div>

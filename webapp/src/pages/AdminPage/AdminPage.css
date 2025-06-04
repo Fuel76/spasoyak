@@ -1,53 +1,387 @@
-.admin-container {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 24px;
-  background: #f9fafb;
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
-  font-family: 'Segoe UI', Arial, sans-serif;
+/* Современная админская панель */
+.admin-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 2rem;
 }
 
-.admin-container h1 {
-  font-size: 2.2rem;
-  margin-bottom: 32px;
-  color: #3a3a3a;
-  text-align: center;
-}
-
-.admin-sections {
+/* Шапка админки */
+.admin-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 32px;
   justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.admin-section {
-  flex: 1 1 320px;
-  min-width: 280px;
-  background: #f4f6fa;
+.admin-header-content h1.admin-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+.admin-subtitle {
+  color: #64748b;
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 400;
+}
+
+.admin-header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.admin-btn {
+  padding: 0.75rem 1.5rem;
   border-radius: 12px;
-  padding: 24px 20px 20px 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-  margin-bottom: 16px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-btn-outline {
+  background: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.admin-btn-outline:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.admin-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+}
+
+.admin-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+/* Статистика */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.stat-icon {
+  font-size: 3rem;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Сетка разделов */
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Разделы админки */
+.admin-section {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.admin-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.section-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.section-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-header p {
+  color: #64748b;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Ссылки в разделах */
+.section-links {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0.75rem;
 }
 
-.admin-section h2 {
-  font-size: 1.2rem;
-  margin-bottom: 12px;
-  color: #4a5a6a;
-}
-
-.admin-section a {
-  color: #5b8def;
+.admin-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
   text-decoration: none;
-  font-weight: 500;
-  margin-bottom: 6px;
-  transition: color 0.2s;
+  color: #334155;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
 }
+
+.admin-link:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateX(5px);
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.link-icon {
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.admin-link:hover .link-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.link-text {
+  flex: 1;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.link-badge {
+  background: #e2e8f0;
+  color: #475569;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.link-badge.warning {
+  background: #fed7aa;
+  color: #c2410c;
+}
+
+.admin-link:hover .link-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.admin-link:hover .link-badge.warning {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Специальные цвета для разных разделов */
+.content-section {
+  border-left: 4px solid #10b981;
+}
+
+.calendar-section {
+  border-left: 4px solid #f59e0b;
+}
+
+.treby-section {
+  border-left: 4px solid #ef4444;
+}
+
+.structure-section {
+  border-left: 4px solid #8b5cf6;
+}
+
+.media-section {
+  border-left: 4px solid #06b6d4;
+}
+
+.settings-section {
+  border-left: 4px solid #6b7280;
+}
+
+.carousel-section {
+  border-left: 4px solid #ec4899;
+  grid-column: 1 / -1;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+  .admin-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 1rem;
+  }
+  
+  .admin-header {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  
+  .admin-header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .admin-stats {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .stat-card {
+    padding: 1.5rem;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .stat-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+  
+  .admin-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .admin-section {
+    padding: 1.5rem;
+  }
+  
+  .admin-link {
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header-content h1.admin-title {
+    font-size: 2rem;
+  }
+  
+  .admin-subtitle {
+    font-size: 1rem;
+  }
+  
+  .admin-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+  
+  .section-header h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* Анимации */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-section,
+.stat-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.admin-section:nth-child(1) { animation-delay: 0.1s; }
+.admin-section:nth-child(2) { animation-delay: 0.2s; }
+.admin-section:nth-child(3) { animation-delay: 0.3s; }
+.admin-section:nth-child(4) { animation-delay: 0.4s; }
+.admin-section:nth-child(5) { animation-delay: 0.5s; }
+.admin-section:nth-child(6) { animation-delay: 0.6s; }
 
 .admin-section a:hover {
   color: #3a6fc1;
