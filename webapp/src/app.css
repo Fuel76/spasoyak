@@ -1,9 +1,7 @@
 /* Общие стили */
 
 /* Правила для предотвращения масштабирования */
-* {
-  zoom: 1 !important;
-}
+/* * { zoom: 1 !important; } */
 
 /* Разрешаем zoom для sidemenu и календаря, чтобы они увеличивались при масштабировании */
 .sidemenu-absolute-container,
@@ -11,11 +9,6 @@
 .sidemenu,
 .orthodox-calendar {
   zoom: unset !important;
-}
-
-/* ОТМЕНЯЕМ transform: none !important ДЛЯ slick-карусели */
-.slick-slider, .slick-track, .slick-slide, .slick-list {
-  transform: unset !important;
 }
 
 /* Правила для плавного скролла без скачков */
@@ -1509,5 +1502,11 @@ body { overflow-x: hidden !important; }
   background-clip: text;
   font-weight: 700;
   text-shadow: none;
+}
+
+/* ОТМЕНА zoom для slick-карусели */
+.carousel-container *,
+.slick-slider, .slick-track, .slick-slide, .slick-list {
+  zoom: unset !important;
 }
 

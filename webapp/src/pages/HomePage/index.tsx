@@ -23,13 +23,14 @@ export const HomePage = () => {
 
   // Настройки для карусели
   const sliderSettings = {
-    dots: false,
+    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    arrows: true
   };
 
   return (
@@ -38,7 +39,7 @@ export const HomePage = () => {
       <div className="carousel-container">
         <Slider {...sliderSettings}>
           {carouselImages.map((image) => (
-            <div key={image.id} className="carousel-slide">
+            <div key={image.id + '-' + image.url} className="carousel-slide">
               <img src={image.url} alt="carousel" />
             </div>
           ))}
