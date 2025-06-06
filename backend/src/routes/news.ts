@@ -233,7 +233,9 @@ router.post('/', async (req, res) => {
     metaTitle,
     metaDescription,
     slug,
-    isPinned = false
+    isPinned = false,
+    headerStyle = 'default',
+    headerColor = '#f8f9fa'
   } = req.body;
 
   if (!title || !content) {
@@ -256,6 +258,8 @@ router.post('/', async (req, res) => {
         cover: coverUrl || null,
         media: JSON.stringify(mediaUrls || []),
         customCss: customCss || null,
+        headerStyle,
+        headerColor,
         categoryId: categoryId ? parseInt(categoryId) : null,
         authorId: authorId ? parseInt(authorId) : null,
         publishedAt: publishedAt ? new Date(publishedAt) : new Date(),
@@ -311,7 +315,9 @@ router.put('/:id', async (req: Request<{ id: string }>, res: Response) => {
     metaDescription,
     slug,
     isPinned,
-    isVisible
+    isVisible,
+    headerStyle = 'default',
+    headerColor = '#f8f9fa'
   } = req.body;
   if (!title) {
     return res.status(400).json({ error: 'Заголовок обязателен' });
@@ -333,6 +339,8 @@ router.put('/:id', async (req: Request<{ id: string }>, res: Response) => {
         cover: coverUrl || null,
         media: JSON.stringify(mediaUrls || []),
         customCss: customCss || null,
+        headerStyle,
+        headerColor,
         categoryId: categoryId ? parseInt(categoryId) : null,
         authorId: authorId ? parseInt(authorId) : null,
         publishedAt: publishedAt ? new Date(publishedAt) : undefined,

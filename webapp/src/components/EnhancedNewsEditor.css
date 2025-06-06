@@ -506,7 +506,253 @@
   gap: 8px;
 }
 
-/* Responsive Design */
+/* Tab Styles */
+.main-tab {
+  animation: fadeIn 0.3s ease;
+}
+
+.seo-tab {
+  animation: fadeIn 0.3s ease;
+}
+
+.advanced-tab {
+  animation: fadeIn 0.3s ease;
+}
+
+.history-tab {
+  animation: fadeIn 0.3s ease;
+}
+
+/* SEO Panel Styles */
+.seo-panel {
+  background: #f8f9fa;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.seo-panel h3 {
+  color: #1f2937;
+  margin: 0 0 20px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seo-panel h3::before {
+  content: "🔍";
+  font-size: 1.2em;
+}
+
+.seo-content {
+  display: grid;
+  gap: 20px;
+}
+
+/* Advanced Panel Styles */
+.advanced-panel {
+  background: #f8f9fa;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.advanced-panel h3 {
+  color: #1f2937;
+  margin: 0 0 20px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.advanced-panel h3::before {
+  content: "⚙️";
+  font-size: 1.2em;
+}
+
+.advanced-content {
+  display: grid;
+  gap: 20px;
+}
+
+/* History Panel Styles */
+.history-panel {
+  background: #f8f9fa;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.history-panel h3 {
+  color: #1f2937;
+  margin: 0 0 20px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.history-panel h3::before {
+  content: "📚";
+  font-size: 1.2em;
+}
+
+.history-list {
+  display: grid;
+  gap: 12px;
+}
+
+.history-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.history-item:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.history-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-time {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.history-title {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Save Version Button */
+.btn-save-version {
+  margin-left: auto;
+  background: #10b981;
+  color: white;
+  border: 2px solid #10b981;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-save-version:hover {
+  background: #059669;
+  border-color: #059669;
+  transform: translateY(-1px);
+}
+
+/* Tab Button Active State Enhancement */
+.tab-button.active {
+  background: #fff;
+  color: #1f2937;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  position: relative;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 3px;
+  background: #3b82f6;
+  border-radius: 2px;
+}
+
+/* Empty History State */
+.history-panel p {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+  margin: 40px 0;
+  font-size: 1rem;
+}
+
+/* Media Input Group Enhancement */
+.media-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.media-input-group .form-input {
+  flex: 1;
+}
+
+/* Cover Preview Enhancement */
+.cover-preview {
+  max-width: 200px;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #e5e7eb;
+  margin-top: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS Textarea Enhancement */
+.css-textarea {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  background: #1e293b;
+  color: #e2e8f0;
+  border: 2px solid #334155;
+}
+
+.css-textarea:focus {
+  border-color: #3b82f6;
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+/* Responsive Design for Tabs */
+@media (max-width: 768px) {
+  .editor-tabs {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .tab-button {
+    padding: 12px 16px;
+    text-align: left;
+  }
+  
+  .tab-button.active::after {
+    display: none;
+  }
+  
+  .btn-save-version {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 768px) {
   .enhanced-news-editor {
     padding: 16px;
@@ -578,5 +824,841 @@
   .history-item {
     background: #374151;
     border-color: #4b5563;
+  }
+}
+
+/* Современная адаптивная система обтекания текстом */
+
+/* Контейнеры для медиа с обтеканием */
+.media-wrap-container {
+  display: contents;
+  position: relative;
+}
+
+/* Базовые стили для всех медиа элементов - применяем ко всем возможным контейнерам */
+.se-wrapper img[class*="text-wrap-"],
+.se-wrapper iframe[class*="text-wrap-"],
+.se-wrapper video[class*="text-wrap-"],
+/* Для области редактирования SunEditor */
+.se-wrapper-inner img[class*="text-wrap-"],
+.se-wrapper-inner iframe[class*="text-wrap-"],
+.se-wrapper-inner video[class*="text-wrap-"],
+/* Для контента внутри редактора */
+.se-container img[class*="text-wrap-"],
+.se-container iframe[class*="text-wrap-"],
+.se-container video[class*="text-wrap-"],
+/* Для самого содержимого */
+.sun-editor img[class*="text-wrap-"],
+.sun-editor iframe[class*="text-wrap-"],
+.sun-editor video[class*="text-wrap-"],
+/* Обычные селекторы для предпросмотра */
+img[class*="text-wrap-"],
+iframe[class*="text-wrap-"],
+video[class*="text-wrap-"] {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  height: auto;
+}
+
+/* Обтекание слева - современный подход */
+.se-wrapper img.text-wrap-left,
+.se-wrapper iframe.text-wrap-left,
+.se-wrapper video.text-wrap-left,
+.se-wrapper-inner img.text-wrap-left,
+.se-wrapper-inner iframe.text-wrap-left,
+.se-wrapper-inner video.text-wrap-left,
+.se-container img.text-wrap-left,
+.se-container iframe.text-wrap-left,
+.se-container video.text-wrap-left,
+.sun-editor img.text-wrap-left,
+.sun-editor iframe.text-wrap-left,
+.sun-editor video.text-wrap-left,
+img.text-wrap-left,
+iframe.text-wrap-left,
+video.text-wrap-left {
+  float: left !important;
+  margin: 0 clamp(12px, 2vw, 24px) clamp(12px, 2vw, 24px) 0 !important;
+  clear: left !important;
+  width: clamp(200px, 40vw, 400px) !important;
+  max-width: 45% !important;
+  shape-outside: margin-box !important;
+}
+
+/* Обтекание справа - современный подход */
+.se-wrapper img.text-wrap-right,
+.se-wrapper iframe.text-wrap-right,
+.se-wrapper video.text-wrap-right,
+.se-wrapper-inner img.text-wrap-right,
+.se-wrapper-inner iframe.text-wrap-right,
+.se-wrapper-inner video.text-wrap-right,
+.se-container img.text-wrap-right,
+.se-container iframe.text-wrap-right,
+.se-container video.text-wrap-right,
+.sun-editor img.text-wrap-right,
+.sun-editor iframe.text-wrap-right,
+.sun-editor video.text-wrap-right,
+img.text-wrap-right,
+iframe.text-wrap-right,
+video.text-wrap-right {
+  float: right !important;
+  margin: 0 0 clamp(12px, 2vw, 24px) clamp(12px, 2vw, 24px) !important;
+  clear: right !important;
+  width: clamp(200px, 40vw, 400px) !important;
+  max-width: 45% !important;
+  shape-outside: margin-box !important;
+}
+
+/* Центрированные медиа */
+.se-wrapper img.text-wrap-center,
+.se-wrapper iframe.text-wrap-center,
+.se-wrapper video.text-wrap-center,
+.se-wrapper-inner img.text-wrap-center,
+.se-wrapper-inner iframe.text-wrap-center,
+.se-wrapper-inner video.text-wrap-center,
+.se-container img.text-wrap-center,
+.se-container iframe.text-wrap-center,
+.se-container video.text-wrap-center,
+.sun-editor img.text-wrap-center,
+.sun-editor iframe.text-wrap-center,
+.sun-editor video.text-wrap-center,
+img.text-wrap-center,
+iframe.text-wrap-center,
+video.text-wrap-center {
+  display: block !important;
+  margin: clamp(16px, 3vw, 32px) auto !important;
+  clear: both !important;
+  width: clamp(300px, 60vw, 600px) !important;
+  max-width: 80% !important;
+}
+
+/* Полная ширина */
+.se-wrapper img.text-wrap-full,
+.se-wrapper iframe.text-wrap-full,
+.se-wrapper video.text-wrap-full,
+.se-wrapper-inner img.text-wrap-full,
+.se-wrapper-inner iframe.text-wrap-full,
+.se-wrapper-inner video.text-wrap-full,
+.se-container img.text-wrap-full,
+.se-container iframe.text-wrap-full,
+.se-container video.text-wrap-full,
+.sun-editor img.text-wrap-full,
+.sun-editor iframe.text-wrap-full,
+.sun-editor video.text-wrap-full,
+img.text-wrap-full,
+iframe.text-wrap-full,
+video.text-wrap-full {
+  display: block !important;
+  width: 100% !important;
+  margin: clamp(20px, 4vw, 40px) 0 !important;
+  clear: both !important;
+}
+
+/* Адаптивные breakpoints для мобильных устройств */
+@media screen and (max-width: 768px) {
+  /* На мобильных все медиа становятся полноразмерными */
+  .se-wrapper img.text-wrap-left,
+  .se-wrapper img.text-wrap-right,
+  .se-wrapper iframe.text-wrap-left,
+  .se-wrapper iframe.text-wrap-right,
+  .se-wrapper video.text-wrap-left,
+  .se-wrapper video.text-wrap-right {
+    float: none !important;
+    display: block !important;
+    margin: 16px auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    clear: both !important;
+  }
+  
+  /* Центрированные медиа остаются центрированными */
+  .se-wrapper img.text-wrap-center,
+  .se-wrapper iframe.text-wrap-center,
+  .se-wrapper video.text-wrap-center {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 16px auto !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* Дополнительные улучшения для очень маленьких экранов */
+  .se-wrapper img[class*="text-wrap-"],
+  .se-wrapper iframe[class*="text-wrap-"],
+  .se-wrapper video[class*="text-wrap-"] {
+    margin: 12px auto !important;
+    border-radius: 4px;
+  }
+}
+
+/* Улучшения для планшетов */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .se-wrapper img.text-wrap-left,
+  .se-wrapper img.text-wrap-right,
+  .se-wrapper iframe.text-wrap-left,
+  .se-wrapper iframe.text-wrap-right,
+  .se-wrapper video.text-wrap-left,
+  .se-wrapper video.text-wrap-right {
+    width: clamp(180px, 35vw, 320px) !important;
+    max-width: 40% !important;
+  }
+  
+  .se-wrapper img.text-wrap-center,
+  .se-wrapper iframe.text-wrap-center,
+  .se-wrapper video.text-wrap-center {
+    width: clamp(250px, 50vw, 450px) !important;
+    max-width: 70% !important;
+  }
+}
+
+/* Очистка флоатов */
+.se-wrapper::after,
+.se-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Критические стили для работы в редакторе SunEditor */
+/* Эти стили применяются принудительно */
+[contenteditable] img.text-wrap-left,
+[contenteditable] iframe.text-wrap-left,
+[contenteditable] video.text-wrap-left {
+  float: left !important;
+  margin: 0 16px 16px 0 !important;
+  width: 300px !important;
+  max-width: 45% !important;
+  clear: left !important;
+  shape-outside: margin-box !important;
+}
+
+[contenteditable] img.text-wrap-right,
+[contenteditable] iframe.text-wrap-right,
+[contenteditable] video.text-wrap-right {
+  float: right !important;
+  margin: 0 0 16px 16px !important;
+  width: 300px !important;
+  max-width: 45% !important;
+  clear: right !important;
+  shape-outside: margin-box !important;
+}
+
+[contenteditable] img.text-wrap-center,
+[contenteditable] iframe.text-wrap-center,
+[contenteditable] video.text-wrap-center {
+  display: block !important;
+  margin: 16px auto !important;
+  clear: both !important;
+  width: 400px !important;
+  max-width: 80% !important;
+}
+
+[contenteditable] img.text-wrap-full,
+[contenteditable] iframe.text-wrap-full,
+[contenteditable] video.text-wrap-full {
+  display: block !important;
+  width: 100% !important;
+  margin: 20px 0 !important;
+  clear: both !important;
+}
+
+/* Дополнительная очистка флоатов для редактируемого контента */
+[contenteditable]::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Стили для модального окна выравнивания изображений */
+.image-insert-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-content h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  text-align: center;
+}
+
+.image-url-input {
+  margin: 15px 0;
+}
+
+.image-url-input label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.image-url {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.image-url:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.insert-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.insert-btn {
+  padding: 16px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.insert-btn:hover {
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.insert-btn.selected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.option-preview {
+  width: 60px;
+  height: 40px;
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.text-line {
+  height: 2px;
+  background: #9ca3af;
+  border-radius: 1px;
+  margin: 2px 0;
+}
+
+.text-line.short {
+  width: 60%;
+}
+
+.image-placeholder {
+  border-radius: 2px;
+}
+
+.image-placeholder.full {
+  width: 100%;
+  height: 12px;
+  background: #3b82f6;
+  margin: 3px 0;
+}
+
+.image-placeholder.left {
+  width: 20px;
+  height: 12px;
+  background: #3b82f6;
+  flex-shrink: 0;
+}
+
+.image-placeholder.right {
+  width: 20px;
+  height: 12px;
+  background: #3b82f6;
+  flex-shrink: 0;
+}
+
+.image-placeholder.center {
+  width: 30px;
+  height: 12px;
+  background: #3b82f6;
+  margin: 3px auto;
+}
+
+.content-row {
+  display: flex;
+  gap: 3px;
+  align-items: flex-start;
+}
+
+.text-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.insert-btn span {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.size-options {
+  margin: 20px 0;
+}
+
+.size-options label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.size-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.size-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn-cancel {
+  padding: 8px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.btn-insert {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-insert:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Адаптивность для модального окна */
+@media (max-width: 640px) {
+  .modal-content {
+    padding: 20px;
+    max-width: 95%;
+  }
+  
+  .insert-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+  }
+  
+  .btn-cancel,
+  .btn-insert {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Очистка флоатов после элементов с обтеканием */
+.se-wrapper::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Стили для preview в редакторе */
+/* Адаптивные стили для предпросмотра новостей */
+.news-preview img[class*="text-wrap-"],
+.news-preview iframe[class*="text-wrap-"],
+.news-preview video[class*="text-wrap-"] {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  height: auto;
+}
+
+/* Обтекание слева в предпросмотре */
+.news-preview img.text-wrap-left,
+.news-preview iframe.text-wrap-left,
+.news-preview video.text-wrap-left {
+  float: left !important;
+  margin: 0 clamp(12px, 2vw, 24px) clamp(12px, 2vw, 24px) 0 !important;
+  clear: left !important;
+  width: clamp(200px, 40vw, 400px) !important;
+  max-width: 45% !important;
+}
+
+/* Обтекание справа в предпросмотре */
+.news-preview img.text-wrap-right,
+.news-preview iframe.text-wrap-right,
+.news-preview video.text-wrap-right {
+  float: right !important;
+  margin: 0 0 clamp(12px, 2vw, 24px) clamp(12px, 2vw, 24px) !important;
+  clear: right !important;
+  width: clamp(200px, 40vw, 400px) !important;
+  max-width: 45% !important;
+}
+
+/* Центрированные медиа в предпросмотре */
+.news-preview img.text-wrap-center,
+.news-preview iframe.text-wrap-center,
+.news-preview video.text-wrap-center {
+  display: block !important;
+  margin: clamp(16px, 3vw, 32px) auto !important;
+  clear: both !important;
+  width: clamp(300px, 60vw, 600px) !important;
+  max-width: 80% !important;
+}
+
+/* Полная ширина в предпросмотре */
+.news-preview img.text-wrap-full,
+.news-preview iframe.text-wrap-full,
+.news-preview video.text-wrap-full {
+  display: block !important;
+  width: 100% !important;
+  margin: clamp(20px, 4vw, 40px) 0 !important;
+  clear: both !important;
+}
+
+/* Адаптивные breakpoints для предпросмотра на мобильных */
+@media screen and (max-width: 768px) {
+  .news-preview img.text-wrap-left,
+  .news-preview img.text-wrap-right,
+  .news-preview iframe.text-wrap-left,
+  .news-preview iframe.text-wrap-right,
+  .news-preview video.text-wrap-left,
+  .news-preview video.text-wrap-right {
+    float: none !important;
+    display: block !important;
+    margin: 16px auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    clear: both !important;
+  }
+  
+  .news-preview img.text-wrap-center,
+  .news-preview iframe.text-wrap-center,
+  .news-preview video.text-wrap-center {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 16px auto !important;
+  }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .news-preview img.text-wrap-left,
+  .news-preview img.text-wrap-right,
+  .news-preview iframe.text-wrap-left,
+  .news-preview iframe.text-wrap-right,
+  .news-preview video.text-wrap-left,
+  .news-preview video.text-wrap-right {
+    width: clamp(180px, 35vw, 320px) !important;
+    max-width: 40% !important;
+  }
+  
+  .news-preview img.text-wrap-center,
+  .news-preview iframe.text-wrap-center,
+  .news-preview video.text-wrap-center {
+    width: clamp(250px, 50vw, 450px) !important;
+    max-width: 70% !important;
+  }
+}
+
+.news-preview::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Стили для тулбара редактора */
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+/* Улучшенные стили для разделов редактора */
+.editor-content {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.editor-sidebar {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 8px;
+  height: fit-content;
+  border: 1px solid #e5e7eb;
+}
+
+.editor-main {
+  min-width: 0; /* Предотвращает переполнение в flex/grid */
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #374151;
+  padding: 8px 0;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Панели */
+.seo-panel,
+.advanced-panel,
+.history-panel {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.seo-panel h3,
+.advanced-panel h3,
+.history-panel h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.seo-content,
+.advanced-content {
+  display: grid;
+  gap: 16px;
+}
+
+.media-input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.media-input-group .form-input {
+  flex: 1;
+}
+
+.media-list {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.media-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+
+.media-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.media-url {
+  flex: 1;
+  font-size: 0.875rem;
+  color: #6b7280;
+  word-break: break-all;
+}
+
+.btn-sm {
+  padding: 4px 8px;
+  font-size: 0.75rem;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+.css-textarea {
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.history-list {
+  display: grid;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+
+.history-info {
+  flex: 1;
+}
+
+.history-time {
+  font-size: 0.75rem;
+  color: #6b7280;
+  display: block;
+}
+
+.history-title {
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.cover-preview {
+  margin-top: 8px;
+  max-width: 200px;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+.title-input {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.btn-large {
+  padding: 16px 32px;
+  font-size: 1.125rem;
+}
+
+.loading-state,
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .editor-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .editor-toolbar {
+    justify-content: center;
   }
 }

@@ -15,6 +15,8 @@ interface NewsData {
   isPinned: boolean;
   isVisible: boolean;
   coverImage?: string;
+  headerStyle: 'default' | 'cover-blur' | 'cover-side';
+  headerColor: string;
 }
 
 export const EditNewsPage: React.FC = () => {
@@ -55,7 +57,9 @@ export const EditNewsPage: React.FC = () => {
         slug: data.slug,
         isPinned: data.isPinned || false,
         isVisible: data.isVisible !== false,
-        coverImage: data.coverImage,
+        coverImage: data.cover || data.coverImage,
+        headerStyle: data.headerStyle || 'default',
+        headerColor: data.headerColor || '#f8f9fa',
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Произошла ошибка');
@@ -75,7 +79,10 @@ export const EditNewsPage: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify(updatedNewsData),
+        body: JSON.stringify({
+          ...updatedNewsData,
+          coverUrl: updatedNewsData.coverImage, // Преобразуем название поля для бэкенда
+        }),
       });
 
       if (!response.ok) {

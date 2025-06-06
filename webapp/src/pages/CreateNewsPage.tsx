@@ -15,6 +15,8 @@ interface NewsData {
   isPinned: boolean;
   isVisible: boolean;
   coverImage?: string;
+  headerStyle: 'default' | 'cover-blur' | 'cover-side';
+  headerColor: string;
 }
 
 const CreateNewsPage: React.FC = () => {
@@ -35,6 +37,7 @@ const CreateNewsPage: React.FC = () => {
         },
         body: JSON.stringify({
           ...newsData,
+          coverUrl: newsData.coverImage, // Преобразуем название поля для бэкенда
           authorId: 1, // TODO: получать из контекста аутентификации
           publishedAt: new Date().toISOString(),
         }),

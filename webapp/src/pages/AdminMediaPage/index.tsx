@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import ImageUploadSettings, { ImageUploadSettings as UploadSettings } from '../../components/ImageUploadSettings';
 import './AdminMedia.css';
 
 interface MediaFile {
@@ -8,6 +9,7 @@ interface MediaFile {
   url: string;
   size: number;
   createdAt: string;
+  source?: 'local' | 'postimages';
 }
 
 const AdminMediaPage: React.FC = () => {
@@ -17,6 +19,11 @@ const AdminMediaPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'images' | 'documents'>('images');
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [uploadSettings, setUploadSettings] = useState<UploadSettings>({
+    usePostImages: true,
+    autoUploadToPostImages: true,
+    fallbackToLocal: true
+  });
 
   useEffect(() => {
     fetchMediaFiles();
@@ -60,6 +67,11 @@ const AdminMediaPage: React.FC = () => {
 
     const formData = new FormData();
     formData.append('file', file);
+    
+    // Добавляем настройки загрузки для изображений
+    if (activeTab === 'images' && uploadSettings.usePostImages) {
+      formData.append('usePostImages', 'true');
+    }
 
     try {
       setUploadProgress(0);
@@ -86,7 +98,12 @@ const AdminMediaPage: React.FC = () => {
       });
 
       if (response.ok) {
-        showMessage('success', 'Файл успешно загружен');
+        const result = await response.json();
+        if (result.file?.source === 'postimages') {
+          showMessage('success', '✅ Файл успешно загружен на PostImages.org');
+        } else {
+          showMessage('success', '📁 Файл успешно загружен локально');
+        }
         fetchMediaFiles();
       } else {
         const errorData = await response.json().catch(() => ({}));
@@ -195,6 +212,11 @@ const AdminMediaPage: React.FC = () => {
         </div>
 
         <div className="upload-section">
+          <ImageUploadSettings
+            settings={uploadSettings}
+            onSettingsChange={setUploadSettings}
+          />
+          
           <label className="upload-btn">
             ⬆️ Загрузить {activeTab === 'images' ? 'изображение' : 'документ'}
             <input
@@ -247,6 +269,11 @@ const AdminMediaPage: React.FC = () => {
               <div className="media-info">
                 <h4 className="media-name" title={file.fileName}>
                   {file.fileName}
+                  {file.source && (
+                    <span className={`source-badge ${file.source}`}>
+                      {file.source === 'postimages' ? '🌐 PostImages' : '📁 Локально'}
+                    </span>
+                  )}
                 </h4>
                 <div className="media-meta">
                   <span className="media-size">{formatFileSize(file.size)}</span>

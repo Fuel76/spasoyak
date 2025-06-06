@@ -3,6 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { promisify } from 'util';
+import { PostImagesService } from '../services/postimages';
 
 const router = Router();
 const readdir = promisify(fs.readdir);
@@ -194,6 +195,128 @@ router.post('/document', upload.single('document'), (req: Request, res: Response
   }
 });
 
+// Загрузить изображение через PostImages
+router.post('/upload-postimages', upload.single('file'), async (req: Request, res: Response) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не предоставлен' });
+    }
+    
+    // Проверяем, что это изображение
+    if (!req.file.mimetype.startsWith('image/')) {
+      return res.status(400).json({ error: 'Поддерживаются только изображения' });
+    }
+    
+    // Загружаем изображение на PostImages
+    const postImagesUrl = await PostImagesService.uploadImage(req.file.path, req.file.originalname);
+    
+    // Удаляем временный файл после загрузки
+    try {
+      await unlink(req.file.path);
+    } catch (unlinkError) {
+      console.warn('Не удалось удалить временный файл:', unlinkError);
+    }
+    
+    const fileInfo = {
+      fileName: req.file.originalname,
+      originalName: req.file.originalname,
+      url: postImagesUrl,
+      size: req.file.size,
+      mimetype: req.file.mimetype,
+      source: 'postimages'
+    };
+    
+    res.json({
+      success: true,
+      message: 'Изображение успешно загружено на PostImages',
+      file: fileInfo
+    });
+  } catch (error) {
+    console.error('Ошибка загрузки на PostImages:', error);
+    
+    // Если загрузка на PostImages не удалась, сохраняем локально как fallback
+    if (req.file) {
+      const fileInfo = {
+        fileName: req.file.filename,
+        originalName: req.file.originalname,
+        filePath: req.file.path,
+        url: `/uploads/images/${req.file.filename}`,
+        size: req.file.size,
+        mimetype: req.file.mimetype,
+        source: 'local'
+      };
+      
+      res.json({
+        success: true,
+        message: 'Изображение сохранено локально (PostImages недоступен)',
+        file: fileInfo
+      });
+    } else {
+      res.status(500).json({ error: 'Ошибка загрузки изображения' });
+    }
+  }
+});
+
+// Универсальный маршрут загрузки (можно выбрать между локальным хранилищем и PostImages)
+router.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'Файл не предоставлен' });
+    }
+    
+    const usePostImages = req.body.usePostImages === 'true' && req.file.mimetype.startsWith('image/');
+    
+    if (usePostImages) {
+      try {
+        // Загружаем на PostImages
+        const postImagesUrl = await PostImagesService.uploadImage(req.file.path, req.file.originalname);
+        
+        // Удаляем временный файл
+        await unlink(req.file.path);
+        
+        const fileInfo = {
+          fileName: req.file.originalname,
+          originalName: req.file.originalname,
+          url: postImagesUrl,
+          size: req.file.size,
+          mimetype: req.file.mimetype,
+          source: 'postimages'
+        };
+        
+        return res.json({
+          success: true,
+          message: 'Изображение успешно загружено на PostImages',
+          file: fileInfo
+        });
+      } catch (postImagesError) {
+        console.warn('PostImages недоступен, используем локальное хранилище:', postImagesError);
+        // Продолжаем с локальным хранилищем
+      }
+    }
+    
+    // Локальное хранилище
+    const uploadPath = req.file.mimetype.startsWith('image/') ? 'images' : 'documents';
+    const fileInfo = {
+      fileName: req.file.filename,
+      originalName: req.file.originalname,
+      filePath: req.file.path,
+      url: `/uploads/${uploadPath}/${req.file.filename}`,
+      size: req.file.size,
+      mimetype: req.file.mimetype,
+      source: 'local'
+    };
+    
+    res.json({
+      success: true,
+      message: `Файл успешно загружен локально`,
+      file: fileInfo
+    });
+  } catch (error) {
+    console.error('Ошибка загрузки файла:', error);
+    res.status(500).json({ error: 'Ошибка загрузки файла' });
+  }
+});
+
 // Удалить файл
 router.delete('/file', authenticate, async (req: Request, res: Response) => {
   try {
@@ -302,6 +425,111 @@ router.get('/stats', async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Ошибка получения статистики:', error);
     res.status(500).json({ error: 'Ошибка получения статистики' });
+  }
+});
+
+// Упрощенные эндпоинты для совместимости с фронтендом
+router.get('/images', async (req: Request, res: Response) => {
+  try {
+    const imagesPath = 'uploads/images';
+    
+    if (!fs.existsSync(imagesPath)) {
+      return res.json([]);
+    }
+    
+    const files = await readdir(imagesPath);
+    const fileStats = await Promise.all(
+      files.map(async (fileName) => {
+        const filePath = path.join(imagesPath, fileName);
+        const stats = await stat(filePath);
+        
+        return {
+          fileName,
+          filePath: path.join('uploads/images', fileName),
+          url: `/uploads/images/${fileName}`,
+          size: stats.size,
+          createdAt: stats.birthtime.toISOString(),
+          source: 'local'
+        };
+      })
+    );
+    
+    // Сортируем по дате создания (новые первыми)
+    fileStats.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    
+    res.json(fileStats);
+  } catch (error) {
+    console.error('Ошибка получения списка изображений:', error);
+    res.status(500).json({ error: 'Ошибка получения списка изображений' });
+  }
+});
+
+router.get('/documents', async (req: Request, res: Response) => {
+  try {
+    const documentsPath = 'uploads/documents';
+    
+    if (!fs.existsSync(documentsPath)) {
+      return res.json([]);
+    }
+    
+    const files = await readdir(documentsPath);
+    const fileStats = await Promise.all(
+      files.map(async (fileName) => {
+        const filePath = path.join(documentsPath, fileName);
+        const stats = await stat(filePath);
+        
+        return {
+          fileName,
+          filePath: path.join('uploads/documents', fileName),
+          url: `/uploads/documents/${fileName}`,
+          size: stats.size,
+          createdAt: stats.birthtime.toISOString(),
+          source: 'local'
+        };
+      })
+    );
+    
+    // Сортируем по дате создания (новые первыми)
+    fileStats.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    
+    res.json(fileStats);
+  } catch (error) {
+    console.error('Ошибка получения списка документов:', error);
+    res.status(500).json({ error: 'Ошибка получения списка документов' });
+  }
+});
+
+// Эндпоинт для SunEditor галереи изображений
+router.get('/images/gallery', async (req: Request, res: Response) => {
+  try {
+    const imagesPath = 'uploads/images';
+    
+    if (!fs.existsSync(imagesPath)) {
+      return res.json([]);
+    }
+    
+    const files = await readdir(imagesPath);
+    const imageList = await Promise.all(
+      files.map(async (fileName) => {
+        const filePath = path.join(imagesPath, fileName);
+        const stats = await stat(filePath);
+        
+        return {
+          name: fileName,
+          src: `/uploads/images/${fileName}`,
+          size: stats.size,
+          lastModified: stats.mtime.getTime()
+        };
+      })
+    );
+    
+    // Сортируем по дате изменения (новые первыми)
+    imageList.sort((a, b) => b.lastModified - a.lastModified);
+    
+    res.json(imageList);
+  } catch (error) {
+    console.error('Ошибка получения галереи изображений:', error);
+    res.status(500).json({ error: 'Ошибка получения галереи изображений' });
   }
 });
 

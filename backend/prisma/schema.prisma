@@ -16,6 +16,8 @@ model News {
   cover           String?   @db.Text
   isVisible       Boolean   @default(true)
   customCss       String?   @db.LongText
+  headerStyle     String    @default("default") @db.VarChar(20)
+  headerColor     String    @default("#f8f9fa") @db.VarChar(7)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   authorId        Int?

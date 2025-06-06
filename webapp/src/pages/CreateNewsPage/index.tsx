@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NewsEditor } from '../../components/NewsEditor';
+import { EnhancedNewsEditor } from '../../components/EnhancedNewsEditor';
 import '../EditNewsPage/EditNewsPage.css'; // Используем те же стили
 
 export const CreateNewsPage: React.FC = () => {
@@ -17,7 +17,7 @@ export const CreateNewsPage: React.FC = () => {
           ← Вернуться к списку
         </button>
       </div>
-      <NewsEditor /> {/* Без newsId - для создания новой новости */}
+      <EnhancedNewsEditor mode="create" />
     </div>
   );
 };

@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
-  Calendar, 
-  User, 
-  Eye, 
   ArrowLeft, 
-  Share2, 
-  Bookmark,
   ChevronRight,
-  Clock,
-  ExternalLink,
-  Star
+  ExternalLink
 } from 'lucide-react';
+import NewsHeader from '../components/NewsHeader';
 import './NewsDetailPage.css';
 
 interface Category {
@@ -43,6 +37,9 @@ interface NewsItem {
   isPinned: boolean;
   metaTitle?: string;
   metaDescription?: string;
+  coverImage?: string;
+  headerStyle: 'default' | 'cover-blur' | 'cover-side';
+  headerColor: string;
   category?: Category;
   tags?: Tag[];
   author?: {
@@ -99,7 +96,13 @@ const NewsDetailPage: React.FC = () => {
       }
       
       const data = await response.json();
-      setNews(data);
+      // Маппинг для корректной работы NewsHeader
+      setNews({
+        ...data,
+        coverImage: data.cover || data.coverImage,
+        headerStyle: data.headerStyle || 'default',
+        headerColor: data.headerColor || '#f8f9fa',
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Произошла ошибка');
     } finally {
@@ -204,16 +207,6 @@ const NewsDetailPage: React.FC = () => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ru-RU', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
   const formatShortDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('ru-RU', {
       month: 'short',
@@ -301,75 +294,23 @@ const NewsDetailPage: React.FC = () => {
       </button>
 
       <article className="news-article">
-        {/* Article Header */}
-        <header className="article-header">
-          {news.isPinned && (
-            <div className="pinned-badge">
-              <Star size={16} />
-              Закреплено
-            </div>
-          )}
-
-          {news.category && (
-            <div 
-              className="category-badge"
-              style={{ backgroundColor: news.category.color || '#3b82f6' }}
-            >
-              {news.category.name}
-            </div>
-          )}
-
-          <h1 className="article-title">{news.title}</h1>
-
-          {news.excerpt && (
-            <div className="article-excerpt">
-              {news.excerpt}
-            </div>
-          )}
-
-          <div className="article-meta">
-            <div className="meta-primary">
-              <span className="meta-item">
-                <Calendar size={16} />
-                {formatDate(news.publishedAt || news.createdAt)}
-              </span>
-              {news.author && (
-                <span className="meta-item">
-                  <User size={16} />
-                  {news.author.name}
-                </span>
-              )}
-              <span className="meta-item">
-                <Eye size={16} />
-                {news.viewCount} просмотров
-              </span>
-            </div>
-
-            <div className="article-actions">
-              <button 
-                className="action-btn"
-                onClick={handleShare}
-                title="Поделиться"
-              >
-                <Share2 size={18} />
-              </button>
-              <button 
-                className={`action-btn ${bookmarked ? 'active' : ''}`}
-                onClick={toggleBookmark}
-                title={bookmarked ? 'Удалить из закладок' : 'Добавить в закладки'}
-              >
-                <Bookmark size={18} />
-              </button>
-            </div>
-          </div>
-
-          {news.updatedAt !== news.createdAt && (
-            <div className="update-notice">
-              <Clock size={14} />
-              Обновлено: {formatDate(news.updatedAt)}
-            </div>
-          )}
-        </header>
+        {/* News Header */}
+        <NewsHeader 
+          title={news.title}
+          excerpt={news.excerpt}
+          category={news.category}
+          author={news.author}
+          publishedAt={news.publishedAt || news.createdAt}
+          updatedAt={news.updatedAt}
+          viewCount={news.viewCount}
+          isPinned={news.isPinned}
+          coverImage={news.coverImage}
+          headerStyle={news.headerStyle}
+          headerColor={news.headerColor}
+          onShare={handleShare}
+          onBookmark={toggleBookmark}
+          isBookmarked={bookmarked}
+        />
 
         {/* Article Content */}
         <div className="article-content">
