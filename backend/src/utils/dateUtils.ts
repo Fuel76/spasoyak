@@ -5,13 +5,12 @@
 
 /**
  * Безопасно парсит строку даты в формате YYYY-MM-DD в объект Date
- * без учета часового пояса
+ * в UTC полночь для стабильного сравнения в базе данных
  * @param dateString - строка даты в формате YYYY-MM-DD
- * @returns объект Date с локальным временем
+ * @returns объект Date в UTC
  */
 export function parseDateSafe(dateString: string): Date {
-  const [year, month, day] = dateString.split('-').map(Number);
-  return new Date(year, month - 1, day);
+  return new Date(dateString + 'T00:00:00.000Z');
 }
 
 /**

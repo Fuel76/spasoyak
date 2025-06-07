@@ -121,6 +121,40 @@ router.get('/:date', async (req: Request, res: Response) => {
   }
 });
 
+// Получить святых для конкретного дня
+router.get('/:date/saints', async (req: Request, res: Response) => {
+  try {
+    const { date } = req.params;
+    
+    // Найти календарный день
+    let calendarDay = await prisma.calendarDay.findUnique({
+      where: { date: parseDateSafe(date) },
+      include: {
+        saints: true
+      }
+    });
+
+    // Если не нашли новым способом, пробуем старым (для совместимости)
+    if (!calendarDay) {
+      calendarDay = await prisma.calendarDay.findUnique({
+        where: { date: parseDateUTC(date) },
+        include: {
+          saints: true
+        }
+      });
+    }
+
+    if (!calendarDay) {
+      return res.json({ saints: [] });
+    }
+
+    res.json({ saints: calendarDay.saints });
+  } catch (error) {
+    console.error('Error fetching saints for day:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Получить календарь за месяц
 router.get('/month/:year/:month', async (req: Request, res: Response) => {
   try {
@@ -200,32 +234,43 @@ router.post('/:date/saints', async (req: Request, res: Response) => {
   try {
     const { date } = req.params;
     const { name, description, icon, priority } = req.body;
+    
+    console.log('Adding saint for date:', date);
+    const parsedDate = parseDateSafe(date);
+    console.log('Parsed date:', parsedDate);
+    console.log('Parsed date ISO:', parsedDate.toISOString());
 
-    // Найти или создать календарный день
-    let calendarDay = await prisma.calendarDay.findUnique({
-      where: { date: parseDateSafe(date) }
-    });
-
-    if (!calendarDay) {
-      calendarDay = await prisma.calendarDay.create({
-        data: { date: parseDateSafe(date) }
+    // Используем транзакцию для избежания race condition
+    const result = await prisma.$transaction(async (tx) => {
+      // Найти календарный день
+      let calendarDay = await tx.calendarDay.findUnique({
+        where: { date: parsedDate }
       });
-    }
 
-    // Создать святого
-    const saint = await prisma.saint.create({
-      data: {
-        name,
-        description,
-        icon,
-        priority: priority || SaintPriority.COMMEMORATED,
-        calendarDays: {
-          connect: { id: calendarDay.id }
-        }
+      // Если не найден, создать новый
+      if (!calendarDay) {
+        calendarDay = await tx.calendarDay.create({
+          data: { date: parsedDate }
+        });
       }
+
+      // Создать святого
+      const saint = await tx.saint.create({
+        data: {
+          name,
+          description,
+          icon,
+          priority: priority || SaintPriority.COMMEMORATED,
+          calendarDays: {
+            connect: { id: calendarDay.id }
+          }
+        }
+      });
+
+      return saint;
     });
 
-    res.json(saint);
+    res.json(result);
   } catch (error) {
     console.error('Error adding saint:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -239,15 +284,11 @@ router.post('/:date/readings', async (req: Request, res: Response) => {
     const { type, reference, title, text, order } = req.body;
 
     // Найти или создать календарный день
-    let calendarDay = await prisma.calendarDay.findUnique({
-      where: { date: parseDateSafe(date) }
+    let calendarDay = await prisma.calendarDay.upsert({
+      where: { date: parseDateSafe(date) },
+      update: {},
+      create: { date: parseDateSafe(date) }
     });
-
-    if (!calendarDay) {
-      calendarDay = await prisma.calendarDay.create({
-        data: { date: parseDateSafe(date) }
-      });
-    }
 
     // Создать чтение
     const reading = await prisma.reading.create({

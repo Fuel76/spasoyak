@@ -18,8 +18,13 @@ import menuRouter from './routes/menu';
 import { carouselRouter } from './routes/carousel';
 import uploadRoutes from './routes/upload';
 import trebyRouter from './routes/treby';
-import trebaFormFieldsRouter from './routes/trebaFormFields';
-import trebaPricingRulesRouter from './routes/trebaPricingRules';
+import trebyNewRouter from './routes/trebyNew';
+import paymentsRouter from './routes/payments';
+import notificationsRouter from './routes/notifications';
+import calendarEventsRouter from './routes/calendarEvents';
+import trebaTypesRouter from './routes/trebaTypes';
+import требаFormFieldsRouter from './routes/trebaFormFields';
+import требаPricingRulesRouter from './routes/trebaPricingRulesNew';
 import scheduleRouter from './routes/schedule';
 import calendarRouter from './routes/calendar';
 import categoriesRouter from './routes/categories';
@@ -29,6 +34,7 @@ import usersRouter from './routes/users';
 import mediaRouter from './routes/media';
 import backupRouter from './routes/backup';
 import settingsRouter from './routes/settings';
+import требаNamesAndStatusRouter from './routes/trebaNamesAndStatus';
 import { requestLogger, corsMiddleware } from './middleware/globalMiddleware';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -85,9 +91,14 @@ app.use('/api/auth', authRouter);
 app.use('/api/menu', menuRouter);
 app.use('/api/carousel', carouselRouter);
 app.use('/api/upload', uploadRoutes);
-app.use('/api/treby', trebyRouter);
-app.use('/api/treba-form-fields', trebaFormFieldsRouter);
-app.use('/api/treba-pricing-rules', trebaPricingRulesRouter);
+app.use('/api/treby', trebyRouter); // Старый роутер треб
+app.use('/api/v2/treby', trebyNewRouter); // Новый роутер треб с улучшенной структурой
+app.use('/api/payments', paymentsRouter); // Роутер платежей
+app.use('/api/notifications', notificationsRouter); // Роутер уведомлений
+app.use('/api/calendar-events', calendarEventsRouter); // Роутер календарных событий
+app.use('/api/treba-types', trebaTypesRouter); // Роутер типов треб
+app.use('/api/treba-form-fields', требаFormFieldsRouter);
+app.use('/api/treba-pricing-rules', требаPricingRulesRouter);
 app.use('/api/schedule', scheduleRouter);
 app.use('/api/calendar', calendarRouter);
 app.use('/api/categories', categoriesRouter);
@@ -97,6 +108,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/media', mediaRouter);
 app.use('/api/backup', backupRouter);
 app.use('/api/settings', settingsRouter);
+app.use('/api/treba-names', требаNamesAndStatusRouter);
 app.use('/carousel', carouselRouter); // Совместимость со старым API
 
 // ---------- ОБРАБОТКА ОШИБОК ----------

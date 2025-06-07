@@ -175,21 +175,29 @@ const AdminPage = () => {
         <div className="admin-section treby-section">
           <div className="section-header">
             <h2>📋 Заявки на требы</h2>
-            <p>Обработка церковных треб</p>
+            <p>Управление церковными требами (API v2)</p>
           </div>
           <div className="section-links">
             <Link to="/admin/treby" className="admin-link">
               <span className="link-icon">📋</span>
-              <span className="link-text">Все заявки</span>
+              <span className="link-text">Управление требами</span>
               <span className="link-badge warning">{stats?.pendingTreby || 0}</span>
             </Link>
-            <Link to="/admin/treby/form-fields" className="admin-link">
-              <span className="link-icon">🔧</span>
-              <span className="link-text">Настройка полей</span>
+            <Link to="/admin/treby/types" className="admin-link">
+              <span className="link-icon">⚙️</span>
+              <span className="link-text">Типы треб</span>
             </Link>
-            <Link to="/admin/treby/pricing-rules" className="admin-link">
-              <span className="link-icon">💰</span>
-              <span className="link-text">Правила ценообразования</span>
+            <Link to="/admin/treby/payments" className="admin-link">
+              <span className="link-icon">💳</span>
+              <span className="link-text">Платежи</span>
+            </Link>
+            <Link to="/admin/treby/notifications" className="admin-link">
+              <span className="link-icon">📧</span>
+              <span className="link-text">Уведомления</span>
+            </Link>
+            <Link to="/admin/treby/calendar" className="admin-link">
+              <span className="link-icon">📅</span>
+              <span className="link-text">Календарь служб</span>
             </Link>
           </div>
         </div>

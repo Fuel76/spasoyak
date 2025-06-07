@@ -19,12 +19,12 @@ import { CreatePagePage } from './pages/CreatePagePage';
 import { EditPagePage } from './pages/EditPagePage';
 import { RegisterPage } from './pages/RegisterPage';
 import { RegisterAdminPage } from './pages/RegisterAdminPage';
-import TrebyPage from './pages/TrebyPage';
-import AdminTrebyPage from './pages/AdminTrebyPage';
-import AdminTrebaFormFieldsPage from './pages/AdminTrebaFormFieldsPage';
-import AdminTrebaPricingRulesPage from './pages/AdminTrebaPricingRulesPage';
-import AddTrebaFormFieldPage from './pages/AdminTrebaFormFieldsPage/AddTrebaFormFieldPage';
-import AddTrebaPricingRulePage from './pages/AdminTrebaPricingRulesPage/AddTrebaPricingRulePage';
+import TrebyPageV2 from './pages/TrebyPageV2';
+import AdminTrebyPageV2 from './pages/AdminTrebyPageV2';
+import AdminTrebyPaymentsPage from './pages/AdminTrebyPaymentsPage';
+import AdminTrebyNotificationsPage from './pages/AdminTrebyNotificationsPage';
+import AdminTrebyCalendarPage from './pages/AdminTrebyCalendarPage';
+import AdminTrebyTypesPage from './pages/AdminTrebyTypesPage';
 import SchedulePage from './pages/SchedulePage';
 import AdminSchedulePage from './pages/AdminSchedulePage';
 import AboutPage from './pages/AboutPage';
@@ -75,7 +75,7 @@ export const App = () => {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/register-admin" element={<RegisterAdminPage />} />
-              <Route path="/treby" element={<TrebyPage />} />
+              <Route path="/treby" element={<TrebyPageV2 />} />
               <Route path="/schedule" element={<SchedulePage />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/monastery-history" element={<MonasteryHistoryPage />} />
@@ -89,11 +89,11 @@ export const App = () => {
               <Route path="/admin/pages/create" element={<PrivateRoute><CreatePagePage /></PrivateRoute>} />
               <Route path="/admin/pages/edit/:id" element={<PrivateRoute><EditPagePage /></PrivateRoute>} />
               <Route path="/admin/sitemap" element={<PrivateRoute><SiteMapEditor /></PrivateRoute>} />
-              <Route path="/admin/treby" element={<PrivateRoute><AdminTrebyPage /></PrivateRoute>} />
-              <Route path="/admin/treby/form-fields" element={<PrivateRoute><AdminTrebaFormFieldsPage /></PrivateRoute>} />
-              <Route path="/admin/treby/form-fields/add" element={<PrivateRoute><AddTrebaFormFieldPage /></PrivateRoute>} />
-              <Route path="/admin/treby/pricing-rules" element={<PrivateRoute><AdminTrebaPricingRulesPage /></PrivateRoute>} />
-              <Route path="/admin/treby/pricing-rules/add" element={<PrivateRoute><AddTrebaPricingRulePage /></PrivateRoute>} />
+              <Route path="/admin/treby" element={<PrivateRoute><AdminTrebyPageV2 /></PrivateRoute>} />
+              <Route path="/admin/treby/types" element={<PrivateRoute><AdminTrebyTypesPage /></PrivateRoute>} />
+              <Route path="/admin/treby/payments" element={<PrivateRoute><AdminTrebyPaymentsPage /></PrivateRoute>} />
+              <Route path="/admin/treby/notifications" element={<PrivateRoute><AdminTrebyNotificationsPage /></PrivateRoute>} />
+              <Route path="/admin/treby/calendar" element={<PrivateRoute><AdminTrebyCalendarPage /></PrivateRoute>} />
               <Route path="/admin/schedule" element={<PrivateRoute><AdminSchedulePage /></PrivateRoute>} />
               <Route path="/admin/calendar" element={<PrivateRoute><AdminCalendarPage /></PrivateRoute>} />
               <Route path="/admin/calendar/saints" element={<PrivateRoute><AdminSaintsPage /></PrivateRoute>} />

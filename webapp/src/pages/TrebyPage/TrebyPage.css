@@ -2,292 +2,226 @@
 .treby-page-container {
   display: flex;
   justify-content: center;
-  padding: 20px;
-  background-color: #f4f2e8; /* Светло-бежевый фон, как на сайте Валаама */
+  padding: 2rem; /* Увеличен padding */
+  background-color: var(--bg-body, #f4f2e8); /* Используем переменную из system-pages.css */
+  min-height: 100vh; /* Занимает всю высоту экрана */
 }
 
 .treby-page {
   width: 100%;
-  max-width: 1200px; /* Ограничиваем максимальную ширину */
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  font-family: 'Noto Sans', sans-serif; /* Шрифт с засечками заменён на Noto Sans */
+  max-width: 1200px;
+  background-color: var(--bg-paper, #fff); /* Используем переменную */
+  padding: 2.5rem; /* Увеличен padding */
+  border-radius: var(--radius-card, 18px 32px 18px 32px / 24px 36px 24px 36px); /* Используем переменную */
+  box-shadow: var(--shadow-paper, 0 4px 12px rgba(0, 0, 0, 0.05)); /* Используем переменную */
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .treby-title {
   text-align: center;
-  font-size: 2.5em;
-  color: #5a4a42; /* Темно-коричневый цвет заголовка */
-  margin-bottom: 30px;
-  font-weight: normal;
-  position: relative;
-  padding-bottom: 15px;
+  font-size: 2.8em; /* Немного увеличен */
+  color: var(--primary-dark, #6b5139); /* Используем переменную */
+  margin-bottom: 2.5rem; /* Увеличен отступ */
+  font-weight: 600;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive; /* Оставляем рукописный для заголовка */
 }
-
-/* Декоративный элемент под заголовком (можно использовать SVG или псевдоэлемент) */
-.treby-title::after {
-  content: '';
-  display: block;
-  width: 100px;
-  height: 2px;
-  background-color: #b0a092; /* Светло-коричневый */
-  margin: 15px auto 0;
-}
-
 
 .treby-form-section {
   display: flex;
-  gap: 40px; /* Пространство между формой и инструкциями */
+  gap: 2.5rem; /* Увеличен gap */
+  margin-top: 1.5rem;
 }
 
 .treby-form-left {
-  flex: 2; /* Форма занимает больше места */
+  flex: 3; /* Даем форме немного больше места */
 }
 
 .treby-instructions-right {
-  flex: 1; /* Инструкции занимают меньше места */
-  background-color: #f9f7f0; /* Слегка отличающийся фон для инструкций */
-  padding: 25px;
-  border-radius: 6px;
-  border: 1px solid #e0d8cc;
+  flex: 2; /* Инструкциям чуть меньше */
+  padding: 2rem;
+  background: var(--bg-paper-warm, rgba(255, 255, 255, 0.1)); /* Используем переменную */
+  border-radius: var(--radius-paper, 16px); /* Используем переменную */
+  border: 1px solid var(--border-light, rgba(255, 255, 255, 0.2)); /* Используем переменную */
+  box-shadow: var(--shadow-soft);
 }
 
-.treby-form .form-group {
-  margin-bottom: 25px;
+.treby-form .form-step {
+  margin-bottom: 2.5rem; /* Увеличен отступ */
+  padding-bottom: 2rem; /* Добавлен отступ снизу */
+  border-bottom: 1px dashed var(--border-light, rgba(255, 255, 255, 0.3));
+}
+
+.treby-form .form-step:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.form-step-title {
+  font-size: 1.5rem; /* Увеличен */
+  color: var(--accent-color, #a0825e); /* Используем переменную */
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
 }
 
 .treby-label {
   display: block;
-  font-size: 1.1em;
-  color: #6c5f57; /* Коричневый цвет для меток */
-  margin-bottom: 8px;
+  font-size: 1.1rem; /* Немного увеличен */
+  color: var(--text-primary, #5a4a42); /* Используем переменную */
+  margin-bottom: 0.75rem; /* Увеличен отступ */
+  font-weight: 500;
 }
 
-.form-control.treby-textarea,
+/* Стили для полей ввода, селектов и текстовых областей наследуются из system-pages.css 
+   через классы .system-form-input, .system-form-select, .system-form-textarea 
+   но мы можем добавить специфичные для треб стили, если нужно */
+
+.form-control.treby-input,
 .form-control.treby-select,
-.form-control.treby-input {
-  border: 1px solid #d3c9bc; /* Граница в тон */
-  border-radius: 4px;
-  padding: 12px;
-  font-size: 1em;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: #fff;
-  font-family: 'Noto Sans', sans-serif; /* Для поля ввода также Noto Sans */
+.form-control.treby-textarea {
+  /* Наследуем стили из system-pages.css, но можем переопределить при необходимости */
+  /* Например, если нужен другой фон или тени для страницы треб */
+  background-color: var(--bg-paper-warm, #fbf5ea); 
 }
 
 .form-control.treby-textarea {
-  min-height: 220px; /* Увеличим немного высоту для лучшего вида */
+  min-height: 180px; /* Немного уменьшена высота, если нужно */
   resize: vertical;
-  border: none; /* Убираем стандартную рамку, так как будет своя */
-  padding-left: 10px; /* Отступ текста слева от края "бумаги" */
-  padding-right: 5px; /* Небольшой отступ справа */
-  padding-top: 2px;   /* Небольшой отступ сверху перед первой строкой текста */
-  padding-bottom: 2px;/* Небольшой отступ снизу */
-  background-color: transparent; /* Прозрачный фон, чтобы был виден фон обертки */
-  box-shadow: none; /* Убираем возможные тени */
-  outline: none; /* Убираем обводку при фокусе */
-  font-family: 'Times New Roman', Times, serif; /* Явно задаем шрифт для поля ввода */
-  font-size: 1.1em; /* Немного увеличим шрифт для имен */
-  line-height: 30px; /* КРИТИЧЕСКИ ВАЖНО: должно совпадать с циклом градиента */
-  color: #333; /* Цвет текста имен */
-  background-image: repeating-linear-gradient(
-    transparent, /* Начало цикла */
-    transparent 29px, /* Пространство перед линией */
-    #e0d8cc 29px,    /* Начало линии */
-    #e0d8cc 30px     /* Конец линии (толщина 1px), конец 30px цикла */
-  );
-  background-attachment: local; /* Градиент прокручивается вместе с текстом */
-  background-origin: content-box; /* Позиционирование фона относительно контентной области (после padding) */
-  background-position-y: -8px;  /* Сдвигаем фон вверх для совмещения базовой линии текста с линиями.
-                                     При font-size: 1.1em и line-height: 30px, базовая линия текста находится
-                                     примерно на 20-21px от верха строки. Линия градиента (29px в цикле)
-                                     сдвигается на -8px, т.е. становится на 21px. */
+  line-height: 1.7; /* Улучшаем читаемость */
+  padding: 1rem; /* Синхронизируем с другими полями */
 }
 
-.form-control.treby-textarea::placeholder {
-  color: #a09387;
-  font-style: italic;
-  /* line-height для placeholder обычно наследуется, но можно указать явно при необходимости */
-  /* line-height: 30px; */
+.names-input-wrapper {
+  position: relative;
+  background: var(--bg-paper-warm, #fbf5ea);
+  border-radius: var(--radius-card, 18px 32px 18px 32px / 24px 36px 24px 36px);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-soft), inset 0 0 0 1px var(--border-light);
+  margin-bottom: 1.5rem;
 }
 
-.form-control.treby-input {
-  border: 1px solid #d3c9bc; /* Граница в тон */
-  border-radius: 4px;
-  padding: 12px;
-  font-size: 1em;
-  width: 100%;
-  box-sizing: border-box;
-  background-color: #fff;
+.names-input-wrapper .form-control.treby-textarea {
+  background: transparent; /* Убираем фон, так как он есть у родителя */
+  border: none; /* Убираем границу, так как она есть у родителя */
+  box-shadow: none; /* Убираем тень, так как она есть у родителя */
+  padding: 0; /* Сбрасываем внутренние отступы, если они не нужны */
+}
+
+.field-hint {
+  font-size: 0.95rem; /* Немного увеличен */
+  color: var(--text-muted, rgba(var(--text-rgb), 0.7));
+  margin-top: 0.5rem;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
 }
 
 .radio-group {
   display: flex;
-  gap: 20px;
-  margin-bottom: 15px;
+  flex-wrap: wrap; /* Для лучшей адаптивности */
+  gap: 1rem; /* Увеличен gap */
+  margin-bottom: 1.5rem;
 }
 
 .radio-group label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 1em;
-  color: #5a4a42;
+  gap: 0.75rem; /* Увеличен gap */
+  cursor: pointer;
+  padding: 0.75rem 1rem; /* Добавлены отступы для лучшего вида */
+  border-radius: var(--radius-paper);
+  background-color: var(--bg-paper);
+  border: 1px solid var(--border-light);
+  transition: var(--transition);
 }
 
 .radio-group input[type="radio"] {
-  accent-color: #8c7b70; /* Цвет для выбранного радио-баттона */
+  accent-color: var(--primary-color);
+  width: 18px; /* Увеличен размер */
+  height: 18px;
 }
 
+.radio-group label:hover {
+  background-color: var(--bg-soft);
+  border-color: var(--primary-light);
+}
 
+.radio-group input[type="radio"]:checked + span {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.calculated-price-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: var(--bg-soft);
+  border-radius: var(--radius-paper);
+  text-align: center;
+  border: 1px solid var(--border-light);
+}
+
+.calculated-price {
+  font-size: 2em; /* Увеличен */
+  font-weight: bold;
+  color: var(--primary-dark, #6b5139);
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+}
+
+/* Кнопка отправки наследует стили .system-btn .system-btn-primary */
 .treby-submit-btn {
-  background-color: #8c7b70; /* Приглушенный коричнево-серый */
-  border-color: #8c7b70;
-  color: #fff;
-  padding: 12px 25px;
-  font-size: 1.1em;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.treby-submit-btn:hover {
-  background-color: #7a6a5f;
-  border-color: #7a6a5f;
-}
-
-.treby-submit-btn:disabled {
-  background-color: #b0a092;
-  cursor: not-allowed;
+  /* Можно добавить специфичные стили, если нужно */
+  width: 100%;
+  padding: 1rem 2rem; /* Увеличены отступы */
+  font-size: 1.2rem; /* Увеличен шрифт */
 }
 
 .treby-alert {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 4px;
-  font-size: 1em;
+  padding: 1.25rem; /* Увеличены отступы */
+  border-radius: var(--radius-paper);
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow-soft);
+  font-size: 1.05rem; /* Немного увеличен шрифт */
 }
 
 .alert-success.treby-alert {
-  background-color: #e6f4e6;
-  border-color: #c3e6cb;
+  background-color: #e6f4e6; /* Оставляем для контраста */
+  border: 1px solid #c3e6cb;
   color: #155724;
 }
 
 .alert-danger.treby-alert {
   background-color: #f8d7da;
-  border-color: #f5c6cb;
+  border: 1px solid #f5c6cb;
   color: #721c24;
 }
 
-/* Стили для блока инструкций */
 .instruction-block {
-  margin-bottom: 25px;
+  margin-bottom: 2rem;
 }
 
 .instruction-title {
-  font-size: 1.3em;
-  color: #5a4a42;
-  margin-bottom: 10px;
-  font-weight: bold; /* Используем bold для заголовков инструкций */
-  border-bottom: 1px solid #e0d8cc;
-  padding-bottom: 8px;
+  font-size: 1.4em; /* Увеличен */
+  color: var(--accent-color, #5a4a42);
+  margin-bottom: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-light, #e0d8cc);
+  padding-bottom: 0.75rem;
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
 }
 
 .instruction-block p,
 .instruction-block ul {
-  font-size: 0.95em;
-  line-height: 1.6;
-  color: #6c5f57;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
 }
 
 .instruction-block ul {
-  list-style-type: disc;
-  padding-left: 20px;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .instruction-block li {
-  margin-bottom: 5px;
+  margin-bottom: 0.5rem;
 }
-
-.instruction-block a {
-  color: #8c7b70;
-  text-decoration: underline;
-}
-
-.instruction-block a:hover {
-  color: #5a4a42;
-}
-
-/* Стили для обертки поля имен и креста */
-.names-input-wrapper {
-  position: relative;
-  border: 1px solid #d3c9bc;
-  border-radius: 4px;
-  padding-top: 45px; /* Увеличим отступ для креста и заголовка записки */
-  padding-bottom: 15px;
-  padding-right: 15px;
-  padding-left: 15px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  margin-bottom: 20px; /* Добавим отступ снизу */
-}
-
-.names-input-wrapper::before { /* Псевдоэлемент для заголовка "О ЗДРАВИИ" / "ОБ УПОКОЕНИИ" */
-  content: attr(data-note-title);
-  position: absolute;
-  top: 28px; /* Позиционируем под крестом */
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.9em;
-  font-weight: bold;
-  color: #777;
-  letter-spacing: 1px;
-}
-
-.names-input-wrapper.zdravie-style {
-  border-top: 5px solid #81c784; /* Более насыщенный зеленый */
-}
-
-.names-input-wrapper.zdravie-style::before {
-  content: 'О ЗДРАВИИ';
-  color: #38761d; /* Темно-зеленый для заголовка */
-}
-
-.names-input-wrapper.upokoi-style {
-  border-top: 5px solid #757575; /* Темно-серый */
-}
-
-.names-input-wrapper.upokoi-style::before {
-  content: 'ОБ УПОКОЕНИИ';
-  color: #434343; /* Темно-серый для заголовка */
-}
-
-.cross-icon {
-  position: absolute;
-  top: 8px; /* Сдвинем крест чуть выше */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 28px;
-}
-
-.cross-icon img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-/* Адаптация для textarea внутри обертки */
-.names-input-wrapper .form-control.treby-textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding-left: 5px; /* Уменьшаем внутренний отступ, так как есть отступ у родителя */
-}
-
 
 /* Адаптивность */
 @media (max-width: 992px) {
@@ -296,243 +230,42 @@
   }
 
   .treby-instructions-right {
-    margin-top: 30px;
+    margin-top: 2.5rem; /* Увеличен отступ */
+    order: -1; /* Инструкции сверху на мобильных */
   }
 }
 
 @media (max-width: 576px) {
   .treby-page {
-    padding: 20px;
+    padding: 1.5rem;
   }
 
   .treby-title {
-    font-size: 2em;
+    font-size: 2.2em;
+  }
+
+  .form-step-title {
+    font-size: 1.3rem;
   }
 
   .radio-group {
-    flex-direction: column;
-    gap: 10px;
+    gap: 0.75rem;
   }
+  
+  .radio-group label {
+    padding: 0.6rem 0.8rem;
+  }
+
   .names-input-wrapper {
-    padding-left: 10px;
+    padding: 1rem;
   }
-  .names-input-wrapper .form-control.treby-textarea {
-    padding-left: 5px;
+  
+  .calculated-price {
+    font-size: 1.8em;
   }
-}
 
-/*
-  Paper-like редизайн: добавлены paper-bg, paper-sheet, paper-shadow, handwritten, paper-btn, paper-alert, paper-names, datepicker-paper и др.
-  Бумажная текстура, рваные края, paper-like кнопки, алерты, шаги, плавные анимации, рукописный шрифт.
-*/
-
-.paper-bg {
-  background: #f4f2e8 url('../../assets/paper_texture.jpg'); /* Бумажная текстура */
-  min-height: 100vh;
-  padding: 0;
-}
-
-.paper-sheet {
-  background: #fffbe9 url('../../assets/paper_texture.jpg');
-  border-radius: 18px 18px 32px 32px/24px 24px 36px 36px;
-  box-shadow: 0 8px 32px 0 rgba(80, 60, 30, 0.13), 0 1.5px 0 #e0d8cc inset;
-  border: 2.5px dashed #e0d8cc;
-  position: relative;
-  overflow: hidden;
-}
-
-.paper-shadow {
-  box-shadow: 0 8px 32px 0 rgba(80, 60, 30, 0.13), 0 1.5px 0 #e0d8cc inset;
-}
-
-.handwritten {
-  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
-  letter-spacing: 0.02em;
-}
-
-.paper-btn {
-  background: #fffbe9;
-  border: 1.5px solid #e0d8cc;
-  border-radius: 8px 16px 12px 18px/12px 18px 8px 16px;
-  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.07);
-  color: #5a4a42;
-  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
-  font-size: 1.1em;
-  padding: 10px 22px;
-  transition: background 0.2s, box-shadow 0.2s;
-  cursor: pointer;
-}
-.paper-btn:hover, .paper-btn:focus {
-  background: #f9f7f0;
-  box-shadow: 0 4px 16px 0 rgba(80, 60, 30, 0.13);
-}
-
-.paper-alert {
-  background: #fffbe9 url('../../assets/paper_texture.jpg');
-  border: 2px dashed #e0d8cc;
-  border-radius: 14px 24px 18px 22px/18px 22px 14px 24px;
-  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.09);
-  color: #5a4a42;
-  padding: 18px 22px;
-  margin: 18px 0;
-  font-size: 1.1em;
-  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
-  animation: fadeInPaper 0.7s;
-}
-.paper-alert-success {
-  border-color: #b6e2b6;
-  background: #f6fff6 url('../../assets/paper_texture.jpg');
-}
-.paper-alert-error {
-  border-color: #e2b6b6;
-  background: #fff6f6 url('../../assets/paper_texture.jpg');
-  color: #a33;
-}
-.paper-alert-loading {
-  border-color: #b6cbe2;
-  background: #f6faff url('../../assets/paper_texture.jpg');
-  color: #3a4a6c;
-}
-@keyframes fadeInPaper {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: none; }
-}
-
-.paper-spinner {
-  display: inline-block;
-  width: 1.2em;
-  height: 1.2em;
-  border: 2.5px dashed #b0a092;
-  border-radius: 50%;
-  border-top: 2.5px solid #e0d8cc;
-  animation: spinPaper 1s linear infinite;
-  margin-right: 8px;
-  vertical-align: middle;
-}
-@keyframes spinPaper {
-  100% { transform: rotate(360deg); }
-}
-
-.form-step {
-  margin-bottom: 32px;
-  padding-bottom: 12px;
-  border-bottom: 1.5px dashed #e0d8cc;
-}
-.form-step-title {
-  font-size: 1.3em;
-  margin-bottom: 10px;
-  color: #7a5a3a;
-}
-
-.paper-names {
-  background: #fffbe9 url('../../assets/paper_texture.jpg');
-  border-radius: 18px 32px 18px 32px/24px 36px 24px 36px;
-  border: 2px dashed #e0d8cc;
-  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.09);
-  padding: 12px 18px 12px 48px;
-  position: relative;
-  margin-bottom: 8px;
-}
-.paper-names .cross-icon {
-  position: absolute;
-  left: 12px;
-  top: 18px;
-  width: 28px;
-  height: 28px;
-  opacity: 0.7;
-}
-.paper-names .cross-icon img {
-  width: 100%;
-  height: 100%;
-}
-
-.field-hint {
-  color: #b0a092;
-  font-size: 0.98em;
-  margin-top: 4px;
-  margin-bottom: 0;
-}
-
-.datepicker-paper {
-  background: #fffbe9 url('../../assets/paper_texture.jpg');
-  border-radius: 12px 18px 12px 18px/18px 12px 18px 12px;
-  border: 2px dashed #e0d8cc;
-  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.09);
-  padding: 10px 18px;
-  margin-bottom: 12px;
-}
-
-/* Paper-like стили для инструкций */
-.treby-instructions-right.paper-sheet {
-  background: #f9f7f0 url('../../assets/paper_texture.jpg');
-  border-radius: 18px 32px 18px 32px/24px 36px 24px 36px;
-  border: 2px dashed #e0d8cc;
-  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.09);
-}
-.instruction-title.handwritten {
-  font-size: 1.15em;
-  color: #7a5a3a;
-  margin-bottom: 8px;
-}
-
-/* Paper-like кнопка для оплаты */
-.btn.paper-btn, .btn.paper-btn:focus {
-  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
-  background: #fffbe9;
-  border: 1.5px solid #e0d8cc;
-  border-radius: 8px 16px 12px 18px/12px 18px 8px 16px;
-  color: #5a4a42;
-  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.07);
-  transition: background 0.2s, box-shadow 0.2s;
-}
-.btn.paper-btn:hover, .btn.paper-btn:active {
-  background: #f9f7f0;
-  box-shadow: 0 4px 16px 0 rgba(80, 60, 30, 0.13);
-}
-
-/* Paper-like стилизация для textarea, select, input */
-.form-control.treby-textarea,
-.form-control.treby-select,
-.form-control.treby-input {
-  border: 1.5px dashed #e0d8cc;
-  border-radius: 8px 16px 12px 18px/12px 18px 8px 16px;
-  background: #fffbe9 url('../../assets/paper_texture.jpg');
-  font-family: inherit;
-  font-size: 1.08em;
-  color: #5a4a42;
-  box-shadow: 0 1px 4px 0 rgba(80, 60, 30, 0.04);
-  padding: 10px 14px;
-  margin-bottom: 0;
-  outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-.form-control.treby-textarea:focus,
-.form-control.treby-select:focus,
-.form-control.treby-input:focus {
-  border-color: #b0a092;
-  box-shadow: 0 2px 8px 0 rgba(80, 60, 30, 0.09);
-}
-
-@media (max-width: 900px) {
-  .treby-form-section {
-    flex-direction: column;
-    gap: 24px;
-  }
-  .treby-instructions-right.paper-sheet {
-    margin-top: 18px;
-  }
-}
-
-@media (max-width: 600px) {
-  .treby-page {
-    padding: 10px;
-  }
-  .paper-sheet, .treby-instructions-right.paper-sheet {
-    border-radius: 12px 18px 12px 18px/18px 12px 18px 12px;
-    padding: 10px 6px;
-  }
-  .form-step-title {
-    font-size: 1.08em;
+  .treby-submit-btn {
+    font-size: 1.1rem;
   }
 }
 

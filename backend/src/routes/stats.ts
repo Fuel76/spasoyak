@@ -25,7 +25,7 @@ router.get('/', authenticateToken, isAdmin, async (req, res) => {
       prisma.news.count(),
       prisma.category.count(),
       prisma.tag.count(),
-      prisma.treba.count({ where: { paymentStatus: 'pending' } }),
+      prisma.treba.count({ where: { status: 'PENDING' } }),
       prisma.treba.count(),
       prisma.user.count()
     ]);
@@ -119,7 +119,7 @@ router.get('/activity', authenticateToken, isAdmin, async (req, res) => {
           type: true,
           names: true,
           createdAt: true,
-          paymentStatus: true
+          status: true
         }
       }),
       prisma.page.findMany({

@@ -16,21 +16,28 @@
   --text-secondary: #6b5139;
   --text-muted: #7d6f5a;
   --text-light: #999;
+  --text-on-primary: #ffffff; /* Для текста на основных цветных кнопках */
 
-  /* Фоны в стиле монастыря */
-  --bg-monastery: #d6c3b0;
-  --bg-paper: #fffbe9;
-  --bg-paper-warm: #f9f7f0;
-  --bg-soft: #f8f6f2;
-  --border-paper: #e0d8cc;
-  --border-light: #d3c9bc;
+  /* Фоны */
+  --bg-body: #f4f2e8; /* Общий фон страницы, если отличается от body */
+  --bg-monastery: linear-gradient(135deg, #f5f0e1 0%, #e4d9c6 100%); /* Градиентный фон для контейнера */
+  --bg-paper: #fdfaf3; /* Основной фон "бумажных" элементов */
+  --bg-paper-warm: #fbf5ea; /* Более теплый оттенок для полей ввода, и т.д. */
+  --bg-soft: #f7f2e8; /* Мягкий фон для hover-эффектов */
+  --bg-dark-overlay: rgba(0, 0, 0, 0.5); /* Для модальных окон */
 
-  /* Простые тени в духе монастыря */
-  --shadow-soft: 0 2px 8px rgba(80, 60, 30, 0.09);
-  --shadow-medium: 0 4px 16px rgba(80, 60, 30, 0.13);
-  --shadow-paper: 0 8px 32px rgba(120, 110, 90, 0.13);
+  /* Границы */
+  --border-color: #d1c7b8;
+  --border-light: #e0d8cc;
+  --border-paper: rgba(139, 108, 79, 0.2); /* Граница для бумажных элементов */
 
-  /* Радиусы для органичных форм */
+  /* Тени - обновленные для более современного вида */
+  --shadow-soft: 0 2px 8px rgba(107, 81, 57, 0.08), 0 1px 3px rgba(107, 81, 57, 0.05);
+  --shadow-medium: 0 4px 12px rgba(107, 81, 57, 0.1), 0 2px 6px rgba(107, 81, 57, 0.08);
+  --shadow-paper: 0 5px 15px rgba(139, 108, 79, 0.12), 0 2px 5px rgba(139, 108, 79, 0.08), inset 0 0 0 1px rgba(224, 216, 204, 0.2);
+  --shadow-focus: 0 0 0 3px rgba(139, 108, 79, 0.25); /* Тень для состояния фокуса */
+
+  /* Радиусы скругления (сохраняем уникальный стиль) */
   --radius-paper: 8px 16px 12px 18px / 12px 18px 8px 16px;
   --radius-soft: 12px 18px 12px 18px / 18px 12px 18px 12px;
   --radius-card: 18px 32px 18px 32px / 24px 36px 24px 36px;
@@ -129,21 +136,20 @@
 
 /* Карточки для контента в стиле монастыря */
 .system-content-card {
-  background: var(--bg-paper);
+  background: linear-gradient(135deg, var(--bg-paper) 80%, var(--bg-paper-warm) 100%);
   border-radius: var(--radius-card);
-  padding: 2.5rem;
-  margin-bottom: 2rem;
-  /* Мягкое размытие вместо резких теней */
-  box-shadow: var(--shadow-paper);
-  transition: var(--transition);
-  /* Убираем коричневую полосу */
-  filter: drop-shadow(0 0 1px rgba(160, 130, 94, 0.2));
+  padding: 2.8rem 2.2rem;
+  margin-bottom: 2.2rem;
+  box-shadow: 0 8px 32px 0 rgba(120, 110, 90, 0.10), var(--shadow-paper);
+  transition: box-shadow 0.25s, transform 0.18s, background 0.3s;
+  animation: fadeInUp 0.7s cubic-bezier(.23, 1.01, .32, 1) both;
+  filter: drop-shadow(0 0 2px rgba(160, 130, 94, 0.13));
 }
 
 .system-content-card:hover {
-  /* Убираем резкий подъем, добавляем мягкое свечение */
-  transform: translateY(-1px);
-  filter: drop-shadow(0 0 3px rgba(160, 130, 94, 0.3));
+  box-shadow: 0 16px 48px 0 rgba(120, 110, 90, 0.13), var(--shadow-medium);
+  transform: translateY(-3px) scale(1.01);
+  background: linear-gradient(135deg, var(--bg-paper) 60%, var(--bg-paper-warm) 100%);
 }
 
 /* Сетка для карточек */
@@ -156,9 +162,9 @@
 
 /* Форма системной страницы в стиле монастыря */
 .system-form {
-  background: var(--bg-paper);
+  background: linear-gradient(135deg, var(--bg-paper) 80%, var(--bg-paper-warm) 100%);
   border-radius: var(--radius-card);
-  padding: 2.5rem;
+  padding: 2.8rem 2.2rem;
   box-shadow: var(--shadow-paper);
   margin-bottom: 2rem;
   /* Мягкое размытие границ */
@@ -180,34 +186,76 @@
 .system-form-input,
 .system-form-select,
 .system-form-textarea {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  /* Убираем резкие границы, добавляем мягкое размытие */
-  border: none;
+  font-size: 1.08rem;
+  padding: 1.1rem 1.3rem;
+  border-radius: 18px;
+  border: 1.5px solid var(--border-light);
   background: var(--bg-paper-warm);
-  border-radius: var(--radius-paper);
-  font-size: 1rem;
-  transition: var(--transition);
-  color: var(--text-primary);
-  /* Мягкая тень вместо резкой границы */
-  box-shadow: 
-    inset 0 0 0 1px var(--border-paper),
-    var(--shadow-soft);
-  /* Размытие краев */
-  filter: drop-shadow(0 0 1px rgba(224, 216, 204, 0.3));
+  box-shadow: 0 2px 8px rgba(139, 108, 79, 0.04);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
 .system-form-input:focus,
 .system-form-select:focus,
 .system-form-textarea:focus {
-  outline: none;
+  border-color: var(--primary-color);
+  background: #fffbe9;
+  box-shadow: 0 0 0 3px rgba(139, 108, 79, 0.13), 0 2px 8px rgba(139, 108, 79, 0.08);
+}
+
+/* Кнопки системных страниц в монастырском стиле */
+.system-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem; /* Немного увеличен gap */
+  padding: 0.85rem 1.75rem; /* Увеличены отступы для лучшего вида */
+  border: none;
+  border-radius: var(--radius-paper);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  min-width: 130px; /* Немного увеличена мин. ширина */
+  justify-content: center;
+  font-family: inherit;
+  box-shadow: var(--shadow-medium); /* Используем обновленную тень */
+  filter: drop-shadow(0 0 1px rgba(80, 60, 30, 0.05)); /* Очень легкое свечение */
+}
+
+.system-btn:hover {
+  box-shadow: 0 8px 32px 0 rgba(139, 108, 79, 0.16), var(--shadow-medium);
+  background: linear-gradient(90deg, var(--primary-dark) 80%, var(--primary-color) 100%);
+  transform: translateY(-2px) scale(1.01);
+}
+
+.system-btn:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+}
+
+
+.system-btn-primary {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.system-btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  filter: drop-shadow(0 0 3px rgba(139, 108, 79, 0.3));
+}
+
+.system-btn-secondary {
   background: var(--bg-paper);
-  /* Мягкое свечение вместо резкой рамки */
-  box-shadow: 
-    inset 0 0 0 1px var(--accent-color),
-    0 0 8px rgba(160, 130, 94, 0.15),
-    var(--shadow-medium);
-  filter: drop-shadow(0 0 2px rgba(160, 130, 94, 0.2));
+  color: var(--primary-dark);
+  border: 1px solid var(--primary-color); /* Добавим границу для вторичных кнопок */
+}
+
+.system-btn-secondary:hover:not(:disabled) {
+  background: var(--bg-soft);
+  border-color: var(--primary-dark);
+  color: var(--primary-dark);
+  filter: drop-shadow(0 0 2px rgba(139, 108, 79, 0.2));
 }
 
 /* Стили для textarea в монастырском стиле */
@@ -220,101 +268,7 @@
   border-radius: var(--radius-soft);
 }
 
-/* Кнопки системных страниц в монастырском стиле */
-.system-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: var(--radius-paper);
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: var(--transition);
-  text-decoration: none;
-  min-width: 120px;
-  justify-content: center;
-  font-family: inherit;
-  /* Мягкие тени вместо резких */
-  box-shadow: var(--shadow-soft);
-  filter: drop-shadow(0 0 1px rgba(80, 60, 30, 0.1));
-}
-
-.system-btn-primary {
-  background: var(--primary-color);
-  color: var(--bg-paper);
-}
-
-.system-btn-primary:hover {
-  background: var(--primary-dark);
-  /* Убираем резкий подъем, добавляем мягкое свечение */
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-medium);
-  filter: drop-shadow(0 0 3px rgba(107, 81, 57, 0.3));
-}
-
-.system-btn-secondary {
-  background: var(--bg-paper-warm);
-  color: var(--text-primary);
-  box-shadow: 
-    inset 0 0 0 1px var(--border-light),
-    var(--shadow-soft);
-}
-
-.system-btn-secondary:hover {
-  background: var(--bg-monastery);
-  transform: translateY(-1px);
-  filter: drop-shadow(0 0 2px rgba(139, 108, 79, 0.2));
-}
-
-.system-btn-danger {
-  background: #c85450;
-  color: var(--bg-paper);
-}
-
-.system-btn-danger:hover {
-  background: #b04a46;
-  transform: translateY(-1px);
-  filter: drop-shadow(0 0 3px rgba(200, 84, 80, 0.3));
-}
-
-.system-btn-success {
-  background: #6b8b47;
-  color: var(--bg-paper);
-}
-
-.system-btn-success:hover {
-  background: #5a7239;
-  transform: translateY(-1px);
-  filter: drop-shadow(0 0 3px rgba(107, 139, 71, 0.3));
-}
-
-/* Группа кнопок */
-.system-btn-group {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin: 1.5rem 0;
-}
-
-/* Таблицы системных страниц в монастырском стиле */
-.system-table {
-  width: 100%;
-  background: var(--bg-paper);
-  border-radius: var(--radius-card);
-  overflow: hidden;
-  box-shadow: var(--shadow-paper);
-  margin: 2rem 0;
-  /* Размытие краев */
-  filter: drop-shadow(0 0 2px rgba(224, 216, 204, 0.3));
-}
-
-.system-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
+/* Заголовки таблиц в стиле монастыря */
 .system-table th {
   background: var(--bg-monastery);
   color: var(--text-primary);
@@ -337,6 +291,23 @@
   opacity: 0.3;
   /* Размытие разделительной линии */
   filter: blur(0.5px);
+}
+
+/* Таблицы системных страниц в монастырском стиле */
+.system-table {
+  width: 100%;
+  background: var(--bg-paper);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-paper);
+  margin: 2rem 0;
+  /* Размытие краев */
+  filter: drop-shadow(0 0 2px rgba(224, 216, 204, 0.3));
+}
+
+.system-table table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .system-table td {
