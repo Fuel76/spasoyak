@@ -10,6 +10,9 @@ export const ViewNewsPage = () => {
     media: string | null;
     cover: string | null;
     customCss?: string | null;
+    coverImage?: string | null;
+    headerStyle?: string;
+    headerColor?: string;
   } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,7 +26,12 @@ export const ViewNewsPage = () => {
         const response = await fetch(`/api/news/${id}`);
         if (response.ok) {
           const data = await response.json();
-          setNews(data);
+          setNews({
+            ...data,
+            coverImage: data.cover || data.coverImage,
+            headerStyle: data.headerStyle || 'default',
+            headerColor: data.headerColor || '#f8f9fa',
+          });
         } else {
           setError('Новость не найдена');
         }

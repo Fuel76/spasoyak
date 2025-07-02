@@ -1,0 +1,482 @@
+/* Православный календарь */
+.orthodox-calendar {
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.calendar-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+}
+
+.nav-button {
+  background: var(--primary-color, #8B4513);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+}
+
+.nav-button:hover {
+  background: var(--primary-hover, #A0522D);
+  transform: scale(1.05);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--border-color, #e2e8f0);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.weekday-header {
+  background: var(--header-bg, #f8fafc);
+  padding: 10px 5px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #64748b);
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.calendar-day {
+  background: white;
+  min-height: 80px;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-day:hover {
+  background: var(--hover-bg, #f1f5f9);
+  transform: scale(1.02);
+}
+
+.calendar-day.selected {
+  background: var(--selected-bg, #dbeafe);
+  border: 2px solid var(--primary-color, #8B4513);
+}
+
+.calendar-day.empty {
+  background: var(--disabled-bg, #f8fafc);
+  cursor: default;
+}
+
+.calendar-day.empty:hover {
+  background: var(--disabled-bg, #f8fafc);
+  transform: none;
+}
+
+.calendar-day.holiday {
+  background: linear-gradient(135deg, #fff 0%, #fef3c7 100%);
+}
+
+.day-number {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.day-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.75rem;
+}
+
+.fasting-icon {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.saints-brief {
+  color: var(--text-secondary, #64748b);
+  font-size: 0.7rem;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.services-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: auto;
+}
+
+.services-icons .service-icon {
+  width: 12px;
+  height: 12px;
+  font-size: 8px;
+}
+
+.more-services {
+  font-size: 0.6rem;
+  color: var(--text-secondary, #64748b);
+  align-self: center;
+}
+
+/* Цвета приоритетов дней */
+:root {
+  --great-feast-color: #dc2626;
+  --twelve-feast-color: #f59e0b;
+  --polyeleos-color: #2563eb;
+  --vigil-color: #16a34a;
+  --sixth-class-color: #374151;
+  --normal-day-color: #000;
+}
+
+/* Легенда */
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
+  padding: 15px;
+  background: var(--legend-bg, #f8fafc);
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+/* Детальное отображение календарного дня */
+.calendar-day-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--border-color, #e2e8f0);
+}
+
+.detail-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--text-secondary, #64748b);
+  padding: 5px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.close-button:hover {
+  color: var(--primary-color, #8B4513);
+}
+
+.day-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.priority-badge, .fasting-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: white;
+}
+
+.priority-badge {
+  background: var(--badge-bg, #374151);
+}
+
+.fasting-badge {
+  background: var(--fasting-color, #16a34a);
+}
+
+.day-note {
+  flex: 1 1 100%;
+  padding: 12px;
+  background: var(--info-bg, #fef3c7);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.saints-section, .readings-section, .schedule-section {
+  margin-bottom: 30px;
+}
+
+.saints-section h3, .readings-section h3, .schedule-section h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--primary-color, #8B4513);
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.saints-list, .readings-list, .schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.saint-item {
+  display: flex;
+  gap: 12px;
+  padding: 15px;
+  background: var(--card-bg, #f8fafc);
+  border-radius: 8px;
+  border-left: 4px solid var(--saint-accent, #2563eb);
+}
+
+.saint-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-color, #e2e8f0);
+}
+
+.saint-info {
+  flex: 1;
+}
+
+.saint-name {
+  font-weight: 600;
+  color: var(--text-primary, #333);
+  margin-bottom: 4px;
+}
+
+.saint-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #64748b);
+  line-height: 1.4;
+}
+
+.reading-item {
+  padding: 15px;
+  background: var(--card-bg, #f8fafc);
+  border-radius: 8px;
+  border-left: 4px solid var(--reading-accent, #f59e0b);
+}
+
+.reading-type {
+  font-weight: 600;
+  color: var(--primary-color, #8B4513);
+  margin-bottom: 8px;
+}
+
+.reading-reference {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+  margin-bottom: 6px;
+}
+
+.reading-title {
+  font-style: italic;
+  color: var(--text-secondary, #64748b);
+  margin-bottom: 8px;
+}
+
+.reading-text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-primary, #333);
+  padding: 10px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.schedule-item {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: var(--card-bg, #f8fafc);
+  border-radius: 8px;
+  border-left: 4px solid var(--schedule-accent, #16a34a);
+  align-items: center;
+}
+
+.schedule-time {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-color, #8B4513);
+  min-width: 60px;
+}
+
+.schedule-service {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex: 1;
+}
+
+.service-info {
+  flex: 1;
+}
+
+.service-title {
+  font-weight: 600;
+  color: var(--text-primary, #333);
+  margin-bottom: 4px;
+}
+
+.service-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #64748b);
+  line-height: 1.4;
+}
+
+.no-data {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary, #64748b);
+}
+
+.no-data p {
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .orthodox-calendar {
+    margin: 0 10px;
+  }
+  
+  .calendar-day {
+    min-height: 60px;
+    padding: 3px;
+  }
+  
+  .day-number {
+    font-size: 1rem;
+  }
+  
+  .day-info {
+    font-size: 0.65rem;
+  }
+  
+  .calendar-header h3 {
+    font-size: 1.3rem;
+  }
+  
+  .nav-button {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+  
+  .calendar-legend {
+    gap: 10px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-day {
+    min-height: 50px;
+    padding: 2px;
+  }
+  
+  .weekday-header {
+    padding: 8px 3px;
+    font-size: 0.8rem;
+  }
+  
+  .calendar-legend {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* Responsive для детального отображения */
+@media (max-width: 768px) {
+  .calendar-day-detail {
+    margin: 0 10px;
+    padding: 15px;
+  }
+  
+  .detail-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .saint-item, .reading-item, .schedule-item {
+    padding: 12px;
+  }
+  
+  .schedule-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .schedule-time {
+    font-size: 1.1rem;
+  }
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.calendar-day {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary, #64748b);
+}

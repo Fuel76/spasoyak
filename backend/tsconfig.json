@@ -25,5 +25,5 @@
     "types": ["node"]
   },
   "include": ["src"],
-  "exclude": ["dist"]
+  "exclude": ["dist", "src/routes/*_old.ts"]
 }

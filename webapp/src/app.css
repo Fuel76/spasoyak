@@ -1,9 +1,7 @@
 /* Общие стили */
 
 /* Правила для предотвращения масштабирования */
-* {
-  zoom: 1 !important;
-}
+/* * { zoom: 1 !important; } */
 
 /* Разрешаем zoom для sidemenu и календаря, чтобы они увеличивались при масштабировании */
 .sidemenu-absolute-container,
@@ -11,11 +9,6 @@
 .sidemenu,
 .orthodox-calendar {
   zoom: unset !important;
-}
-
-/* ОТМЕНЯЕМ transform: none !important ДЛЯ slick-карусели */
-.slick-slider, .slick-track, .slick-slide, .slick-list {
-  transform: unset !important;
 }
 
 /* Правила для плавного скролла без скачков */
@@ -704,46 +697,200 @@ html, body {
 /* Футер */
 .footer {
   width: 100%;
-  height: 20vh; /* Относительная высота */
+  min-height: 200px;
   position: relative;
-  background: rgb(158, 140, 90);
-  opacity: 0.7;
-  margin-top: auto;
-  z-index: 200; /* Подвал ниже всего */
+  background: linear-gradient(135deg, #f8f5f0 0%, #e8e0d5 50%, #d6c3b0 100%);
+  margin-top: var(--header-height)+ var(--sidemenu-height)+ 4rem;
+  z-index: 200;
   max-width: 100vw;
   box-sizing: border-box;
+  overflow: hidden;
+  border-top: 1px solid rgba(139, 108, 79, 0.2);
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(139, 108, 79, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.footer-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem 5% 1.5rem 5%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-section h3 {
+  color: #6b5139;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  font-family: 'Noto Sans', serif;
+  position: relative;
+}
+
+.footer-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, #8b6c4f, transparent);
+}
+
+.footer-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
 .footer-logo {
-  position: absolute;
-  top: 10%;
-  left: 5%;
-  width: 20%; /* Относительная ширина */
+  flex-shrink: 0;
 }
 
 .footer-logo img {
-  width: 100%; /* Растягивается на всю ширину контейнера */
-  height: auto; /* Сохраняет пропорции */
+  width: 20vw;
+  height: auto;
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.1));
 }
 
-.footer-text {
-  position: absolute;
-  top: 10%;
-  right: 5%;
-  color: black;
+.footer-info h2 {
+  color: #5a4330;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-family: 'Noto Sans', serif;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.footer-subtitle {
+  color: #8b6c4f;
+  font-size: 0.95rem;
+  font-style: italic;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.contact-item,
+.schedule-item {
+  margin-bottom: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.contact-label {
+  color: #6b5139;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.contact-item span:last-child,
+.schedule-item span {
+  color: #4a3a2a;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.schedule-item {
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(139, 108, 79, 0.15);
+}
+
+.schedule-item:last-child {
+  border-bottom: none;
+}
+
+.footer-bottom {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(139, 108, 79, 0.2);
+  padding: 1rem 5%;
+  background: rgba(214, 195, 176, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-copyright p,
+.footer-blessing p {
+  margin: 0;
+  color: #6b5139;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.footer-blessing p {
+  font-style: italic;
   text-align: right;
 }
 
-.footer-text h2 {
-  font-size: 2vw; /* Относительный размер шрифта */
-  font-family: 'Noto Sans', sans-serif;
-  font-weight: 700;
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 5%;
+  }
+  
+  .footer-main {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .footer-info h2 {
+    font-size: 1.2rem;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    padding: 0.8rem 5%;
+  }
+  
+  .footer-blessing p {
+    text-align: center;
+  }
 }
 
-.footer-text p {
-  font-size: 1.5vw; /* Относительный размер шрифта */
-  font-family: 'Noto Sans', sans-serif;
-  font-weight: 400;
+@media (max-width: 480px) {
+  .footer {
+    min-height: auto;
+  }
+  
+  .footer-content {
+    padding: 1rem 4%;
+  }
+  
+  .footer-section h3 {
+    font-size: 1rem;
+  }
+  
+  .footer-info h2 {
+    font-size: 1.1rem;
+  }
+  
+  .contact-item,
+  .schedule-item {
+    margin-bottom: 0.5rem;
+  }
 }
 
 /* Quill Container */
@@ -1033,14 +1180,6 @@ table th {
   gap: 10px;
 }
 
-.news-media-gallery img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 4px;
-  border: 1px solid #eee;
-}
-
 /* Общие стили для форматированного контента */
 .formatted-content {
   font-size: 1rem;
@@ -1237,4 +1376,137 @@ body { overflow-x: hidden !important; }
 .content-container { flex-grow: 1; overflow-x: hidden !important; }
 .page-content { overflow-x: hidden !important; }
 .footer { overflow-x: hidden !important; }
+
+/* Встроенная секция новостей на главной странице */
+.embedded-news-section {
+  margin-top: 3rem;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Убираем дублирующий фон для встроенной страницы новостей */
+.embedded-news-section .news-page {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  min-height: auto;
+}
+
+.embedded-news-section .news-page-content {
+  padding: 1rem 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* Адаптируем заголовок страницы новостей для главной */
+.embedded-news-section .page-header {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 2rem;
+}
+
+.embedded-news-section .page-title {
+  text-align: center;
+  color: var(--primary-color, #8b6c4f);
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.embedded-news-section .page-description {
+  text-align: center;
+  color: var(--text-muted, #7d6f5a);
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+/* Адаптируем кнопки управления */
+.embedded-news-section .header-actions {
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Убираем лишние отступы для фильтров */
+.embedded-news-section .filters-panel {
+  margin-top: 1rem;
+}
+
+/* Адаптируем сетку новостей для главной */
+.embedded-news-section .news-grid {
+  margin-top: 2rem;
+}
+
+/* Адаптируем пагинацию */
+.embedded-news-section .pagination {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+/* Дополнительные стили для плавной интеграции новостей */
+.embedded-news-section .news-page {
+  max-width: none;
+  width: 100%;
+}
+
+/* Плавный переход от карусели к новостям */
+.carousel-container + .embedded-news-section {
+  border-top: 3px solid var(--accent-color, #a0825e);
+  position: relative;
+}
+
+.carousel-container + .embedded-news-section::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 6px;
+  background: linear-gradient(135deg, var(--primary-color, #8b6c4f) 0%, var(--accent-color, #a0825e) 100%);
+  border-radius: 3px;
+}
+
+/* Убираем избыточные отступы в homepage */
+.homepage .embedded-news-section .news-page-content {
+  max-width: 100%;
+  margin: 0;
+}
+
+/* Адаптируем grid новостей для главной страницы */
+.embedded-news-section .news-grid.grid {
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto 0 auto;
+}
+
+/* Адаптируем список новостей для главной */
+.embedded-news-section .news-grid.list {
+  max-width: 1200px;
+  margin: 2rem auto 0 auto;
+}
+
+/* Стилизация заголовка для лучшей интеграции */
+.embedded-news-section .page-header .header-content {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.embedded-news-section .page-title {
+  background: linear-gradient(135deg, var(--primary-color, #8b6c4f) 0%, var(--accent-color, #a0825e) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+  text-shadow: none;
+}
+
+/* ОТМЕНА zoom для slick-карусели */
+.carousel-container *,
+.slick-slider, .slick-track, .slick-slide, .slick-list {
+  zoom: unset !important;
+}
 

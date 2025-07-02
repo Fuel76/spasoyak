@@ -1,0 +1,26 @@
+# Dockerfile для Backend (Development)
+FROM node:18-alpine
+
+# Установка pnpm
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Копирование файлов зависимостей
+COPY package.json pnpm-lock.yaml ./
+COPY prisma ./prisma/
+
+# Установка зависимостей
+RUN pnpm install
+
+# Копирование исходного кода
+COPY . .
+
+# Генерация Prisma Client
+RUN pnpm prisma generate
+
+# Expose порт и debug порт
+EXPOSE 3000 9229
+
+# Development команда с hot reload
+CMD ["pnpm", "dev-watch"]

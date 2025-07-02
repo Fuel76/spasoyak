@@ -18,6 +18,78 @@ export const Sidemenu = () => {
   const sidemenuWrapperRef = useRef<HTMLDivElement>(null);
   const sidemenuAbsoluteRef = useRef<HTMLDivElement>(null);
 
+  // Функция для динамического изменения размера шрифта
+  const updateFontSize = () => {
+    const screenWidth = window.innerWidth;
+    const root = document.documentElement;
+    
+    // Базовый размер шрифта в зависимости от ширины экрана
+    let baseFontPercent = 1.2; // базовый процент
+    let minFont = 1.0;
+    let maxFont = 4.0;
+    
+    if (screenWidth >= 2000) {
+      // Очень широкие экраны - увеличиваем еще больше
+      baseFontPercent = 2.0;
+      maxFont = 8.0;
+    } else if (screenWidth >= 1600) {
+      // Широкие экраны
+      baseFontPercent = 1.8;
+      maxFont = 6.0;
+    } else if (screenWidth >= 1400) {
+      // Большие экраны
+      baseFontPercent = 1.5;
+      maxFont = 5.0;
+    } else if (screenWidth <= 480) {
+      // Мобильные устройства
+      baseFontPercent = 0.9;
+      minFont = 0.7;
+      maxFont = 2.0;
+    } else if (screenWidth <= 768) {
+      // Планшеты
+      baseFontPercent = 1.0;
+      minFont = 0.8;
+      maxFont = 2.5;
+    } else if (screenWidth <= 1200) {
+      // Средние экраны
+      baseFontPercent = 1.1;
+      minFont = 0.9;
+      maxFont = 3.0;
+    }
+    
+    // Рассчитываем расстояния между пунктами пропорционально размеру шрифта
+    const spacingPercent = baseFontPercent * 0.8; // 80% от размера шрифта
+    const minSpacing = Math.max(8, minFont * 16 * 0.5); // минимум 8px или 50% от минимального шрифта
+    const maxSpacing = Math.min(32, maxFont * 16 * 0.2); // максимум 32px или 20% от максимального шрифта
+    
+    // Устанавливаем CSS переменные
+    root.style.setProperty('--sidemenu-base-font-percent', `${baseFontPercent}vw`);
+    root.style.setProperty('--sidemenu-min-font', `${minFont}rem`);
+    root.style.setProperty('--sidemenu-max-font', `${maxFont}rem`);
+    
+    // Устанавливаем переменные для расстояний
+    root.style.setProperty('--sidemenu-item-spacing', `${spacingPercent}vw`);
+    root.style.setProperty('--sidemenu-item-spacing-min', `${minSpacing}px`);
+    root.style.setProperty('--sidemenu-item-spacing-max', `${maxSpacing}px`);
+  };
+
+  useEffect(() => {
+    // Устанавливаем начальный размер шрифта
+    updateFontSize();
+    
+    // Добавляем обработчик изменения размера окна
+    const handleResize = () => {
+      updateFontSize();
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    // Очищаем обработчик при размонтировании компонента
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
@@ -104,7 +176,12 @@ export const Sidemenu = () => {
         <div className="sidemenu-fixed-wrapper" ref={sidemenuWrapperRef}>
           <div className="sidemenu">
             {renderMenu(menuItems)}
-            <OrthodoxCalendar />
+            <OrthodoxCalendar 
+              compact={true}
+              showReadings={false}
+              showSaints={false}
+              className="orthodox-calendar--sidemenu"
+            />
           </div>
         </div>
       </div>
@@ -113,7 +190,12 @@ export const Sidemenu = () => {
         <div className="burger-menu-links">
           {renderMobileMenu(menuItems)}
           <div style={{ marginTop: 32, width: '100%' }}>
-            <OrthodoxCalendar />
+            <OrthodoxCalendar 
+              compact={true}
+              showReadings={false}
+              showSaints={false}
+              className="orthodox-calendar--mobile"
+            />
           </div>
         </div>
       </div>

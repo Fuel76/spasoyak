@@ -1,29 +1,89 @@
 version: '3.8'
 
+# Docker Compose конфигурация для разработки
+# Использует локальные volumes и открывает больше портов для отладки
+
 services:
-  # База данных MySQL для разработки
-  database:
+  # База данных MySQL
+  db:
     image: mysql:8.0
+    container_name: monastyr_db_dev
+    restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: monastyr_db
-      MYSQL_USER: monastyr_user
-      MYSQL_PASSWORD: monastyr_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-monastyr}
+      MYSQL_USER: ${MYSQL_USER:-monastyr_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-password}
+    volumes:
+      - mysql_data_dev:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/mysql/conf.d/custom.cnf:ro
     ports:
       - "3306:3306"
-    volumes:
-      - mysql_dev_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - monastyr_network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
-      timeout: 20s
-      retries: 10
+      - monastyr-network-dev
+
+  # Backend API (в режиме разработки)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: monastyr_backend_dev
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: mysql://${MYSQL_USER:-monastyr_user}:${MYSQL_PASSWORD:-password}@db:3306/${MYSQL_DATABASE:-monastyr}
+      JWT_SECRET: ${JWT_SECRET:-dev_secret_key}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-30d}
+      ADMIN_REGISTRATION_KEY: ${ADMIN_REGISTRATION_KEY:-dev_admin_key}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      PORT: 3000
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/prisma:/app/prisma
+      - uploads_data_dev:/app/uploads
+    ports:
+      - "3000:3000"
+      - "9229:9229" # Debug port
+    depends_on:
+      - db
+    networks:
+      - monastyr-network-dev
+
+  # Frontend (в режиме разработки)
+  frontend:
+    build:
+      context: ./webapp
+      dockerfile: Dockerfile.dev
+    container_name: monastyr_frontend_dev
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
+    volumes:
+      - ./webapp/src:/app/src
+      - ./webapp/public:/app/public
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - monastyr-network-dev
+
+  # Redis для кеширования
+  redis:
+    image: redis:7-alpine
+    container_name: monastyr_redis_dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - monastyr-network-dev
 
 volumes:
-  mysql_dev_data:
+  mysql_data_dev:
+    driver: local
+  uploads_data_dev:
+    driver: local
 
 networks:
-  monastyr_network:
+  monastyr-network-dev:
     driver: bridge

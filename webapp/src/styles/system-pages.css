@@ -1,0 +1,1441 @@
+/* =============================================================================
+   ЕДИНЫЙ ДИЗАЙН-КОНТЕЙНЕР ДЛЯ СИСТЕМНЫХ СТРАНИЦ В СТИЛЕ МОНАСТЫРЯ
+   ============================================================================= */
+
+/* CSS-переменные для монастырского дизайна */
+:root {
+  /* Основная цветовая палитра монастыря */
+  --primary-color: #8b6c4f;
+  --primary-dark: #6b5139;
+  --primary-light: #a0825e;
+  --accent-color: #a0825e;
+  --accent-light: #c4a580;
+
+  /* Нейтральные цвета */
+  --text-primary: #5a4a42;
+  --text-secondary: #6b5139;
+  --text-muted: #7d6f5a;
+  --text-light: #999;
+  --text-on-primary: #ffffff; /* Для текста на основных цветных кнопках */
+
+  /* Фоны */
+  --bg-body: #f4f2e8; /* Общий фон страницы, если отличается от body */
+  --bg-monastery: linear-gradient(135deg, #f5f0e1 0%, #e4d9c6 100%); /* Градиентный фон для контейнера */
+  --bg-paper: #fdfaf3; /* Основной фон "бумажных" элементов */
+  --bg-paper-warm: #fbf5ea; /* Более теплый оттенок для полей ввода, и т.д. */
+  --bg-soft: #f7f2e8; /* Мягкий фон для hover-эффектов */
+  --bg-dark-overlay: rgba(0, 0, 0, 0.5); /* Для модальных окон */
+
+  /* Границы */
+  --border-color: #d1c7b8;
+  --border-light: #e0d8cc;
+  --border-paper: rgba(139, 108, 79, 0.2); /* Граница для бумажных элементов */
+
+  /* Тени - обновленные для более современного вида */
+  --shadow-soft: 0 2px 8px rgba(107, 81, 57, 0.08), 0 1px 3px rgba(107, 81, 57, 0.05);
+  --shadow-medium: 0 4px 12px rgba(107, 81, 57, 0.1), 0 2px 6px rgba(107, 81, 57, 0.08);
+  --shadow-paper: 0 5px 15px rgba(139, 108, 79, 0.12), 0 2px 5px rgba(139, 108, 79, 0.08), inset 0 0 0 1px rgba(224, 216, 204, 0.2);
+  --shadow-focus: 0 0 0 3px rgba(139, 108, 79, 0.25); /* Тень для состояния фокуса */
+
+  /* Радиусы скругления (сохраняем уникальный стиль) */
+  --radius-paper: 8px 16px 12px 18px / 12px 18px 8px 16px;
+  --radius-soft: 12px 18px 12px 18px / 18px 12px 18px 12px;
+  --radius-card: 18px 32px 18px 32px / 24px 36px 24px 36px;
+
+  /* Простые переходы */
+  --transition: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* Размеры */
+  --header-height: 120px;
+  --content-max-width: 1200px;
+  --content-padding: 2rem;
+}
+
+/* Базовый контейнер для всех системных страниц */
+.system-page-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  min-height: calc(100vh - var(--header-height));
+  background: var(--bg-monastery);
+  position: relative;
+}
+
+/* Основной контент страницы в стиле монастыря */
+.system-page-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--content-padding);
+  background: var(--bg-paper);
+  border-radius: var(--radius-card);
+  /* Убираем резкие границы, заменяем размытием */
+  box-shadow: 
+    var(--shadow-paper),
+    inset 0 0 0 1px rgba(224, 216, 204, 0.3);
+  min-height: 70vh;
+  /* Добавляем мягкое размытие краев */
+  filter: drop-shadow(0 0 2px rgba(224, 216, 204, 0.4));
+  transition: var(--transition);
+}
+
+/* Простая анимация появления */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Заголовок системной страницы в стиле монастыря */
+.system-page-title {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 1rem;
+  font-family: 'Noto Sans', serif;
+  /* Мягкое размытие вместо резких линий */
+  text-shadow: 0 1px 3px rgba(90, 74, 66, 0.2);
+}
+
+.system-page-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: var(--accent-color);
+  border-radius: 1px;
+  /* Размытие вместо четкой линии */
+  filter: blur(0.5px);
+  opacity: 0.7;
+}
+
+/* Подзаголовок */
+.system-page-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #999;
+  margin-bottom: 3rem;
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* Карточки для контента в стиле монастыря */
+.system-content-card {
+  background: linear-gradient(135deg, var(--bg-paper) 80%, var(--bg-paper-warm) 100%);
+  border-radius: var(--radius-card);
+  padding: 2.8rem 2.2rem;
+  margin-bottom: 2.2rem;
+  box-shadow: 0 8px 32px 0 rgba(120, 110, 90, 0.10), var(--shadow-paper);
+  transition: box-shadow 0.25s, transform 0.18s, background 0.3s;
+  animation: fadeInUp 0.7s cubic-bezier(.23, 1.01, .32, 1) both;
+  filter: drop-shadow(0 0 2px rgba(160, 130, 94, 0.13));
+}
+
+.system-content-card:hover {
+  box-shadow: 0 16px 48px 0 rgba(120, 110, 90, 0.13), var(--shadow-medium);
+  transform: translateY(-3px) scale(1.01);
+  background: linear-gradient(135deg, var(--bg-paper) 60%, var(--bg-paper-warm) 100%);
+}
+
+/* Сетка для карточек */
+.system-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+/* Форма системной страницы в стиле монастыря */
+.system-form {
+  background: linear-gradient(135deg, var(--bg-paper) 80%, var(--bg-paper-warm) 100%);
+  border-radius: var(--radius-card);
+  padding: 2.8rem 2.2rem;
+  box-shadow: var(--shadow-paper);
+  margin-bottom: 2rem;
+  /* Мягкое размытие границ */
+  filter: drop-shadow(0 0 1px rgba(224, 216, 204, 0.4));
+}
+
+.system-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.system-form-label {
+  display: block;
+  font-weight: 600;
+  color: #6b5139;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.system-form-input,
+.system-form-select,
+.system-form-textarea {
+  font-size: 1.08rem;
+  padding: 1.1rem 1.3rem;
+  border-radius: 18px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-paper-warm);
+  box-shadow: 0 2px 8px rgba(139, 108, 79, 0.04);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.system-form-input:focus,
+.system-form-select:focus,
+.system-form-textarea:focus {
+  border-color: var(--primary-color);
+  background: #fffbe9;
+  box-shadow: 0 0 0 3px rgba(139, 108, 79, 0.13), 0 2px 8px rgba(139, 108, 79, 0.08);
+}
+
+/* Кнопки системных страниц в монастырском стиле */
+.system-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem; /* Немного увеличен gap */
+  padding: 0.85rem 1.75rem; /* Увеличены отступы для лучшего вида */
+  border: none;
+  border-radius: var(--radius-paper);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  min-width: 130px; /* Немного увеличена мин. ширина */
+  justify-content: center;
+  font-family: inherit;
+  box-shadow: var(--shadow-medium); /* Используем обновленную тень */
+  filter: drop-shadow(0 0 1px rgba(80, 60, 30, 0.05)); /* Очень легкое свечение */
+}
+
+.system-btn:hover {
+  box-shadow: 0 8px 32px 0 rgba(139, 108, 79, 0.16), var(--shadow-medium);
+  background: linear-gradient(90deg, var(--primary-dark) 80%, var(--primary-color) 100%);
+  transform: translateY(-2px) scale(1.01);
+}
+
+.system-btn:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+}
+
+
+.system-btn-primary {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.system-btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  filter: drop-shadow(0 0 3px rgba(139, 108, 79, 0.3));
+}
+
+.system-btn-secondary {
+  background: var(--bg-paper);
+  color: var(--primary-dark);
+  border: 1px solid var(--primary-color); /* Добавим границу для вторичных кнопок */
+}
+
+.system-btn-secondary:hover:not(:disabled) {
+  background: var(--bg-soft);
+  border-color: var(--primary-dark);
+  color: var(--primary-dark);
+  filter: drop-shadow(0 0 2px rgba(139, 108, 79, 0.2));
+}
+
+/* Стили для textarea в монастырском стиле */
+.system-form-textarea {
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.6;
+  /* Специальные настройки для текстовых областей */
+  border-radius: var(--radius-soft);
+}
+
+/* Заголовки таблиц в стиле монастыря */
+.system-table th {
+  background: var(--bg-monastery);
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+  /* Убираем резкую границу, заменяем мягким разделением */
+  border-bottom: 1px solid var(--border-light);
+  position: relative;
+}
+
+.system-table th::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent-color);
+  opacity: 0.3;
+  /* Размытие разделительной линии */
+  filter: blur(0.5px);
+}
+
+/* Таблицы системных страниц в монастырском стиле */
+.system-table {
+  width: 100%;
+  background: var(--bg-paper);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-paper);
+  margin: 2rem 0;
+  /* Размытие краев */
+  filter: drop-shadow(0 0 2px rgba(224, 216, 204, 0.3));
+}
+
+.system-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.system-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-paper);
+  vertical-align: top;
+  color: var(--text-primary);
+}
+
+.system-table tr:hover {
+  background: var(--bg-paper-warm);
+}
+
+/* Алерты системных страниц в монастырском стиле */
+.system-alert {
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-paper);
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  /* Мягкие тени вместо резких границ */
+  box-shadow: var(--shadow-soft);
+  /* Убираем коричневую полосу */
+  filter: drop-shadow(0 0 1px rgba(80, 60, 30, 0.1));
+}
+
+.system-alert-success {
+  background: #f4f7f0;
+  border-color: #6b8b47;
+  color: #4a5f32;
+}
+
+.system-alert-error {
+  background: #f7f0f0;
+  border-color: #c85450;
+  color: #8b3a36;
+}
+
+.system-alert-warning {
+  background: #f7f4e8;
+  border-color: #d4a853;
+  color: #8b7237;
+}
+
+.system-alert-info {
+  background: var(--bg-paper-warm);
+  border-color: var(--accent-color);
+  color: var(--text-primary);
+}
+
+/* Прогресс-бар в монастырском стиле */
+.system-progress {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-monastery);
+  border-radius: var(--radius-paper);
+  overflow: hidden;
+  margin: 1rem 0;
+  /* Мягкое размытие */
+  box-shadow: inset var(--shadow-soft);
+}
+
+.system-progress-bar {
+  height: 100%;
+  background: var(--accent-color);
+  transition: width var(--transition-slow);
+  border-radius: var(--radius-paper);
+  /* Размытое свечение */
+  filter: drop-shadow(0 0 2px rgba(160, 130, 94, 0.4));
+}
+
+/* Загрузочный спиннер в монастырском стиле */
+.system-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--text-muted);
+}
+
+.system-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--bg-monastery);
+  border-top: 3px solid var(--accent-color);
+  border-radius: 50%;
+  animation: spinSoft 1.5s ease-in-out infinite;
+  margin-bottom: 1rem;
+  /* Мягкое размытие */
+  filter: drop-shadow(0 0 2px rgba(160, 130, 94, 0.3));
+}
+
+@keyframes spinSoft {
+  0% { 
+    transform: rotate(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% { 
+    transform: rotate(360deg);
+    opacity: 0.8;
+  }
+}
+
+/* Пустое состояние в монастырском стиле */
+.system-empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+  background: var(--bg-paper-warm);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+
+.system-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.4;
+  color: var(--accent-color);
+}
+
+/* Теги и бейджи в монастырском стиле */
+.system-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-paper);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  /* Мягкие тени */
+  box-shadow: var(--shadow-soft);
+  filter: drop-shadow(0 0 1px rgba(80, 60, 30, 0.1));
+}
+
+.system-badge-primary {
+  background: var(--primary-color);
+  color: var(--bg-paper);
+}
+
+.system-badge-success {
+  background: #f4f7f0;
+  color: #4a5f32;
+  border: 1px solid #6b8b47;
+}
+
+.system-badge-warning {
+  background: #f7f4e8;
+  color: #8b7237;
+  border: 1px solid #d4a853;
+}
+
+.system-badge-danger {
+  background: #c85450;
+  color: var(--bg-paper);
+}
+
+/* Панель навигации в монастырском стиле */
+.system-nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--bg-paper-warm);
+  border-radius: var(--radius-card);
+  /* Убираем backdrop-filter, добавляем монастырские тени */
+  box-shadow: var(--shadow-soft);
+  filter: drop-shadow(0 0 2px rgba(224, 216, 204, 0.3));
+}
+
+.system-nav-item {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-paper);
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 500;
+  transition: var(--transition);
+  /* Мягкие края */
+  filter: drop-shadow(0 0 1px rgba(80, 60, 30, 0.1));
+}
+
+.system-nav-item:hover,
+.system-nav-item.active {
+  background: var(--primary-color);
+  color: var(--bg-paper);
+  /* Убираем резкий переход */
+  transform: translateY(-1px);
+  filter: drop-shadow(0 0 3px rgba(139, 108, 79, 0.3));
+}
+
+/* Специальные стили для расписания богослужений в монастырском стиле */
+.schedule-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.schedule-item {
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  background: var(--bg-paper-warm);
+  border-radius: var(--radius-paper);
+  /* Убираем коричневую полосу */
+  transition: var(--transition);
+  box-shadow: var(--shadow-soft);
+  filter: drop-shadow(0 0 1px rgba(160, 130, 94, 0.2));
+}
+
+.schedule-item:hover {
+  background: var(--bg-paper);
+  /* Убираем резкий сдвиг */
+  transform: translateY(-1px);
+  filter: drop-shadow(0 0 3px rgba(160, 130, 94, 0.3));
+}
+
+.schedule-calendar-block {
+  margin-top: 1rem;
+}
+
+/* Стили для предпросмотра в монастырском стиле */
+.news-preview {
+  background: var(--bg-paper);
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  margin: 1rem 0;
+  /* Мягкие тени вместо резких границ */
+  box-shadow: var(--shadow-paper);
+  filter: drop-shadow(0 0 2px rgba(224, 216, 204, 0.3));
+}
+
+.page-preview {
+  background: var(--bg-paper);
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-paper);
+  filter: drop-shadow(0 0 2px rgba(224, 216, 204, 0.3));
+}
+
+/* Стили для медиа элементов в редакторах - монастырский стиль */
+.news-editor__cover-preview {
+  max-width: 300px;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius-card);
+  /* Мягкая тень вместо резкой границы */
+  box-shadow: var(--shadow-medium);
+  margin-top: 0.5rem;
+  filter: drop-shadow(0 0 2px rgba(139, 108, 79, 0.2));
+}
+
+.news-editor__media-thumb {
+  width: 60px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: var(--radius-paper);
+  /* Мягкая тень */
+  box-shadow: var(--shadow-soft);
+  margin-right: 0.5rem;
+  filter: drop-shadow(0 0 1px rgba(139, 108, 79, 0.15));
+}
+
+/* Новостные карточки и медиа в монастырском стиле */
+.system-news-cover {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  /* Мягкое размытие краев */
+  filter: drop-shadow(0 0 2px rgba(139, 108, 79, 0.2));
+}
+
+.system-text-content {
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+.system-text-content p {
+  margin: 0.5rem 0;
+}
+
+.system-text-content h1,
+.system-text-content h2,
+.system-text-content h3 {
+  margin: 1rem 0 0.5rem 0;
+  color: var(--text-primary);
+}
+
+/* Утилиты прозрачности */
+.system-opacity-50 {
+  opacity: 0.5;
+}
+
+.system-opacity-75 {
+  opacity: 0.75;
+}
+
+/* Форма в ряд */
+.system-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: end;
+}
+
+.system-form-row .system-form-group {
+  min-width: 200px;
+}
+
+.system-form-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: auto;
+}
+
+/* Списки в монастырском стиле */
+.system-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.system-list-item {
+  background: var(--bg-paper);
+  border-radius: var(--radius-paper);
+  padding: 1rem;
+  transition: var(--transition);
+  /* Мягкие тени вместо резких границ */
+  box-shadow: var(--shadow-soft);
+  filter: drop-shadow(0 0 1px rgba(224, 216, 204, 0.3));
+}
+
+.system-list-item:hover {
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-1px);
+  filter: drop-shadow(0 0 3px rgba(139, 108, 79, 0.15));
+}
+
+/* Текстовые утилиты в монастырском стиле */
+.system-text-bold {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.system-text-sm {
+  font-size: 0.875rem;
+}
+
+/* Утилиты ссылок в монастырском стиле */
+.system-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: var(--transition);
+  /* Мягкое подчеркивание */
+  border-bottom: 1px solid transparent;
+}
+
+.system-link:hover {
+  color: var(--primary-dark);
+  border-bottom-color: var(--primary-light);
+  /* Размытое свечение */
+  filter: drop-shadow(0 0 2px rgba(139, 108, 79, 0.3));
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .system-page-content {
+    padding: 2rem 1rem;
+    border-radius: 15px 15px 0 0;
+  }
+  
+  .system-page-title {
+    font-size: 2rem;
+  }
+  
+  .system-content-card,
+  .system-form {
+    padding: 1.5rem;
+    border-radius: 15px;
+  }
+  
+  .system-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .system-btn-group {
+    flex-direction: column;
+  }
+  
+  .system-btn {
+    width: 100%;
+  }
+  
+  .system-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .system-table {
+    font-size: 0.875rem;
+  }
+  
+  .system-table th,
+  .system-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .system-page-content {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .system-page-title {
+    font-size: 1.75rem;
+  }
+  
+  .system-content-card,
+  .system-form {
+    padding: 1rem;
+  }
+}
+
+/* Специальные стили для треб с сохранением бумажного дизайна */
+.treby-form-section {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.treby-form-left {
+  flex: 2;
+}
+
+.treby-instructions-right {
+  flex: 1;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.form-step {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.form-step-title {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.treby-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.form-control.treby-input,
+.form-control.treby-select,
+.form-control.treby-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  /* Монастырский стиль для полей треб */
+  border: none;
+  border-radius: var(--radius-paper);
+  background: var(--bg-paper-warm);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition);
+  box-shadow: 
+    inset 0 0 0 1px var(--border-paper),
+    var(--shadow-soft);
+  filter: drop-shadow(0 0 1px rgba(224, 216, 204, 0.3));
+}
+
+.form-control.treby-input:focus,
+.form-control.treby-select:focus,
+.form-control.treby-textarea:focus {
+  outline: none;
+  background: var(--bg-paper);
+  box-shadow: 
+    inset 0 0 0 1px var(--accent-color),
+    0 0 8px rgba(160, 130, 94, 0.15),
+    var(--shadow-medium);
+  filter: drop-shadow(0 0 2px rgba(160, 130, 94, 0.2));
+}
+
+.treby-submit-btn {
+  background: var(--accent-color);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: var(--radius-paper);
+  color: var(--bg-paper);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+  /* Монастырские тени */
+  box-shadow: var(--shadow-soft);
+  filter: drop-shadow(0 0 1px rgba(160, 130, 94, 0.2));
+}
+
+.treby-submit-btn:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
+  filter: drop-shadow(0 0 3px rgba(107, 81, 57, 0.3));
+}
+
+.treby-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.names-input-wrapper {
+  position: relative;
+  background: var(--bg-paper-warm);
+  border-radius: var(--radius-card);
+  padding: 1rem;
+  /* Убираем резкие пунктирные линии, заменяем мягкими тенями */
+  box-shadow: 
+    inset 0 0 0 2px var(--border-light),
+    var(--shadow-soft);
+  filter: drop-shadow(0 0 1px rgba(224, 216, 204, 0.3));
+}
+
+.cross-icon {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 24px;
+  height: 24px;
+  opacity: 0.7;
+}
+
+.paper-names textarea {
+  padding-left: 2.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: inherit;
+}
+
+.calculated-price-section {
+  background: var(--bg-paper);
+  padding: 1rem;
+  border-radius: var(--radius-paper);
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+  filter: drop-shadow(0 0 1px rgba(224, 216, 204, 0.3));
+}
+
+.calculated-price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--accent-color);
+  margin: 0.5rem 0;
+}
+
+.treby-alert {
+  padding: 1rem;
+  border-radius: var(--radius-paper);
+  margin: 1rem 0;
+  /* Монастырские тени */
+  box-shadow: var(--shadow-soft);
+  filter: drop-shadow(0 0 1px rgba(80, 60, 30, 0.1));
+}
+
+.instruction-block {
+  margin-bottom: 1.5rem;
+}
+
+.instruction-title {
+  color: var(--accent-color);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.handwritten {
+  font-family: 'Marck Script', 'Caveat', 'Pacifico', cursive;
+}
+
+.field-hint {
+  font-size: 0.9rem;
+  color: rgba(var(--text-rgb), 0.7);
+  margin-top: 0.25rem;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .treby-form-section {
+    flex-direction: column;
+  }
+  
+  .treby-instructions-right {
+    order: -1;
+  }
+}
+
+/* =============================================================================
+   ГРУППИРОВАННОЕ РАСПИСАНИЕ ПО ДАТАМ
+   ============================================================================= */
+
+/* Контейнер для группированного расписания */
+.schedule-grouped {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Группа служб на одну дату */
+.schedule-date-group {
+  background: var(--bg-paper);
+  border-radius: var(--radius-paper);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  border: 1px solid var(--border-paper);
+}
+
+/* Заголовок даты */
+.schedule-date-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: white;
+  padding: 1rem 1.5rem;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Список служб */
+.schedule-services-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Отдельная служба */
+.schedule-service-item {
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color var(--transition);
+}
+
+.schedule-service-item:last-child {
+  border-bottom: none;
+}
+
+.schedule-service-item:hover {
+  background: var(--bg-soft);
+}
+
+/* Контент службы */
+.schedule-service-content {
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Время и иконка */
+.schedule-service-time-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.schedule-time {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+/* Описание службы */
+.schedule-service-description {
+  flex: 1;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+/* Приоритеты для групп дат */
+.schedule-service-item[data-priority="holiday"] {
+  background: linear-gradient(90deg, #f8fff8 0%, var(--bg-paper) 10%);
+  border-left: 4px solid #6b8b47;
+}
+
+.schedule-service-item[data-priority="special"] {
+  background: linear-gradient(90deg, #fffef8 0%, var(--bg-paper) 10%);
+  border-left: 4px solid #d4a853;
+}
+
+.schedule-service-item[data-priority="holiday"]:hover {
+  background: linear-gradient(90deg, #f4f9f4 0%, var(--bg-soft) 10%);
+}
+
+.schedule-service-item[data-priority="special"]:hover {
+  background: linear-gradient(90deg, #fffcf4 0%, var(--bg-soft) 10%);
+}
+
+/* Адаптивность для группированного расписания */
+@media (max-width: 768px) {
+  .schedule-grouped {
+    gap: 1.5rem;
+  }
+  
+  .schedule-date-header {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .schedule-service-content {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .schedule-service-time-icon {
+    min-width: auto;
+    gap: 0.5rem;
+  }
+  
+  .schedule-time {
+    font-size: 0.9rem;
+  }
+  
+  .schedule-service-description {
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+}
+
+/* =============================================================================
+   КОНЕЦ ГРУППИРОВАННОГО РАСПИСАНИЯ
+   ============================================================================= */
+
+/* =============================================================================
+   СТИЛИ ДЛЯ АДМИНСКОЙ ПАНЕЛИ РАСПИСАНИЯ
+   ============================================================================= */
+
+/* Элементы службы в админке */
+.service-item-content {
+  flex: 1;
+}
+
+.service-item-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.service-item-header .service-icon {
+  margin-right: 0.75rem;
+}
+
+.service-item-meta {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Бейджи для типов и приоритетов служб */
+.service-type-badge,
+.service-priority-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  background: var(--bg-soft);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+}
+
+.service-priority-badge.priority-holiday {
+  background: #e8f5e8;
+  color: #2d5a2d;
+  border-color: #6b8b47;
+}
+
+.service-priority-badge.priority-special {
+  background: #fff7f0;
+  color: #8b5a3c;
+  border-color: #d4a853;
+}
+
+/* Стили для разных приоритетов в списке админки */
+.service-item-normal {
+  background: var(--bg-paper);
+}
+
+.service-item-holiday {
+  background: #f8fef8;
+  border-left: 4px solid #6b8b47;
+}
+
+.service-item-special {
+  background: #fffef8;
+  border-left: 4px solid #d4a853;
+}
+
+/* Адаптивность для мобильных в админке */
+@media (max-width: 768px) {
+  .service-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .service-item-header .service-icon {
+    margin-right: 0.5rem;
+  }
+  
+  .service-item-meta {
+    margin-top: 0.75rem;
+  }
+  
+  .service-type-badge,
+  .service-priority-badge {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.4rem;
+  }
+}
+
+/* =============================================================================
+   КОНЕЦ СТИЛЕЙ АДМИНСКОЙ ПАНЕЛИ
+   ============================================================================= */
+
+/* =============================================================================
+   СТИЛИ АУТЕНТИФИКАЦИИ
+   ============================================================================= */
+
+/* Карточка аутентификации */
+.system-auth-card {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-medium);
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Форма аутентификации */
+.system-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Ссылки аутентификации */
+.system-auth-links {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .system-auth-card {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+}
+
+/* =============================================================================
+   ИКОНКИ СЛУЖБ И СИСТЕМА ПРИОРИТЕТОВ
+   ============================================================================= */
+
+/* Иконки служб */
+.service-icon {
+  display: inline-block;
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  /* Мягкое свечение для лучшей видимости */
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.1));
+  transition: transform 0.2s ease;
+}
+
+.service-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Стили для разных типов служб */
+.schedule-item-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.schedule-service-info {
+  flex: 1;
+}
+
+.schedule-service-time {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.schedule-service-description {
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Приоритеты служб */
+.schedule-item[data-priority="holiday"] {
+  background: #f4f7f0;
+  border: 1px solid #6b8b47;
+  box-shadow: var(--shadow-medium);
+}
+
+.schedule-item[data-priority="special"] {
+  background: #fff7f0;
+  border: 1px solid #d4a853;
+  box-shadow: var(--shadow-medium);
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .service-icon {
+    font-size: 1.1rem;
+    margin-right: 0.4rem;
+  }
+  
+  .schedule-item-with-icon {
+    gap: 0.5rem;
+  }
+}
+
+/* =============================================================================
+   КОНЕЦ ИКОНОК СЛУЖБ
+   ============================================================================= */
+
+/* =============================================================================
+   ГРУППИРОВАННОЕ РАСПИСАНИЕ В АДМИНКЕ
+   ============================================================================= */
+
+/* Контейнер для админского группированного расписания */
+.admin-schedule-grouped {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Группа служб на одну дату в админке */
+.admin-schedule-date-group {
+  background: var(--bg-paper);
+  border-radius: var(--radius-paper);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  border: 1px solid var(--border-paper);
+}
+
+/* Заголовок даты в админке */
+.admin-schedule-date-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  color: white;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Список служб в админке */
+.admin-services-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Отдельная служба в админке */
+.admin-service-item {
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color var(--transition);
+}
+
+.admin-service-item:last-child {
+  border-bottom: none;
+}
+
+.admin-service-item:hover {
+  background: var(--bg-soft);
+}
+
+/* Контент службы в админке */
+.admin-service-content {
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Основная информация о службе */
+.admin-service-main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* Время и иконка в админке */
+.admin-service-time-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
+.admin-service-time {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+/* Информация о службе */
+.admin-service-info {
+  flex: 1;
+}
+
+.admin-service-description {
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+/* Приоритеты для админских групп */
+.admin-service-item.service-item-holiday {
+  background: linear-gradient(90deg, #f8fff8 0%, var(--bg-paper) 8%);
+  border-left: 4px solid #6b8b47;
+}
+
+.admin-service-item.service-item-special {
+  background: linear-gradient(90deg, #fffef8 0%, var(--bg-paper) 8%);
+  border-left: 4px solid #d4a853;
+}
+
+.admin-service-item.service-item-holiday:hover {
+  background: linear-gradient(90deg, #f4f9f4 0%, var(--bg-soft) 8%);
+}
+
+.admin-service-item.service-item-special:hover {
+  background: linear-gradient(90deg, #fffcf4 0%, var(--bg-soft) 8%);
+}
+
+/* Адаптивность для админского группированного расписания */
+@media (max-width: 768px) {
+  .admin-schedule-grouped {
+    gap: 1rem;
+  }
+  
+  .admin-schedule-date-header {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .admin-service-content {
+    padding: 0.75rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .admin-service-main {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .admin-service-time-icon {
+    min-width: auto;
+    gap: 0.4rem;
+  }
+  
+  .admin-service-time {
+    font-size: 0.85rem;
+  }
+  
+  .admin-service-description {
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .system-card-actions {
+    align-self: flex-end;
+    margin-top: 0.5rem;
+  }
+}
+
+/* =============================================================================
+   КОНЕЦ ГРУППИРОВАННОГО РАСПИСАНИЯ В АДМИНКЕ
+   ============================================================================= */

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './AdminPagesPage.css';
+// Удаляем старый CSS
+// import './AdminPagesPage.css';
 
 interface Page {
   id: number;
@@ -121,101 +122,123 @@ export const AdminPagesPage: React.FC = () => {
   );
 
   if (loading) {
-    return <div className="loading">Загрузка списка страниц...</div>;
+    return (
+      <div className="system-page-container">
+        <div className="system-page-content">
+          <div className="system-alert system-alert-info">Загрузка списка страниц...</div>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error-message">{error}</div>;
+    return (
+      <div className="system-page-container">
+        <div className="system-page-content">
+          <div className="system-alert system-alert-error">{error}</div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="admin-pages">
-      <div className="admin-pages__header">
-        <h1>Управление страницами</h1>
-        <button 
-          className="admin-pages__create-btn" 
-          onClick={() => navigate('/admin/pages/create')}
-        >
-          + Создать новую страницу
-        </button>
-        <input
-          type="text"
-          placeholder="Поиск по заголовку или slug..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="admin-pages__search"
-          style={{ marginLeft: 16, minWidth: 220 }}
-        />
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <div className="system-flex-between system-mb-3">
+          <h1 className="system-page-title">Управление страницами</h1>
+          <button 
+            className="system-btn-primary" 
+            onClick={() => navigate('/admin/pages/create')}
+          >
+            + Создать новую страницу
+          </button>
+        </div>
+        
+        <div className="system-content-card">
+          <div className="system-mb-3">
+            <input
+              type="text"
+              placeholder="Поиск по заголовку или slug..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="system-form-input"
+              style={{ maxWidth: '300px' }}
+            />
+          </div>
+          
+          {notification && (
+            <div className="system-alert system-alert-success system-mb-3">{notification}</div>
+          )}
+          
+          {filteredPages.length === 0 ? (
+            <div className="system-alert system-alert-info">
+              <p>Страницы не найдены. Создайте первую страницу!</p>
+            </div>
+          ) : (
+            <div className="system-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Заголовок</th>
+                    <th>Slug (URL)</th>
+                    <th>Видимость</th>
+                    <th>Последнее обновление</th>
+                    <th>Действия</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredPages.map((page) => (
+                    <tr key={page.id} className={!page.isVisible ? 'system-opacity-50' : ''}>
+                      <td>{page.id}</td>
+                      <td>{page.title}</td>
+                      <td>
+                        <a 
+                          href={`/${page.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer" 
+                          title="Открыть страницу"
+                          className="system-link"
+                        >
+                          {page.slug}
+                        </a>
+                      </td>
+                      <td>
+                        <button 
+                          className={`system-btn-sm ${page.isVisible ? 'system-btn-success' : 'system-btn-warning'}`}
+                          onClick={() => handleToggleVisibility(page)}
+                          title={page.isVisible ? "Скрыть страницу" : "Показать страницу"}
+                        >
+                          {page.isVisible ? "Видимая" : "Скрытая"}
+                        </button>
+                      </td>
+                      <td className="system-text-muted system-text-sm">{formatDate(page.updatedAt)}</td>
+                      <td>
+                        <div className="system-flex-center" style={{ gap: '0.5rem' }}>
+                          <Link 
+                            to={`/admin/pages/edit/${page.id}`}
+                            className="system-btn-outline system-btn-sm"
+                            title="Редактировать"
+                          >
+                            ✏️
+                          </Link>
+                          <button
+                            className="system-btn-outline system-btn-sm system-btn-danger"
+                            onClick={() => handleDelete(page.id)}
+                            title="Удалить"
+                          >
+                            🗑️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
-      {notification && (
-        <div className="admin-pages__notification">{notification}</div>
-      )}
-      {filteredPages.length === 0 ? (
-        <div className="admin-pages__empty">
-          <p>Страницы не найдены. Создайте первую страницу!</p>
-        </div>
-      ) : (
-        <div className="admin-pages__table-container">
-          <table className="admin-pages__table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Заголовок</th>
-                <th>Slug (URL)</th>
-                <th>Видимость</th>
-                <th>Последнее обновление</th>
-                <th>Действия</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPages.map((page) => (
-                <tr key={page.id} className={!page.isVisible ? 'row-inactive' : ''}>
-                  <td>{page.id}</td>
-                  <td>{page.title}</td>
-                  <td>
-                    <a 
-                      href={`/${page.slug}`}
-                      target="_blank"
-                      rel="noopener noreferrer" 
-                      title="Открыть страницу"
-                    >
-                      {page.slug}
-                    </a>
-                  </td>
-                  <td>
-                    <button 
-                      className={`visibility-toggle ${page.isVisible ? 'visible' : 'hidden'}`}
-                      onClick={() => handleToggleVisibility(page)}
-                      title={page.isVisible ? "Скрыть страницу" : "Показать страницу"}
-                    >
-                      {page.isVisible ? "Видимая" : "Скрытая"}
-                    </button>
-                  </td>
-                  <td>{formatDate(page.updatedAt)}</td>
-                  <td>
-                    <div className="admin-pages__actions">
-                      <Link 
-                        to={`/admin/pages/edit/${page.id}`}
-                        className="action-btn edit"
-                        title="Редактировать"
-                      >
-                        ✏️
-                      </Link>
-                      <button
-                        className="action-btn delete"
-                        onClick={() => handleDelete(page.id)}
-                        title="Удалить"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
     </div>
   );
 };

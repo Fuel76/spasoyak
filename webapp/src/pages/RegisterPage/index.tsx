@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../../styles/system-pages.css';
 
 export function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -32,41 +33,52 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h1>Регистрация</h1>
-        {error && <div className="auth-error">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Имя"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            disabled={loading}
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={loading}
-          />
-          <input
-            type="password"
-            placeholder="Пароль"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            disabled={loading}
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? 'Регистрация...' : 'Зарегистрироваться'}
-          </button>
-        </form>
-        <div style={{ marginTop: 16 }}>
-          <a href="/login">Уже есть аккаунт? Войти</a>
+    <div className="system-page-container">
+      <div className="system-page-content">
+        <div className="system-auth-card">
+          <h1 className="system-page-title">Регистрация</h1>
+          {error && <div className="system-error-message">{error}</div>}
+          <form onSubmit={handleSubmit} className="system-auth-form">
+            <div className="system-form-group">
+              <input
+                type="text"
+                placeholder="Имя"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                disabled={loading}
+                className="system-input"
+              />
+            </div>
+            <div className="system-form-group">
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading}
+                className="system-input"
+              />
+            </div>
+            <div className="system-form-group">
+              <input
+                type="password"
+                placeholder="Пароль"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={loading}
+                className="system-input"
+              />
+            </div>
+            <button type="submit" disabled={loading} className="system-btn system-btn-primary">
+              {loading ? 'Регистрация...' : 'Зарегистрироваться'}
+            </button>
+          </form>
+          <div className="system-auth-links">
+            <a href="/login" className="system-link">Уже есть аккаунт? Войти</a>
+          </div>
         </div>
       </div>
     </div>

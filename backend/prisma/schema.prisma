@@ -8,16 +8,72 @@ datasource db {
 }
 
 model News {
+  id              Int       @id @default(autoincrement())
+  title           String    @db.VarChar(255)
+  content         String    @db.Text
+  htmlContent     String?   @db.LongText
+  media           Json
+  cover           String?   @db.Text
+  isVisible       Boolean   @default(true)
+  customCss       String?   @db.LongText
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  authorId        Int?
+  categoryId      Int?
+  excerpt         String?   @db.Text
+  isPinned        Boolean   @default(false)
+  metaDescription String?   @db.Text
+  metaTitle       String?   @db.VarChar(255)
+  publishedAt     DateTime?
+  slug            String?   @unique @db.VarChar(255)
+  viewCount       Int       @default(0)
+  headerColor     String    @default("#f8f9fa") @db.VarChar(7)
+  headerStyle     String    @default("default") @db.VarChar(20)
+  author          User?     @relation(fields: [authorId], references: [id])
+  category        Category? @relation(fields: [categoryId], references: [id])
+  tags            NewsTag[]
+
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([publishedAt])
+  @@index([slug])
+}
+
+model Category {
   id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
-  content     String   @db.Text
-  htmlContent String?  @db.LongText
-  media       Json
-  cover       String?  @db.Text
+  name        String   @unique @db.VarChar(100)
+  description String?  @db.Text
+  slug        String   @unique @db.VarChar(100)
+  color       String?  @db.VarChar(7)
+  icon        String?  @db.VarChar(50)
   isVisible   Boolean  @default(true)
-  customCss   String?  @db.LongText
+  order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  news        News[]
+}
+
+model Tag {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique @db.VarChar(50)
+  slug        String    @unique @db.VarChar(50)
+  color       String?   @db.VarChar(7)
+  description String?   @db.Text
+  isVisible   Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  news        NewsTag[]
+}
+
+model NewsTag {
+  id     Int  @id @default(autoincrement())
+  newsId Int
+  tagId  Int
+  news   News @relation(fields: [newsId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([newsId, tagId])
+  @@index([tagId], map: "NewsTag_tagId_fkey")
 }
 
 model Page {
@@ -35,13 +91,19 @@ model Page {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  name      String?
-  role      String   @default("user")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  password      String
+  name          String?
+  role          String         @default("user")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  isActive      Boolean        @default(true)
+  phone         String?
+  News          News[]
+  notifications Notification[] @relation("UserNotifications")
+  payments      Payment[]      @relation("UserPayments")
+  treby         Treba[]        @relation("UserTreby")
 }
 
 model MenuItem {
@@ -71,62 +133,260 @@ model CarouselImage {
 }
 
 model Treba {
-  id                Int       @id @default(autoincrement())
+  id                Int                  @id @default(autoincrement())
   type              String
-  names             String    @db.Text
-  note              String?   @db.Text
-  paymentStatus     String    @default("pending")
-  paymentId         String?
-  createdAt         DateTime  @default(now())
-  email             String?
-  period            String    @default("Разовое")
-  updatedAt         DateTime  @updatedAt
+  note              String?              @db.Text
+  createdAt         DateTime             @default(now())
+  period            String               @default("Разовое")
+  updatedAt         DateTime             @updatedAt
   calculatedPrice   Float?
-  currency          String?
+  currency          String?              @default("RUB")
   dynamicFieldsData Json?
   customDate        DateTime?
+  isAnonymous       Boolean              @default(false)
+  status            TrebaStatus          @default(PENDING)
+  userId            Int?
+  events            CalendarEvent[]
+  notifications     Notification[]
+  payment           Payment?
+  user              User?                @relation("UserTreby", fields: [userId], references: [id])
+  names             TrebaName[]
+  statusHistory     TrebaStatusHistory[]
+
+  @@index([userId], map: "Treba_userId_fkey")
 }
 
-model TrebaFormField {
-  id          Int       @id @default(autoincrement())
-  fieldName   String    @unique
-  fieldType   FieldType
-  label       String
-  options     Json?
-  placeholder String?
-  isRequired  Boolean   @default(false)
-  order       Int       @default(0)
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+model TrebaName {
+  id              Int      @id @default(autoincrement())
+  trebaId         Int
+  name            String   @db.VarChar(255)
+  type            NameType @default(ZA_ZDRAVIE)
+  rank            String?
+  isValid         Boolean  @default(true)
+  validationError String?
+  churchForm      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  treba           Treba    @relation(fields: [trebaId], references: [id])
+
+  @@index([trebaId], map: "TrebaName_trebaId_fkey")
 }
 
-model TrebaPricingRule {
-  id          Int       @id @default(autoincrement())
-  periodValue String
-  description String?
-  price       Float
-  priceType   PriceType
-  currency    String    @default("RUB")
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  name        String
+model Payment {
+  id        Int           @id @default(autoincrement())
+  userId    Int?
+  trebaId   Int?          @unique
+  amount    Float
+  currency  String        @default("RUB")
+  status    PaymentStatus @default(PENDING)
+  method    String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  treba     Treba?        @relation(fields: [trebaId], references: [id])
+  user      User?         @relation("UserPayments", fields: [userId], references: [id])
 
-  @@unique([name, periodValue])
+  @@index([userId], map: "Payment_userId_fkey")
 }
 
-enum FieldType {
-  TEXT
-  TEXTAREA
-  SELECT
-  RADIO
-  CHECKBOX
-  NUMBER
+model Notification {
+  id        Int                @id @default(autoincrement())
+  userId    Int?
+  trebaId   Int?
+  type      NotificationType
+  status    NotificationStatus @default(PENDING)
+  message   String
+  sentAt    DateTime?
+  createdAt DateTime           @default(now())
+  treba     Treba?             @relation(fields: [trebaId], references: [id])
+  user      User?              @relation("UserNotifications", fields: [userId], references: [id])
+
+  @@index([trebaId], map: "Notification_trebaId_fkey")
+  @@index([userId], map: "Notification_userId_fkey")
 }
 
-enum PriceType {
-  PER_NAME
-  PER_TEN_NAMES
-  FIXED
+model CalendarEvent {
+  id        Int      @id @default(autoincrement())
+  trebaId   Int?
+  date      DateTime
+  type      String
+  note      String?
+  createdAt DateTime @default(now())
+  treba     Treba?   @relation(fields: [trebaId], references: [id])
+
+  @@index([trebaId], map: "CalendarEvent_trebaId_fkey")
+}
+
+model TrebaStatusHistory {
+  id        Int         @id @default(autoincrement())
+  trebaId   Int
+  status    TrebaStatus
+  changedAt DateTime    @default(now())
+  comment   String?
+  treba     Treba       @relation(fields: [trebaId], references: [id])
+
+  @@index([trebaId], map: "TrebaStatusHistory_trebaId_fkey")
+}
+
+model TrebaType {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(255)
+  description String?  @db.Text
+  basePrice   Float
+  currency    String   @default("RUB") @db.VarChar(10)
+  period      String   @default("Разовое") @db.VarChar(50)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("treba_types")
+}
+
+model CalendarDay {
+  id          Int         @id @default(autoincrement())
+  date        DateTime    @unique @db.Date
+  priority    DayPriority @default(NORMAL)
+  fastingType FastingType @default(NONE)
+  isHoliday   Boolean     @default(false)
+  color       String?
+  note        String?     @db.Text
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  schedules   Schedule[]
+  readings    Reading[]   @relation("CalendarDayToReading")
+  saints      Saint[]     @relation("CalendarDayToSaint")
+
+  @@map("calendar_days")
+}
+
+model Saint {
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(500)
+  description  String?       @db.Text
+  icon         String?
+  priority     SaintPriority @default(COMMEMORATED)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  calendarDays CalendarDay[] @relation("CalendarDayToSaint")
+
+  @@map("saints")
+}
+
+model Reading {
+  id           Int           @id @default(autoincrement())
+  type         ReadingType
+  reference    String        @db.VarChar(255)
+  title        String?       @db.VarChar(500)
+  text         String?       @db.LongText
+  order        Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  calendarDays CalendarDay[] @relation("CalendarDayToReading")
+
+  @@map("readings")
+}
+
+model Schedule {
+  id            Int             @id @default(autoincrement())
+  calendarDayId Int?
+  date          DateTime        @db.Date
+  time          String          @db.VarChar(10)
+  title         String          @db.VarChar(255)
+  description   String?         @db.Text
+  type          ServiceType     @default(REGULAR)
+  priority      ServicePriority @default(NORMAL)
+  isVisible     Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  calendarDay   CalendarDay?    @relation(fields: [calendarDayId], references: [id])
+
+  @@index([date])
+  @@index([calendarDayId])
+  @@map("schedules")
+}
+
+enum TrebaStatus {
+  PENDING
+  ACCEPTED
+  PAID
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum NameType {
+  ZA_ZDRAVIE
+  ZA_UPOKOI
+  SOROKOUST
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum NotificationType {
+  EMAIL
+  SMS
+  PUSH
+  TELEGRAM
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum DayPriority {
+  GREAT_FEAST
+  TWELVE_FEAST
+  POLYELEOS
+  VIGIL
+  SIXTH_CLASS
+  NORMAL
+}
+
+enum FastingType {
+  NONE
+  STRICT
+  FISH_ALLOWED
+  WINE_OIL
+  DRY_EATING
+  FULL_FAST
+}
+
+enum SaintPriority {
+  GREAT_SAINT
+  POLYELEOS_SAINT
+  VIGIL_SAINT
+  SIXTH_CLASS
+  COMMEMORATED
+}
+
+enum ReadingType {
+  APOSTLE
+  GOSPEL
+  OLD_TESTAMENT
+  PROKEIMENON
+  ALLELUIA
+}
+
+enum ServiceType {
+  REGULAR
+  LITURGY
+  VESPERS
+  MATINS
+  MOLEBEN
+  PANIKHIDA
+  AKATHIST
+  SPECIAL
+}
+
+enum ServicePriority {
+  HOLIDAY
+  SPECIAL
+  NORMAL
 }

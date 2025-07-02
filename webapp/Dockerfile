@@ -1,4 +1,4 @@
-# Frontend Dockerfile
+# Dockerfile для Frontend
 FROM node:18-alpine AS base
 
 # Установка pnpm
@@ -6,38 +6,55 @@ RUN npm install -g pnpm
 
 WORKDIR /app
 
-# Копируем файлы workspace
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# Копирование файлов зависимостей
+COPY package.json pnpm-lock.yaml ./
 
-# Копируем frontend и backend package.json для типов
-COPY webapp/package.json webapp/
-COPY webapp/tsconfig*.json webapp/
-COPY webapp/vite.config.ts webapp/
-COPY backend/package.json backend/
-
-# Устанавливаем зависимости
+# Установка зависимостей
 RUN pnpm install --frozen-lockfile
 
-# Копируем весь код frontend
-COPY webapp/ webapp/
+# Копирование исходного кода
+COPY . .
 
-# Копируем backend src для типов (если нужно)
-COPY backend/src/ backend/src/
+# Build аргументы
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 
-WORKDIR /app/webapp
-
-# Собираем приложение
+# Сборка приложения
 RUN pnpm build
 
-# Production stage - используем nginx для раздачи статики
+# Production стадия с Nginx
 FROM nginx:alpine AS production
 
-# Копируем собранное приложение
-COPY --from=base /app/webapp/dist /usr/share/nginx/html
+# Установка curl для health checks
+RUN apk add --no-cache curl
 
-# Копируем конфигурацию nginx
-COPY webapp/nginx.conf /etc/nginx/conf.d/default.conf
+# Копирование собранного приложения
+COPY --from=base /app/dist /usr/share/nginx/html
 
-EXPOSE 80
+# Копирование конфигурации nginx (будет создана отдельно)
+COPY nginx.conf /etc/nginx/nginx.conf
 
+# Создание пользователя без root прав
+RUN adduser -D -s /bin/sh nginxuser
+
+# Настройка прав доступа
+RUN chown -R nginxuser:nginxuser /usr/share/nginx/html && \
+    chown -R nginxuser:nginxuser /var/cache/nginx && \
+    chown -R nginxuser:nginxuser /var/log/nginx && \
+    chown -R nginxuser:nginxuser /etc/nginx/conf.d
+
+# Создание директорий для PID файлов
+RUN touch /var/run/nginx.pid && \
+    chown -R nginxuser:nginxuser /var/run/nginx.pid
+
+USER nginxuser
+
+# Expose порты
+EXPOSE 80 443
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:80 || exit 1
+
+# Запуск nginx
 CMD ["nginx", "-g", "daemon off;"]

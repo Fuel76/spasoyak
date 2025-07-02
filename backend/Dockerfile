@@ -1,67 +1,65 @@
-# Backend Dockerfile
+# Dockerfile для Backend
 FROM node:18-alpine AS base
 
-# Включаем corepack для использования pnpm
-RUN corepack enable
-RUN corepack prepare pnpm@latest --activate
+# Установка pnpm
+RUN npm install -g pnpm
 
-# Установка рабочей директории
 WORKDIR /app
 
-# Копируем файлы workspace
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+# Копирование файлов зависимостей
+COPY package.json pnpm-lock.yaml ./
+COPY prisma ./prisma/
 
-# Копируем backend package.json
-COPY backend/package.json backend/
-COPY backend/tsconfig.json backend/
-
-# Устанавливаем зависимости
+# Установка зависимостей
 RUN pnpm install --frozen-lockfile
 
-# Копируем весь backend код
-COPY backend/ backend/
+# Копирование исходного кода
+COPY . .
 
-# Генерируем Prisma клиент
-WORKDIR /app/backend
+# Генерация Prisma Client
 RUN pnpm prisma generate
 
-# Собираем приложение
+# Сборка приложения
 RUN pnpm build
 
-# Production stage
+# Production стадия
 FROM node:18-alpine AS production
 
-# Включаем corepack для использования pnpm
-RUN corepack enable
-RUN corepack prepare pnpm@latest --activate
-# Устанавливаем wget для health check
-RUN apk add --no-cache wget
+# Установка pnpm и необходимых утилит
+RUN npm install -g pnpm && \
+    apk add --no-cache curl
 
 WORKDIR /app
 
-# Копируем файлы package.json
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY backend/package.json backend/
+# Копирование файлов зависимостей
+COPY package.json pnpm-lock.yaml ./
+COPY prisma ./prisma/
 
-# Устанавливаем только production зависимости
-RUN pnpm install --prod --frozen-lockfile
+# Установка только production зависимостей
+RUN pnpm install --frozen-lockfile --prod
 
-# Копируем собранное приложение и Prisma файлы
-COPY --from=base /app/backend/dist backend/dist
-COPY --from=base /app/backend/prisma backend/prisma
-COPY --from=base /app/backend/node_modules/.pnpm backend/node_modules/.pnpm
-COPY --from=base /app/backend/node_modules/@prisma backend/node_modules/@prisma
+# Копирование собранного приложения
+COPY --from=base /app/dist ./dist
 
-# Создаем директорию для uploads
-RUN mkdir -p /app/uploads
+# Генерация Prisma Client
+RUN pnpm prisma generate
 
-# Устанавливаем права
-RUN chown -R node:node /app
-USER node
+# Создание пользователя без root прав
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
 
-WORKDIR /app/backend
+# Создание директорий для uploads и backups
+RUN mkdir -p /app/uploads /app/backups && \
+    chown -R nextjs:nodejs /app
 
-EXPOSE 3001
+USER nextjs
 
-# Запускаем миграции и сервер
-CMD ["sh", "-c", "pnpm prisma migrate deploy && node dist/index.js"]
+# Expose порт
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
+
+# Запуск приложения
+CMD ["node", "dist/index.js"]

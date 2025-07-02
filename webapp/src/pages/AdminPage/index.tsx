@@ -1,82 +1,280 @@
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './AdminPage.css';
 import CarouselManager from './CarouselManager';
 
+interface StatsData {
+  totalPages: number;
+  totalNews: number;
+  totalCategories: number;
+  totalTags: number;
+  pendingTreby: number;
+  totalTreby: number;
+}
+
 const AdminPage = () => {
+  const [stats, setStats] = useState<StatsData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const sessionData = localStorage.getItem('session');
+      const token = sessionData ? JSON.parse(sessionData).token : null;
+      
+      const response = await fetch(`${API_URL}/api/stats`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setStats(data.stats);
+      } else {
+        console.error('Ошибка получения статистики:', response.statusText);
+        // Fallback к мокапам если API недоступно
+        const mockStats: StatsData = {
+          totalPages: 15,
+          totalNews: 42,
+          totalCategories: 8,
+          totalTags: 23,
+          pendingTreby: 7,
+          totalTreby: 156
+        };
+        setStats(mockStats);
+      }
+    } catch (error) {
+      console.error('Ошибка загрузки статистики:', error);
+      // Fallback к мокапам при ошибке
+      const mockStats: StatsData = {
+        totalPages: 15,
+        totalNews: 42,
+        totalCategories: 8,
+        totalTags: 23,
+        pendingTreby: 7,
+        totalTreby: 156
+      };
+      setStats(mockStats);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="admin-container">
-      <h1>Админпанель</h1>
-      <div className="admin-sections">
-        <div className="admin-section">
-          <h2>Управление страницами</h2>
-          <Link to="/admin/pages" className="admin-link">Список страниц</Link>
-          <Link to="/admin/pages/create" className="admin-link">Создать новую страницу</Link>
+    <div className="admin-dashboard">
+      <div className="admin-header">
+        <div className="admin-header-content">
+          <h1 className="admin-title">Административная панель</h1>
+          <p className="admin-subtitle">Управление сайтом монастыря</p>
         </div>
-        <div className="admin-section">
-          <h2>Управление новостями</h2>
-          <Link to="/admin/news" className="admin-link">Список новостей</Link>
-          <Link to="/news/add" className="admin-link">Добавить новость</Link>
+        <div className="admin-header-actions">
+          <Link to="/" className="admin-btn admin-btn-outline">
+            🏠 На главную
+          </Link>
+          <button className="admin-btn admin-btn-primary">
+            ⚙️ Настройки
+          </button>
         </div>
-        <div className="admin-section">
-          <h2>Управление схемой сайта</h2>
-          <Link to="/admin/sitemap" className="admin-link">Редактировать схему сайта</Link>
-          <Link to="/admin/schedule" className="admin-link">Редактировать расписание богослужений</Link>
+      </div>
+
+      {/* Статистика */}
+      <div className="admin-stats">
+        <div className="stat-card">
+          <div className="stat-icon">📄</div>
+          <div className="stat-content">
+            <div className="stat-number">{loading ? '...' : stats?.totalPages}</div>
+            <div className="stat-label">Страниц</div>
+          </div>
         </div>
-        <div className="admin-section">
-          <h2>Заявки на требы</h2>
-          <div className="admin-treby-links">
-            <Link to="/admin/treby" className="admin-link">Просмотр заявок</Link>
-            <Link to="/admin/treby/form-fields" className="admin-link">Настройка полей формы</Link>
-            <Link to="/admin/treby/form-fields/add" className="admin-link">Добавить поле формы</Link>
-            <Link to="/admin/treby/pricing-rules" className="admin-link">Настройка правил ценообразования</Link>
-            <Link to="/admin/treby/pricing-rules/add" className="admin-link">Добавить правило ценообразования</Link>
+        <div className="stat-card">
+          <div className="stat-icon">📰</div>
+          <div className="stat-content">
+            <div className="stat-number">{loading ? '...' : stats?.totalNews}</div>
+            <div className="stat-label">Новостей</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">📋</div>
+          <div className="stat-content">
+            <div className="stat-number">{loading ? '...' : stats?.pendingTreby}</div>
+            <div className="stat-label">Заявок на рассмотрении</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">🏷️</div>
+          <div className="stat-content">
+            <div className="stat-number">{loading ? '...' : stats?.totalTags}</div>
+            <div className="stat-label">Тегов</div>
           </div>
         </div>
       </div>
-      <CarouselManager />
-      <style>{`
-        .admin-sections {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 32px;
-        }
-        .admin-section {
-          background: #fff;
-          border-radius: 12px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-          padding: 24px 32px;
-          min-width: 260px;
-          flex: 1 1 320px;
-          max-width: 400px;
-        }
-        .admin-section h2 {
-          font-size: 1.2rem;
-          margin-bottom: 16px;
-        }
-        .admin-link {
-          display: block;
-          margin-bottom: 10px;
-          color: #2a4d8f;
-          font-weight: 500;
-          text-decoration: none;
-          transition: color 0.2s;
-        }
-        .admin-link:hover {
-          color: #1a2d5c;
-          text-decoration: underline;
-        }
-        .admin-treby-links {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-        }
-        @media (max-width: 900px) {
-          .admin-sections {
-            flex-direction: column;
-            gap: 20px;
-          }
-        }
-      `}</style>
+
+      {/* Основные разделы */}
+      <div className="admin-grid">
+        {/* Контент */}
+        <div className="admin-section content-section">
+          <div className="section-header">
+            <h2>📝 Управление контентом</h2>
+            <p>Создание и редактирование материалов</p>
+          </div>
+          <div className="section-links">
+            <Link to="/admin/pages" className="admin-link">
+              <span className="link-icon">📄</span>
+              <span className="link-text">Страницы сайта</span>
+              <span className="link-badge">{stats?.totalPages || 0}</span>
+            </Link>
+            <Link to="/admin/pages/create" className="admin-link">
+              <span className="link-icon">➕</span>
+              <span className="link-text">Создать страницу</span>
+            </Link>
+            <Link to="/admin/news" className="admin-link">
+              <span className="link-icon">📰</span>
+              <span className="link-text">Новости</span>
+              <span className="link-badge">{stats?.totalNews || 0}</span>
+            </Link>
+            <Link to="/news/add" className="admin-link">
+              <span className="link-icon">📝</span>
+              <span className="link-text">Добавить новость</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Православный календарь */}
+        <div className="admin-section calendar-section">
+          <div className="section-header">
+            <h2>📅 Православный календарь</h2>
+            <p>Святцы, богослужения и чтения</p>
+          </div>
+          <div className="section-links">
+            <Link to="/admin/calendar" className="admin-link">
+              <span className="link-icon">📅</span>
+              <span className="link-text">Календарь</span>
+            </Link>
+            <Link to="/admin/calendar/saints" className="admin-link">
+              <span className="link-icon">✨</span>
+              <span className="link-text">Святцы</span>
+            </Link>
+            <Link to="/admin/calendar/readings" className="admin-link">
+              <span className="link-icon">📖</span>
+              <span className="link-text">Чтения</span>
+            </Link>
+            <Link to="/admin/schedule" className="admin-link">
+              <span className="link-icon">⛪</span>
+              <span className="link-text">Расписание служб</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Заявки и требы */}
+        <div className="admin-section treby-section">
+          <div className="section-header">
+            <h2>📋 Заявки на требы</h2>
+            <p>Управление церковными требами (API v2)</p>
+          </div>
+          <div className="section-links">
+            <Link to="/admin/treby" className="admin-link">
+              <span className="link-icon">📋</span>
+              <span className="link-text">Управление требами</span>
+              <span className="link-badge warning">{stats?.pendingTreby || 0}</span>
+            </Link>
+            <Link to="/admin/treby/types" className="admin-link">
+              <span className="link-icon">⚙️</span>
+              <span className="link-text">Типы треб</span>
+            </Link>
+            <Link to="/admin/treby/payments" className="admin-link">
+              <span className="link-icon">💳</span>
+              <span className="link-text">Платежи</span>
+            </Link>
+            <Link to="/admin/treby/notifications" className="admin-link">
+              <span className="link-icon">📧</span>
+              <span className="link-text">Уведомления</span>
+            </Link>
+            <Link to="/admin/treby/calendar" className="admin-link">
+              <span className="link-icon">📅</span>
+              <span className="link-text">Календарь служб</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Структура сайта */}
+        <div className="admin-section structure-section">
+          <div className="section-header">
+            <h2>🏗️ Структура сайта</h2>
+            <p>Навигация и организация</p>
+          </div>
+          <div className="section-links">
+            <Link to="/admin/sitemap" className="admin-link">
+              <span className="link-icon">🗺️</span>
+              <span className="link-text">Карта сайта</span>
+            </Link>
+            <Link to="/admin/categories" className="admin-link">
+              <span className="link-icon">📂</span>
+              <span className="link-text">Категории</span>
+              <span className="link-badge">{stats?.totalCategories || 0}</span>
+            </Link>
+            <Link to="/admin/tags" className="admin-link">
+              <span className="link-icon">🏷️</span>
+              <span className="link-text">Теги</span>
+              <span className="link-badge">{stats?.totalTags || 0}</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Мультимедиа */}
+        <div className="admin-section media-section">
+          <div className="section-header">
+            <h2>🖼️ Мультимедиа</h2>
+            <p>Изображения и файлы</p>
+          </div>
+          <div className="section-links">
+            <Link to="/admin/media" className="admin-link">
+              <span className="link-icon">🖼️</span>
+              <span className="link-text">Медиа библиотека</span>
+            </Link>
+            <Link to="/admin/upload" className="admin-link">
+              <span className="link-icon">⬆️</span>
+              <span className="link-text">Загрузить файлы</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Настройки */}
+        <div className="admin-section settings-section">
+          <div className="section-header">
+            <h2>⚙️ Настройки</h2>
+            <p>Конфигурация системы</p>
+          </div>
+          <div className="section-links">
+            <Link to="/admin/users" className="admin-link">
+              <span className="link-icon">👥</span>
+              <span className="link-text">Пользователи</span>
+            </Link>
+            <Link to="/admin/settings" className="admin-link">
+              <span className="link-icon">⚙️</span>
+              <span className="link-text">Общие настройки</span>
+            </Link>
+            <Link to="/admin/backups" className="admin-link">
+              <span className="link-icon">💾</span>
+              <span className="link-text">Резервные копии</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Карусель */}
+      <div className="admin-section carousel-section">
+        <div className="section-header">
+          <h2>🖼️ Управление каруселью</h2>
+          <p>Изображения на главной странице</p>
+        </div>
+        <CarouselManager />
+      </div>
     </div>
   );
 };
