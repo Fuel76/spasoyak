@@ -1,0 +1,62 @@
+name: 🔄 Auto Update Dependencies
+
+on:
+  schedule:
+    # Запуск каждый понедельник в 9:00 UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    name: 📦 Update Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: 📦 Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: '8'
+
+    - name: 📥 Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: 🔄 Update dependencies
+      run: |
+        pnpm update --latest
+        pnpm audit fix || true
+
+    - name: 🧪 Run tests after update
+      run: |
+        pnpm b types
+        pnpm w types
+        pnpm b lint
+        pnpm w lint
+
+    - name: 📝 Create Pull Request
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: 📦 Update dependencies
+        title: '📦 Auto-update dependencies'
+        body: |
+          🤖 Автоматическое обновление зависимостей
+          
+          Этот PR содержит обновления зависимостей проекта:
+          
+          - Обновлены все пакеты до последних версий
+          - Исправлены уязвимости безопасности (если были)
+          - Проверена совместимость с текущим кодом
+          
+          Пожалуйста, проверьте изменения перед слиянием.
+        branch: auto-update-dependencies
+        delete-branch: true
