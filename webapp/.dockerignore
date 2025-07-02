@@ -1,0 +1,20 @@
+# Docker ignore файл для frontend
+node_modules
+npm-debug.log
+.npm
+dist
+.nyc_output
+coverage
+.cache
+.env
+.env.local
+.env.*.local
+*.log
+logs
+.vscode
+.DS_Store
+Thumbs.db
+*.tgz
+.yarn-integrity
+.yarn-error.log
+README.md

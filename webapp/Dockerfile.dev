@@ -1,0 +1,22 @@
+# Dockerfile для Frontend (Development)
+FROM node:18-alpine
+
+# Установка pnpm
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Копирование файлов зависимостей
+COPY package.json pnpm-lock.yaml ./
+
+# Установка зависимостей
+RUN pnpm install
+
+# Копирование исходного кода
+COPY . .
+
+# Expose порт
+EXPOSE 5173
+
+# Development команда
+CMD ["pnpm", "dev", "--host", "0.0.0.0"]

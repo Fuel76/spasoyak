@@ -22,7 +22,7 @@ import trebyNewRouter from './routes/trebyNew';
 import paymentsRouter from './routes/payments';
 import notificationsRouter from './routes/notifications';
 import calendarEventsRouter from './routes/calendarEvents';
-import trebaTypesRouter from './routes/trebaTypes';
+import требаTypesRouter from './routes/trebaTypes';
 import требаFormFieldsRouter from './routes/trebaFormFields';
 import требаPricingRulesRouter from './routes/trebaPricingRulesNew';
 import scheduleRouter from './routes/schedule';
@@ -96,7 +96,7 @@ app.use('/api/v2/treby', trebyNewRouter); // Новый роутер треб с
 app.use('/api/payments', paymentsRouter); // Роутер платежей
 app.use('/api/notifications', notificationsRouter); // Роутер уведомлений
 app.use('/api/calendar-events', calendarEventsRouter); // Роутер календарных событий
-app.use('/api/treba-types', trebaTypesRouter); // Роутер типов треб
+app.use('/api/treba-types', требаTypesRouter); // Роутер типов треб
 app.use('/api/treba-form-fields', требаFormFieldsRouter);
 app.use('/api/treba-pricing-rules', требаPricingRulesRouter);
 app.use('/api/schedule', scheduleRouter);
@@ -110,6 +110,16 @@ app.use('/api/backup', backupRouter);
 app.use('/api/settings', settingsRouter);
 app.use('/api/treba-names', требаNamesAndStatusRouter);
 app.use('/carousel', carouselRouter); // Совместимость со старым API
+
+// Health check endpoint для Docker
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
 
 // ---------- ОБРАБОТКА ОШИБОК ----------
 
